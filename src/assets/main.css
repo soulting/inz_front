@@ -1,0 +1,26 @@
+@import './base.css';
+
+#app {
+  /* max-width: 1280px; */
+  margin: 0;
+  padding: 60px 0 0 0;
+  font-weight: normal;
+  font-family: 'Varela Round', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.swal2-popup {
+  font-family: 'Varela Round', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+a:visited {
+  color: black;
+}
