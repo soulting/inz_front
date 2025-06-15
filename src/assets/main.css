@@ -24,3 +24,43 @@ a {
 a:visited {
   color: black;
 }
+
+/* TASKS CSS START */
+.task-body {
+  padding: 20px 10rem;
+  font-size: 1.5rem;
+}
+
+.task-btn {
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  font-weight: 600;
+  background-color: #3b4bdc;
+  color: #fff;
+  padding: 1rem 1rem;
+  font-size: 1.5rem;
+  transition: background-color 0.3s ease;
+  width: 10rem;
+}
+
+.task-btn:hover {
+  background-color: #2e36a8;
+}
+
+.task-item {
+  margin: 1rem;
+}
+
+.task-item-input {
+  padding: 3px 10px;
+  border: none;
+  border-bottom: 1.5px solid rgb(100, 100, 100);
+  font-size: 1.2rem;
+}
+.task-item-input:focus {
+  outline: none;
+  border-bottom: 2.5px solid rgb(100, 100, 100);
+}
+
+/* TASKS CSS END */
