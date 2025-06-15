@@ -103,11 +103,13 @@ onUnmounted(() => {
       <CorrectionTask
         v-else-if="currentTask.task_type === 'correction'"
         :currentTask="currentTask"
+        @submit="handleSubmitAnwsers"
         ref="componentRef"
       />
       <CorrectionWordTask
         v-else-if="currentTask.task_type === 'correction_word'"
         :currentTask="currentTask"
+        @submit="handleSubmitAnwsers"
         ref="componentRef"
       />
       <div v-else>

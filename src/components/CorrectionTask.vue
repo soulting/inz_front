@@ -1,22 +1,35 @@
 <script setup>
-import { ref } from 'vue'
-defineProps(['currentTask'])
+import { ref, watch } from 'vue'
+const props = defineProps(['currentTask'])
 
-function sayHello() {
-  console.log('Correction')
+const userInputs = ref([])
+
+const emit = defineEmits(['submit'])
+
+function submitAnswers() {
+  emit('submit', userInputs.value)
+  console.log('Answers submitted from Correct.')
 }
 
+watch(
+  () => props.currentTask.subtasks,
+  (newSubtasks) => {
+    userInputs.value = newSubtasks.map(() => '')
+  },
+  { immediate: true },
+)
+
 defineExpose({
-  sayHello,
+  submitAnswers,
 })
 </script>
 
 <template>
   <ol v-if="currentTask.subtasks">
-    <li v-for="sub in currentTask.subtasks" :key="sub.id" class="task-item">
+    <li v-for="(sub, index) in currentTask.subtasks" :key="sub.id" class="task-item">
       <div class="correction-container">
         <span>{{ sub.question }} </span>
-        <input type="text" class="task-item-input correction" />
+        <input type="text" class="task-item-input correction" v-model="userInput[index]" />
       </div>
     </li>
   </ol>
