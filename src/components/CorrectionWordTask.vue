@@ -4,9 +4,13 @@ const props = defineProps(['currentTask'])
 
 const userInputs = ref([])
 
-const emit = defineEmits(['submit'])
+const emit = defineEmits(['submit', 'noAnswers'])
 
 function submitAnswers() {
+  if (userInputs.value.some((input) => input === '')) {
+    emit('noAnswers')
+    return
+  }
   emit('submit', userInputs.value)
   console.log('Answers submitted from Correction Word.')
 }

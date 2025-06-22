@@ -1,12 +1,17 @@
 <script setup>
 import { ref, watch } from 'vue'
 const props = defineProps(['currentTask'])
-const emit = defineEmits(['submit'])
+const emit = defineEmits(['submit', 'noAnswers'])
 
 const userInputs = ref([])
 const currentAnwsers = ref([])
 
 function submitAnswers() {
+  if (userInputs.value.some((input) => input === '')) {
+    emit('noAnswers')
+    return
+  }
+
   const answers = currentAnwsers.value.map((row, index) =>
     row.replace('%%[sel]%%', userInputs.value[index]),
   )
@@ -48,9 +53,10 @@ defineExpose({
                 :value="sub.options[0]"
               />
               a) {{ sub.options[0] }}</label
-            ><br />
-            <label
-              ><input
+            >
+            <br />
+            <label>
+              <input
                 v-model="userInputs[index1]"
                 type="radio"
                 name="question1"
@@ -66,6 +72,11 @@ defineExpose({
                 :value="sub.options[2]"
               />
               c) {{ sub.options[2] }}</label
+            >
+            <br />
+            <label
+              ><input v-model="userInputs[index1]" type="radio" name="question1" value="???" /> d)
+              Nie wiem</label
             >
           </form>
         </span>

@@ -5,8 +5,7 @@ import { ref, watch } from 'vue'
 const props = defineProps(['currentTask'])
 
 // Emit
-const emit = defineEmits(['submit'])
-
+const emit = defineEmits(['submit', 'noAnswers'])
 // Reactive state for user inputs
 const userInputs = ref([])
 
@@ -15,7 +14,10 @@ watch(
   () => props.currentTask.subtasks,
   (newSubtasks) => {
     userInputs.value = newSubtasks.map((subtask) =>
-      subtask.question.split('%%').map((segment) => (segment === '[inp]' ? '' : segment)),
+      subtask.question
+        .replace(/^%%/, '')
+        .split('%%')
+        .map((segment) => (segment === '[inp]' ? '' : segment)),
     )
   },
   { immediate: true },
@@ -23,7 +25,12 @@ watch(
 
 // Function exposed to parent – gathers answers and emits them
 function submitAnswers() {
+  if (userInputs.value.some((row) => row.includes(''))) {
+    emit('noAnswers')
+    return
+  }
   const answers = userInputs.value.map((row) => row.join(''))
+
   emit('submit', answers)
   console.log('Answers submitted from FillInTask.')
 }
@@ -38,7 +45,7 @@ defineExpose({
     <li v-for="(subtask, rowIndex) in currentTask.subtasks" :key="subtask.id" class="task-item">
       <span>
         <template
-          v-for="(segment, segmentIndex) in subtask.question.split('%%')"
+          v-for="(segment, segmentIndex) in subtask.question.replace(/^%%/, '').split('%%')"
           :key="segmentIndex"
         >
           <span v-if="segment === '[inp]'">

@@ -19,7 +19,7 @@
       </form>
 
       <p class="register-link">
-        Nie masz jeszcze konta? <router-link to="/rejestruj">Zarejestruj się</router-link>
+        Nie masz jeszcze konta? <router-link to="/signup">Zarejestruj się</router-link>
       </p>
     </div>
   </div>
