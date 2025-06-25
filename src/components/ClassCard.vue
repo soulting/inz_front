@@ -29,7 +29,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['edit', 'delete'])
+const emit = defineEmits(['delete'])
 
 const emitDelete = () => {
   emit('delete', props.classData.id)
