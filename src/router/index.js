@@ -96,20 +96,15 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  console.log(to)
   const authStore = useAuthStore()
 
   const requiresAuth = to.meta.requiresAuth
-  // const allowedRoles = to.meta.allowedRoles
 
   if (requiresAuth && !authStore.jwtToken) {
     return next('/login')
   }
 
-  console.log('User role:', authStore.user?.role)
-
   if (to.fullPath === '/classes' && authStore.user?.role === 'teacher') {
-    console.log('Redirecting teacher to classes-teacher')
     return next('/classes-teacher')
   }
 

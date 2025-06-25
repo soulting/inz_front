@@ -73,7 +73,7 @@ const { isLoading } = storeToRefs(useLoadingStore())
   <FooterView />
 </template>
 
-<style scoped lang="scss">
+<!-- <style scoped lang="scss">
 @use './styles/abstracts/mixins' as *;
 @use './styles/abstracts/variables' as *;
 
@@ -216,4 +216,4 @@ const { isLoading } = storeToRefs(useLoadingStore())
     }
   }
 }
-</style>
+</style> -->

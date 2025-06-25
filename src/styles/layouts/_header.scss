@@ -1,26 +1,25 @@
+@use '../abstracts/mixins' as mixins;
+
 .header {
+  @include mixins.card-shadow;
+  @include mixins.flex-c-sb;
+  @include mixins.font-normal;
+
   position: fixed;
   top: 0;
-  width: 100%;
+  left: 0;
+  right: 0;
+
   height: 60px;
   padding: 0 1.5rem;
   z-index: 1000;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+
   background-color: white;
-  color: black;
-  font-size: 17px;
-  font-weight: 400;
-  font-style: normal;
-  line-height: 1.5;
-  max-height: 100vh;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  border-radius: 0;
 
   &__logo-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include mixins.flex-c-c;
     height: 100%;
   }
 
@@ -29,43 +28,45 @@
   }
 
   &__nav {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include mixins.flex-c-c;
     gap: 1.5rem;
     height: 100%;
     letter-spacing: 0.5px;
   }
 
+  &header__link {
+    color: black;
+
+    &:visited {
+      color: black;
+    }
+  }
+
   &__profile {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include mixins.flex-c-c;
     gap: 0.75rem;
     height: 90%;
     border: none;
     background-color: transparent;
     cursor: pointer;
-    font-size: 17px;
-    font-weight: 400;
-    font-style: normal;
+    @include mixins.font-normal;
+  }
 
-    &-avatar {
-      height: 40px;
-      aspect-ratio: 1 / 1;
-      border-radius: 60px;
-      object-fit: cover;
-      object-position: center;
-    }
+  &__avatar {
+    height: 40px;
+    aspect-ratio: 1 / 1;
+    border-radius: 60px;
+    object-fit: cover;
+    object-position: center;
+  }
 
-    &-arrow {
-      height: 13px;
-      width: 13px;
-      aspect-ratio: 1 / 1;
-      padding-top: 3px;
-      object-fit: cover;
-      object-position: center;
-    }
+  &__arrow {
+    height: 13px;
+    width: 13px;
+    aspect-ratio: 1 / 1;
+    padding-top: 3px;
+    object-fit: cover;
+    object-position: center;
   }
 
   &__dropdown {
@@ -81,36 +82,40 @@
     background-color: white;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
     border-bottom-left-radius: 4px;
-    font-size: 17px;
-    font-weight: 400;
-    font-style: normal;
+    @include mixins.font-normal;
     letter-spacing: 0.5px;
     z-index: 999;
+  }
 
-    &-item {
-      width: 90%;
-      height: 28px;
-      padding: 0 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      color: black;
-      border-radius: 13px;
+  &__dropdown-item {
+    width: 90%;
+    height: 28px;
+    padding: 5px 17px;
+    @include mixins.flex-c-bl;
+    text-decoration: none;
+    color: black;
+    border-radius: 13px;
+    gap: 0.5rem;
+
+    &:hover {
+      background-color: #eeeeee;
+    }
+
+    &--logout {
+      background-color: red;
+      color: white;
 
       &:hover {
-        background-color: #eeeeee;
+        background-color: darkred;
       }
-
-      &--logout {
-        background-color: red;
-        color: white;
-
-        &:hover {
-          background-color: darkred;
-        }
+      &:visited {
+        color: inherit;
       }
     }
+  }
+
+  &__dropdown-icon {
+    height: 100%;
   }
 
   &__auth {

@@ -37,12 +37,14 @@ const emitDelete = () => {
 </script>
 
 <style scoped lang="scss">
+@use '@/styles/abstracts/mixins' as mixins;
+
 .class-card {
   width: auto;
   height: 160px;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  @include mixins.card-shadow;
   display: flex;
   flex-direction: column;
   background-color: #fff;

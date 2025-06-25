@@ -15,7 +15,7 @@
   height: 60vh;
   min-height: 350px;
   background: url('../assets/images/marius-serban-iFtuhgn7fYs-unsplash.jpg') no-repeat center/cover;
-  @include mixins.flex-center;
+  @include mixins.flex-c-c;
 
   &__overlay {
     text-align: center;

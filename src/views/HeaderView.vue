@@ -9,20 +9,15 @@
       <RouterLink class="header__link" to="/test">Test</RouterLink>
 
       <button v-if="isLoggedIn" class="header__profile" @click="toggleDropdown">
-        <img class="header__profile-avatar" src="@/assets/profile_pic.jpg" alt="profile picture" />
+        <img class="header__avatar" src="@/assets/profile_pic.jpg" alt="profile picture" />
         <span>Moje Konto</span>
         <img
           v-if="!isDropdownOpen"
-          class="header__profile-arrow"
+          class="header__arrow"
           src="@/assets/down-arrow.png"
           alt="nav arrow indicator"
         />
-        <img
-          v-else
-          class="header__profile-arrow"
-          src="@/assets/up-arrow.png"
-          alt="nav arrow indicator"
-        />
+        <img v-else class="header__arrow" src="@/assets/up-arrow.png" alt="nav arrow indicator" />
       </button>
       <div class="header__auth" v-else>
         <RouterLink class="header__auth-item" to="/login">Zaloguj się</RouterLink>
@@ -32,13 +27,24 @@
       </div>
     </nav>
     <div v-if="isDropdownOpen" class="header__dropdown">
-      <RouterLink class="header__dropdown-item" to="/profile">Profil</RouterLink>
-      <RouterLink class="header__dropdown-item" to="/settings">Ustawienia</RouterLink>
+      <RouterLink class="header__dropdown-item" to="/profile">
+        <img class="header__dropdown-icon" src="../assets/icons/user.png" alt="dropdown image" />
+        Profil</RouterLink
+      >
+      <RouterLink class="header__dropdown-item" to="/settings">
+        <img
+          class="header__dropdown-icon"
+          src="../assets/icons/settings.png"
+          alt="dropdown image"
+        />
+        Ustawienia
+      </RouterLink>
       <RouterLink
         class="header__dropdown-item header__dropdown-item--logout"
         to="/login"
         @click="logout"
       >
+        <img class="header__dropdown-icon" src="../assets/icons/logout.png" alt="dropdown image" />
         Wyloguj
       </RouterLink>
     </div>

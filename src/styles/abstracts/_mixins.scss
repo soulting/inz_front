@@ -1,7 +1,19 @@
-@mixin flex-center {
+@mixin flex-c-c {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@mixin flex-c-sb {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-c-bl {
+  display: flex;
+  align-items: center;
+  justify-content: baseline;
 }
 
 @mixin text-truncate {
@@ -26,7 +38,7 @@
 }
 
 @mixin card-shadow {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
 }
 
@@ -34,4 +46,11 @@
   display: grid;
   grid-template-columns: repeat($cols, 1fr);
   gap: $gap;
+}
+
+@mixin font-normal {
+  font-size: 17px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.5;
 }
