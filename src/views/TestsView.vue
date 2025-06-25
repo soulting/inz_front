@@ -67,8 +67,8 @@
     <section class="final-cta">
       <div class="container final-wrapper">
         <p class="final-text"></p>
-        <button v-if="!isLoggedIn" class="btn btn-secondary" @click="goTo('./rejestruj')">
-          Dołącz Teraz
+        <button v-if="!isLoggedIn" class="btn btn-secondary">
+          <router-link to="signup"> Dołącz Teraz</router-link>
         </button>
       </div>
     </section>
@@ -92,7 +92,6 @@ function goTo(level) {
 <style scoped>
 /* Reset i podstawowe style */
 .home-page {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
   color: #333;
   margin: 0;
   padding: 0;

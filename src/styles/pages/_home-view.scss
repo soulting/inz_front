@@ -1,0 +1,177 @@
+@use '../abstracts/variables' as variables;
+@use '../abstracts/mixins' as mixins;
+
+.home-page {
+  color: #333;
+  margin: 0;
+  padding: 0;
+  background-color: white;
+}
+
+/* --- Hero Section --- */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+  min-height: 350px;
+  background: url('../assets/images/marius-serban-iFtuhgn7fYs-unsplash.jpg') no-repeat center/cover;
+  @include mixins.flex-center;
+
+  &__overlay {
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+
+  &__title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: variables.$primaryYellow;
+    margin-bottom: 0.5rem;
+  }
+
+  &__subtitle {
+    font-size: 1.3rem;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+}
+
+.intro {
+  background-color: #3b4bdc;
+  padding: 2rem 1rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.intro-text {
+  color: #ffd700;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.feature {
+  padding: 2rem 0;
+}
+
+.feature-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.feature-image {
+  flex: 1 1 50%;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.feature-image img {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+}
+
+.feature-content {
+  flex: 1 1 50%;
+  padding: 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.feature-content p {
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.feature-even .feature-wrapper {
+  flex-direction: column-reverse;
+}
+
+@media (min-width: 768px) {
+  .feature-even .feature-wrapper {
+    flex-direction: row-reverse;
+  }
+}
+
+/* --- Final CTA Section --- */
+.final-cta {
+  background-color: #3b4bdc;
+  padding: 2rem 1rem;
+}
+
+.final-wrapper {
+  text-align: center;
+}
+
+.final-text {
+  color: #fff;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+/* --- Media Queries --- */
+@media (max-width: 600px) {
+  .hero__overlay {
+    padding: 1rem;
+  }
+  .hero__title {
+    font-size: 1.5rem;
+  }
+  .hero___subtitle {
+    font-size: 0.9rem;
+  }
+  .btn-primary,
+  .btn-secondary {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+  }
+  .intro-text,
+  .final-text {
+    font-size: 0.9rem;
+  }
+  .feature-content p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .hero {
+    height: 50vh;
+  }
+  .hero__title {
+    font-size: 1.2rem;
+  }
+  .hero___subtitle {
+    font-size: 0.8rem;
+  }
+  .btn-primary,
+  .btn-secondary {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+  .feature-wrapper {
+    flex-direction: column;
+  }
+  .feature-image,
+  .feature-content {
+    flex: 1 1 100%;
+    padding: 0.5rem;
+  }
+  .feature-content p {
+    font-size: 0.85rem;
+  }
+}

@@ -1,0 +1,137 @@
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  padding: 0 1.5rem;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  color: black;
+  font-size: 17px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.5;
+  max-height: 100vh;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  &__logo-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  &__logo-image {
+    height: 100%;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    height: 100%;
+    letter-spacing: 0.5px;
+  }
+
+  &__profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    height: 90%;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: 400;
+    font-style: normal;
+
+    &-avatar {
+      height: 40px;
+      aspect-ratio: 1 / 1;
+      border-radius: 60px;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    &-arrow {
+      height: 13px;
+      width: 13px;
+      aspect-ratio: 1 / 1;
+      padding-top: 3px;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
+  &__dropdown {
+    position: fixed;
+    top: 60px;
+    right: 0;
+    width: 200px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    border-bottom-left-radius: 4px;
+    font-size: 17px;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0.5px;
+    z-index: 999;
+
+    &-item {
+      width: 90%;
+      height: 28px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: black;
+      border-radius: 13px;
+
+      &:hover {
+        background-color: #eeeeee;
+      }
+
+      &--logout {
+        background-color: red;
+        color: white;
+
+        &:hover {
+          background-color: darkred;
+        }
+      }
+    }
+  }
+
+  &__auth {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    &-item {
+      border: 1px solid #cccccc;
+      padding: 6px 10px;
+      border-radius: 8px;
+
+      &--signup {
+        background-color: #3b4bdc;
+        color: white;
+        text-decoration: none;
+
+        &:hover {
+          background-color: #2a3bbd;
+        }
+      }
+    }
+  }
+}

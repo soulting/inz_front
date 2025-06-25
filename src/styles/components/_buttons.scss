@@ -1,0 +1,26 @@
+@use '../abstracts/variables' as variables;
+
+.btn {
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  &--purple {
+    background-color: variables.$primaryPurple;
+    color: variables.$purpleBtnText;
+
+    &:hover {
+      background-color: variables.$primaryPurpleHover;
+    }
+  }
+  &--yellow {
+    background-color: variables.$primaryYellow;
+    color: variables.$yellowBtnText;
+    &:hover {
+      background-color: variables.$primaryYellowHover;
+    }
+  }
+}
