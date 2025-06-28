@@ -1,12 +1,12 @@
 <template>
   <div class="teacher-classes">
-    <ClassGrid :classes="classes" @delete="deleteClass">
-      <div class="teacher-classes__add-card" @click="addClass">
+    <ClassGrid :classes="classes" :deleteButton="true" title="Moje klasy" @delete="deleteClass">
+      <div class="teacher-classes__add-card" @click="createClass">
         <div class="teacher-classes__plus">+</div>
         <div class="teacher-classes__add-text">Dodaj klasę</div>
       </div>
       <div
-        v-if="showAddForm"
+        v-if="showCreateForm"
         class="teacher-classes__form-card"
         :style="{ backgroundImage: `url(${placeholderImage})` }"
       >
@@ -30,7 +30,7 @@
             Zapisz
           </button>
           <button
-            @click="cancelAddClass"
+            @click="cancelCreateClass"
             class="teacher-classes__button teacher-classes__button--cancel"
           >
             Anuluj
@@ -56,18 +56,18 @@ const { jwtToken } = storeToRefs(authStore)
 
 const classes = ref([])
 
-const showAddForm = ref(false)
+const showCreateForm = ref(false)
 const newClassName = ref('')
 const newClassPassword = ref('')
 const placeholderImage = ref('')
 
-const addClass = () => {
+const createClass = () => {
   placeholderImage.value = `https://xxofdfokqesjgcuvqsax.supabase.co/storage/v1/object/public/inzyniekrka-images/placeholder${Math.floor(Math.random() * 6) + 1}.webp`
-  showAddForm.value = true
+  showCreateForm.value = true
 }
 
-const cancelAddClass = () => {
-  showAddForm.value = false
+const cancelCreateClass = () => {
+  showCreateForm.value = false
   newClassName.value = ''
   newClassPassword.value = ''
 }
@@ -85,7 +85,7 @@ const submitNewClass = async () => {
     loadingStore.startLoading()
 
     const response = await axios.post(
-      'http://localhost:5000/classes/add_class',
+      'http://localhost:5000/classes/create_class',
       {
         name: newClassName.value,
         password: newClassPassword.value,
@@ -99,7 +99,7 @@ const submitNewClass = async () => {
     )
 
     classes.value = response.data
-    showAddForm.value = false
+    showCreateForm.value = false
     newClassName.value = ''
     newClassPassword.value = ''
     placeholderImage.value = ''
@@ -114,11 +114,14 @@ async function deleteClass(deleteId) {
   try {
     loadingStore.startLoading()
 
-    const response = await axios.delete(`http://localhost:5000/classes/delete_class/${deleteId}`, {
-      headers: {
-        Authorization: `Bearer ${jwtToken.value}`,
+    const response = await axios.delete(
+      `http://localhost:5000/classes/delete_teacher_class/${deleteId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwtToken.value}`,
+        },
       },
-    })
+    )
 
     classes.value = response.data
   } catch (error) {
@@ -150,7 +153,7 @@ onMounted(async () => {
   try {
     loadingStore.startLoading()
 
-    const response = await axios.get('http://localhost:5000/classes/get_classes', {
+    const response = await axios.get('http://localhost:5000/classes/get_teacher_classes', {
       headers: {
         Authorization: `Bearer ${jwtToken.value}`,
       },

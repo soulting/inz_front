@@ -7,4 +7,5 @@
 @use 'layouts/header';
 @use 'components/class-grid';
 @use 'components/class-card';
-@use 'components/teacher-classes';
+@use 'pages/teacher-classes';
+@use 'pages/student-classes';

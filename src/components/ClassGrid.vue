@@ -1,5 +1,6 @@
 <template>
   <div class="class-grid">
+    <h1 class="class-grid_title">{{ title }}</h1>
     <div class="class-grid__controls">
       <input
         v-model="searchQuery"
@@ -17,9 +18,19 @@
     <!-- Grid kafelków -->
     <div class="class-grid__grid">
       <slot></slot>
+      <div v-if="!filteredAndSortedClasses.length" class="class-grid__no-classes">
+        Brak klas do wyświetlenia
+      </div>
+
       <!-- Kafelki klas -->
       <div v-for="classItem in filteredAndSortedClasses.slice(0, sliceCount)" :key="classItem.id">
-        <ClassCard :classData="classItem" @delete="confirmAndDelete" />
+        <ClassCard
+          :classData="classItem"
+          :joinButton="joinButton"
+          :deleteButton="deleteButton"
+          @delete="confirmAndDelete"
+          @join="emitJoin"
+        />
       </div>
     </div>
     <div v-if="showMoreButton" class="class-grid__show-more-wrapper">
@@ -36,8 +47,19 @@ import ClassCard from '@/components/ClassCard.vue'
 import Swal from 'sweetalert2'
 import { ref, computed, defineProps } from 'vue'
 
-const props = defineProps({ classes: Array })
-const emit = defineEmits(['delete'])
+const props = defineProps({
+  classes: Array,
+  title: String,
+  joinButton: {
+    type: Boolean,
+    default: false,
+  },
+  deleteButton: {
+    type: Boolean,
+    default: false,
+  },
+})
+const emit = defineEmits(['delete', 'join'])
 
 const searchQuery = ref('')
 const sortBy = ref('name')
@@ -85,5 +107,9 @@ function confirmAndDelete(deleteId) {
       console.log('Usuwanie anulowane')
     }
   })
+}
+
+function emitJoin(classID, joinPassword) {
+  emit('join', classID, joinPassword)
 }
 </script>

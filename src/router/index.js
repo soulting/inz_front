@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import SignupView from '@/views/SignupView.vue'
-import ClassView from '@/views/ClassView.vue'
+import ClassView from '@/views/ClassesStudentView.vue'
 import ThemesView from '@/views/ThemesView.vue'
 import SettingsView from '@/views/SettingsView.vue'
 import ProfileView from '@/views/ProfileView.vue'
@@ -10,7 +10,7 @@ import PrivacyPolicyView from '@/views/PrivacyPolicyView.vue'
 import TestsView from '@/views/TestsView.vue'
 import TestView from '@/views/TestView.vue'
 import { useAuthStore } from '@/stores/auth'
-import ClassTeacher from '@/views/ClassTeacher.vue'
+import ClassTeacher from '@/views/ClassesTeacherView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
