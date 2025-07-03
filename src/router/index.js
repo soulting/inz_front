@@ -11,6 +11,7 @@ import TestsView from '@/views/TestsView.vue'
 import TestView from '@/views/TestView.vue'
 import { useAuthStore } from '@/stores/auth'
 import ClassTeacher from '@/views/ClassesTeacherView.vue'
+import CreateTaskView from '@/views/CreateTaskView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -88,6 +89,14 @@ const router = createRouter({
       name: 'test-detail',
       component: TestView,
       props: true,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/create-task',
+      name: 'create-task',
+      component: CreateTaskView,
       meta: {
         requiresAuth: true,
       },
