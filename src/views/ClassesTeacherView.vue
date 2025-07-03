@@ -38,6 +38,9 @@
         </div>
       </div>
     </ClassGrid>
+    <TaskGrid :tasks="tasks" :deleteButton="true" :editButton="true" />
+
+    >
   </div>
 </template>
 
@@ -49,12 +52,19 @@ import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
 import Swal from 'sweetalert2'
 import ClassGrid from '@/components/ClassGrid.vue'
+import { handleApiError } from '@/composables/errorHandling'
+import { useRouter } from 'vue-router'
+import TaskGrid from '@/components/TaskGrid.vue'
+
+const tasks = ref([])
 
 const loadingStore = useLoadingStore()
 const authStore = useAuthStore()
 const { jwtToken } = storeToRefs(authStore)
 
 const classes = ref([])
+
+const router = useRouter()
 
 const showCreateForm = ref(false)
 const newClassName = ref('')
@@ -104,7 +114,7 @@ const submitNewClass = async () => {
     newClassPassword.value = ''
     placeholderImage.value = ''
   } catch (error) {
-    console.error('Błąd podczas dodawania klasy:', error)
+    handleApiError(error, router)
   } finally {
     loadingStore.stopLoading()
   }
@@ -125,25 +135,7 @@ async function deleteClass(deleteId) {
 
     classes.value = response.data
   } catch (error) {
-    if (error.response) {
-      console.error('Backend error:', error.response.status, error.response.data)
-
-      return {
-        success: false,
-      }
-    } else if (error.request) {
-      console.error('No response from server:', error.request)
-
-      return {
-        success: false,
-      }
-    } else {
-      console.error('Axios error:', error.message)
-
-      return {
-        success: false,
-      }
-    }
+    handleApiError(error, router)
   } finally {
     loadingStore.stopLoading()
   }
@@ -153,35 +145,22 @@ onMounted(async () => {
   try {
     loadingStore.startLoading()
 
-    const response = await axios.get('http://localhost:5000/classes/get_teacher_classes', {
+    const config = {
       headers: {
         Authorization: `Bearer ${jwtToken.value}`,
       },
-    })
-
-    console.log('Classes fetched:', response.data)
-
-    classes.value = response.data
-  } catch (error) {
-    if (error.response) {
-      console.error('Backend error:', error.response.status, error.response.data)
-
-      return {
-        success: false,
-      }
-    } else if (error.request) {
-      console.error('No response from server:', error.request)
-
-      return {
-        success: false,
-      }
-    } else {
-      console.error('Axios error:', error.message)
-
-      return {
-        success: false,
-      }
     }
+
+    const [classResponse, taskResponse] = await axios.all([
+      axios.get('http://localhost:5000/classes/get_teacher_classes', config),
+      axios.get('http://localhost:5000/tasks/get_teacher_tasks', config),
+    ])
+
+    classes.value = classResponse.data
+    tasks.value = taskResponse.data
+    console.log('tasks.value', tasks.value)
+  } catch (error) {
+    handleApiError(error, router)
   } finally {
     loadingStore.stopLoading()
   }

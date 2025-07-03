@@ -12,9 +12,9 @@
     </section>
 
     <!-- Intro Section -->
-    <section class="intro">
-      <div class="container">
-        <p class="intro-text">
+    <section class="text-section">
+      <div class="text-section__container">
+        <p class="text-section__text">
           Dostosowujemy plan nauki do Twoich potrzeb, abyś mógł osiągnąć najlepsze efekty – nasze
           spersonalizowane zadania i materiały pomagają rozwijać umiejętności w sposób skuteczny i
           dopasowany do Ciebie.
@@ -23,16 +23,17 @@
     </section>
 
     <!-- Feature Section 1: Image Left, Text Right -->
-    <section class="feature feature-odd">
-      <div class="container feature-wrapper">
-        <div class="feature-image">
+    <section class="feature">
+      <div class="feature__wrapper">
+        <div class="feature__image-container">
           <img
+            class="feature__image"
             src="../assets/images/john-schnobrich-2FPjlAyMQTA-unsplash.jpg"
             alt="Uczniowie z laptopem"
           />
         </div>
-        <div class="feature-content">
-          <p>
+        <div class="feature__content-container">
+          <p class="feature__content">
             Dobrze do klasy i ucz się pod okiem doświadczonych mentorów. Dzięki notatkom i
             ćwiczeniom praktycznym masz dostęp do najlepszych narzędzi, które pozwolą na efektywną.
           </p>
@@ -42,13 +43,17 @@
     </section>
 
     <!-- Feature Section 2: Text Left, Image Right -->
-    <section class="feature feature-even">
-      <div class="container feature-wrapper">
-        <div class="feature-image">
-          <img src="../assets/images/carlos-muza-hpjSkU2UYSU-unsplash.jpg" alt="Wykresy postępu" />
+    <section class="feature">
+      <div class="feature__wrapper feature__wrapper--reverse">
+        <div class="feature__image-container">
+          <img
+            class="feature__image"
+            src="../assets/images/carlos-muza-hpjSkU2UYSU-unsplash.jpg"
+            alt="Wykresy postępu"
+          />
         </div>
-        <div class="feature-content">
-          <p>
+        <div class="feature__content-container">
+          <p class="feature__content">
             Uzyskaj narzędzia analityczne do śledzenia Twojego postępu i szybkie przeglądy całej
             Twojej nauki. Pokażemy monitor w Twoje wyniki, które pomogą Ci skutecznie rozwijać
             umiejętności językowe.
@@ -62,12 +67,16 @@
 
     <!-- Feature Section 3: Image Left, Text Right -->
     <section class="feature feature-odd">
-      <div class="container feature-wrapper">
-        <div class="feature-image">
-          <img src="../assets/images/wes-hicks-4-EeTnaC1S4-unsplash.jpg" alt="Student z laptopem" />
+      <div class="feature__wrapper">
+        <div class="feature__image-container">
+          <img
+            class="feature__image"
+            src="../assets/images/wes-hicks-4-EeTnaC1S4-unsplash.jpg"
+            alt="Student z laptopem"
+          />
         </div>
-        <div class="feature-content">
-          <p>
+        <div class="feature__content-container">
+          <p class="feature__content">
             Zapewniamy Ci codzienny kontakt z językiem – ucz się poprzez codzienne nowości i
             zadania, które umożliwiają przyswajanie wiedzy i rozwijanie kompetencji językowych
             każdego dnia.
@@ -80,9 +89,9 @@
     </section>
 
     <!-- Final CTA Section -->
-    <section class="final-cta">
-      <div class="container final-wrapper">
-        <p class="final-text">
+    <section class="text-section">
+      <div class="text-section__container">
+        <p class="text-section__text">
           Dołącz, aby rozwijać swoje niemieckie umiejętności w przyjaznej społeczności. Nasza
           rosnąca baza materiałów czeka na Ciebie – rośnij razem z nami!
         </p>

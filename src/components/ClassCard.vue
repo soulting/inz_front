@@ -7,7 +7,7 @@
       <div class="class-card__actions">
         <button
           v-if="joinButton"
-          class="class-card__button class-card__button--delete"
+          class="class-card__button"
           aria-label="Dołącz do klasy"
           @click="openJoinForm"
         >
@@ -15,7 +15,7 @@
         </button>
         <button
           v-if="deleteButton"
-          class="class-card__button class-card__button--delete"
+          class="class-card__button"
           aria-label="Usuń klasę"
           @click="emitDelete"
         >
@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { defineEmits, ref } from 'vue'
+import { ref } from 'vue'
 const props = defineProps({
   classData: {
     type: Object,

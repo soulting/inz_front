@@ -18,10 +18,14 @@ import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
 import Swal from 'sweetalert2'
 import ClassGrid from '@/components/ClassGrid.vue'
+import { handleApiError } from '@/composables/errorHandling'
+import { useRouter } from 'vue-router'
 
 const loadingStore = useLoadingStore()
 const authStore = useAuthStore()
 const { jwtToken } = storeToRefs(authStore)
+
+const router = useRouter()
 
 const classes = ref([])
 
@@ -52,7 +56,7 @@ const joinClass = async (classID, joinPassword) => {
 
     classes.value = response.data
   } catch (error) {
-    console.error('Błąd podczas dołączenia klasy:', error)
+    handleApiError(error, router)
   } finally {
     loadingStore.stopLoading()
   }
@@ -70,25 +74,7 @@ async function leaveClass(deleteId) {
 
     classes.value = response.data
   } catch (error) {
-    if (error.response) {
-      console.error('Backend error:', error.response.status, error.response.data)
-
-      return {
-        success: false,
-      }
-    } else if (error.request) {
-      console.error('No response from server:', error.request)
-
-      return {
-        success: false,
-      }
-    } else {
-      console.error('Axios error:', error.message)
-
-      return {
-        success: false,
-      }
-    }
+    handleApiError(error, router)
   } finally {
     loadingStore.stopLoading()
   }
@@ -108,25 +94,7 @@ onMounted(async () => {
 
     classes.value = response.data
   } catch (error) {
-    if (error.response) {
-      console.error('Backend error:', error.response.status, error.response.data)
-
-      return {
-        success: false,
-      }
-    } else if (error.request) {
-      console.error('No response from server:', error.request)
-
-      return {
-        success: false,
-      }
-    } else {
-      console.error('Axios error:', error.message)
-
-      return {
-        success: false,
-      }
-    }
+    handleApiError(error, router)
   } finally {
     loadingStore.stopLoading()
   }

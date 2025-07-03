@@ -2,6 +2,7 @@
 @use '@/styles/abstracts/variables' as vars;
 
 .class-card {
+  cursor: pointer;
   width: auto;
   height: 160px;
   border-radius: 12px;
@@ -75,84 +76,83 @@
     height: 25px;
     object-fit: contain;
   }
-}
-
-.class-card__join-form {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-
-  background: {
-    position: center;
-    size: cover;
-    repeat: no-repeat;
-  }
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  border-radius: 12px;
-
-  &::before {
-    content: '';
+  &__join-form {
     position: absolute;
     inset: 0;
-    background-color: rgba(255, 255, 255, 0.4); // biały, półprzezroczysty
-    z-index: 1;
-  }
+    z-index: 10;
 
-  .class-card__join-title {
-    font-size: 1.5rem;
-    color: vars.$yellowBtnText;
-    text-align: center;
-    position: relative;
-    z-index: 2;
-  }
-
-  .class-card__input {
-    position: relative;
-    z-index: 2;
-    width: 80%;
-    padding: 10px 12px;
-    font-size: 1rem;
-    border-radius: 6px;
-    border: none;
-    outline: none;
-    background-color: #fff;
-    box-shadow: 0 0 0 2px #ccc;
-  }
-
-  .class-card__form-buttons {
+    background: {
+      position: center;
+      size: cover;
+      repeat: no-repeat;
+    }
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 12px;
-    position: relative;
-    z-index: 2;
+    padding: 16px;
+    border-radius: 12px;
 
-    .class-card__button {
-      padding: 8px 14px;
-      font-size: 0.9rem;
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: rgba(255, 255, 255, 0.4); // biały, półprzezroczysty
+      z-index: 1;
+    }
+
+    &__join-title {
+      font-size: 1.5rem;
+      color: vars.$yellowBtnText;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    &__input {
+      position: relative;
+      z-index: 2;
+      width: 80%;
+      padding: 10px 12px;
+      font-size: 1rem;
       border-radius: 6px;
-      cursor: pointer;
       border: none;
-      font-weight: bold;
+      outline: none;
+      background-color: #fff;
+      box-shadow: 0 0 0 2px #ccc;
+    }
 
-      &--confirm {
-        background-color: vars.$primaryPurple;
-        color: #fff;
+    &__form-buttons {
+      display: flex;
+      gap: 12px;
+      position: relative;
+      z-index: 2;
 
-        &:hover {
-          background-color: vars.$primaryPurpleHover;
+      &__button {
+        padding: 8px 14px;
+        font-size: 0.9rem;
+        border-radius: 6px;
+        cursor: pointer;
+        border: none;
+        font-weight: bold;
+
+        &--confirm {
+          background-color: vars.$primaryPurple;
+          color: #fff;
+
+          &:hover {
+            background-color: vars.$primaryPurpleHover;
+          }
         }
-      }
 
-      &--cancel {
-        background-color: #f44336;
-        color: #fff;
+        &--cancel {
+          background-color: #f44336;
+          color: #fff;
 
-        &:hover {
-          background-color: #e53935;
+          &:hover {
+            background-color: #e53935;
+          }
         }
       }
     }
