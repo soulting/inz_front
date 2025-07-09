@@ -137,6 +137,7 @@ console.log('subpointy z props', props.subpoints)
 
 const tasks = reactive([
   {
+    id: null,
     originalSentence: '',
     correctedSentence: '',
     hint: '',
@@ -151,6 +152,7 @@ watch(
         0,
         tasks.length,
         ...newSubpoints.map((subpoint) => ({
+          id: subpoint.id ?? null,
           originalSentence: subpoint.question || '',
           correctedSentence: subpoint.correct_answer || '',
           hint: subpoint.hint || '',
@@ -183,6 +185,7 @@ function submitTasks() {
 
 function addTask() {
   tasks.push({
+    id: null,
     originalSentence: '',
     correctedSentence: '',
     hint: '',

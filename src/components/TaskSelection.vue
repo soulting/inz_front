@@ -68,6 +68,7 @@ const optionLabels = ['A', 'B', 'C']
 
 const tasks = reactive([
   {
+    id: null,
     originalSentence: '',
     options: ['', '', ''],
     correctIndex: 0,
@@ -108,6 +109,7 @@ function submitTasks() {
 
 function addTask() {
   tasks.push({
+    id: null,
     originalSentence: '',
     options: ['', '', ''],
     correctIndex: 0,
@@ -122,6 +124,7 @@ watch(
     tasks.length = 0
     newSubpoints.forEach((sp) => {
       tasks.push({
+        id: sp.id ?? null, // ← dodane
         originalSentence: sp.question || '',
         options: sp.options || ['', '', ''],
         correctIndex: sp.correct_index || 0,
