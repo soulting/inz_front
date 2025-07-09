@@ -1,13 +1,21 @@
 <template>
   <div class="task-select">
     <div v-for="(task, index) in tasks" :key="index" class="task-select__task-block">
-      <h2 class="task-select__header">Pytanie {{ index + 1 }}</h2>
+      <h2 class="task-select__header">Podpunkt {{ index + 1 }}</h2>
 
-      <label class="task-select__label">Treść pytania</label>
+      <label class="task-select__label">Treść podpunktu</label>
       <input
-        v-model="task.question"
+        v-model="task.originalSentence"
         type="text"
         placeholder="Wpisz pytanie z %%[sel]%% jako miejscem wyboru"
+        class="task-select__input"
+      />
+
+      <label class="task-select__label">Podpowiedź</label>
+      <input
+        v-model="task.hint"
+        type="text"
+        placeholder="np. rodzajnik określony"
         class="task-select__input"
       />
 
@@ -45,35 +53,91 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
+
+const props = defineProps({
+  subpoints: {
+    type: Array,
+    default: () => [],
+  },
+})
+
+const emit = defineEmits(['taskCreated'])
 
 const optionLabels = ['A', 'B', 'C']
 
 const tasks = reactive([
   {
-    question: '',
+    originalSentence: '',
     options: ['', '', ''],
     correctIndex: 0,
+    hint: '',
   },
 ])
 
-function addTask() {
-  tasks.push({
-    question: '',
-    options: ['', '', ''],
-    correctIndex: 0,
-  })
+function validateTasks() {
+  for (let i = 0; i < tasks.length; i++) {
+    const task = tasks[i]
+
+    if (!task.originalSentence.trim()) {
+      alert(`Proszę wpisać treść pytania w podpunkcie ${i + 1}`)
+      return false
+    }
+
+    for (let j = 0; j < task.options.length; j++) {
+      if (!task.options[j].trim()) {
+        alert(`Proszę uzupełnić opcję ${optionLabels[j]} w podpunkcie ${i + 1}`)
+        return false
+      }
+    }
+  }
+  return true
 }
 
 function submitTasks() {
-  console.log('Zakończone zadania:', tasks)
+  if (validateTasks()) {
+    tasks.forEach((task) => {
+      task.correctedSentence = task.originalSentence.replace(
+        '%%[sel]%%',
+        task.options[task.correctIndex],
+      )
+    })
+    emit('taskCreated', tasks)
+  }
 }
+
+function addTask() {
+  tasks.push({
+    originalSentence: '',
+    options: ['', '', ''],
+    correctIndex: 0,
+    correctedSentence: '',
+    hint: '',
+  })
+}
+
+watch(
+  () => props.subpoints,
+  (newSubpoints) => {
+    tasks.length = 0
+    newSubpoints.forEach((sp) => {
+      tasks.push({
+        originalSentence: sp.question || '',
+        options: sp.options || ['', '', ''],
+        correctIndex: sp.correct_index || 0,
+        correctedSentence: sp.correctedSentence || '',
+        hint: sp.hint || '',
+      })
+    })
+  },
+  { immediate: true },
+)
 </script>
 
 <style scoped lang="scss">
 .task-select {
   width: 100%;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 24px;
   background-color: #ffffff;

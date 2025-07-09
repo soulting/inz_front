@@ -1,10 +1,14 @@
 <template>
   <div class="teacher-classes">
+    <!-- KLASY -->
     <ClassGrid :classes="classes" :deleteButton="true" title="Moje klasy" @delete="deleteClass">
+      <!-- Karta dodawania klasy -->
       <div class="teacher-classes__add-card" @click="createClass">
         <div class="teacher-classes__plus">+</div>
         <div class="teacher-classes__add-text">Dodaj klasę</div>
       </div>
+
+      <!-- Formularz tworzenia klasy -->
       <div
         v-if="showCreateForm"
         class="teacher-classes__form-card"
@@ -38,39 +42,48 @@
         </div>
       </div>
     </ClassGrid>
-    <TaskGrid :tasks="tasks" :deleteButton="true" :editButton="true" />
 
-    >
+    <!-- ZADANIA -->
+    <TaskGrid :tasks="tasks" :deleteButton="true" :editButton="true">
+      <div class="task-list__add-card" @click="goToCreateTask">
+        <div class="task-list__plus">+</div>
+        <div class="task-list__add-text">Dodaj klasę</div>
+      </div>
+    </TaskGrid>
   </div>
 </template>
 
 <script setup>
+// === IMPORTY ===
 import { ref, onMounted } from 'vue'
-import { useLoadingStore } from '@/stores/loading'
-import axios from 'axios'
-import { useAuthStore } from '@/stores/auth'
-import { storeToRefs } from 'pinia'
-import Swal from 'sweetalert2'
-import ClassGrid from '@/components/ClassGrid.vue'
-import { handleApiError } from '@/composables/errorHandling'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
+import Swal from 'sweetalert2'
+import { storeToRefs } from 'pinia'
+
+import ClassGrid from '@/components/ClassGrid.vue'
 import TaskGrid from '@/components/TaskGrid.vue'
 
-const tasks = ref([])
+import { useLoadingStore } from '@/stores/loading'
+import { useAuthStore } from '@/stores/auth'
+import { handleApiError } from '@/composables/errorHandling'
 
+// === INSTANCJE ===
+const router = useRouter()
 const loadingStore = useLoadingStore()
 const authStore = useAuthStore()
 const { jwtToken } = storeToRefs(authStore)
 
+// === STANY ===
 const classes = ref([])
-
-const router = useRouter()
+const tasks = ref([])
 
 const showCreateForm = ref(false)
 const newClassName = ref('')
 const newClassPassword = ref('')
 const placeholderImage = ref('')
 
+// === FUNKCJE POMOCNICZE ===
 const createClass = () => {
   placeholderImage.value = `https://xxofdfokqesjgcuvqsax.supabase.co/storage/v1/object/public/inzyniekrka-images/placeholder${Math.floor(Math.random() * 6) + 1}.webp`
   showCreateForm.value = true
@@ -82,6 +95,12 @@ const cancelCreateClass = () => {
   newClassPassword.value = ''
 }
 
+function goToCreateTask() {
+  router.push({ name: 'create-task' })
+}
+
+// === ŻĄDANIA DO API ===
+
 const submitNewClass = async () => {
   if (!newClassName.value.trim()) {
     Swal.fire({
@@ -91,6 +110,7 @@ const submitNewClass = async () => {
     })
     return
   }
+
   try {
     loadingStore.startLoading()
 
@@ -109,9 +129,7 @@ const submitNewClass = async () => {
     )
 
     classes.value = response.data
-    showCreateForm.value = false
-    newClassName.value = ''
-    newClassPassword.value = ''
+    cancelCreateClass()
     placeholderImage.value = ''
   } catch (error) {
     handleApiError(error, router)
@@ -141,6 +159,7 @@ async function deleteClass(deleteId) {
   }
 }
 
+// === POBIERANIE DANYCH PRZY MONCIE ===
 onMounted(async () => {
   try {
     loadingStore.startLoading()
@@ -158,7 +177,6 @@ onMounted(async () => {
 
     classes.value = classResponse.data
     tasks.value = taskResponse.data
-    console.log('tasks.value', tasks.value)
   } catch (error) {
     handleApiError(error, router)
   } finally {

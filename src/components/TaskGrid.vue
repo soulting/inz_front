@@ -1,6 +1,8 @@
 <template>
   <div class="task-list">
     <h1 class="task-list_title">Moje zadania</h1>
+
+    <!-- FILTRY I SORTOWANIE -->
     <div class="task-list__controls">
       <input
         v-model="searchQuery"
@@ -8,7 +10,6 @@
         placeholder="Szukaj zadania..."
         class="task-list__search-input"
       />
-
       <select v-model="sortBy" class="task-list__sort-select">
         <option value="date_desc">Sortuj: Data (najnowsze)</option>
         <option value="date_asc">Sortuj: Data (najstarsze)</option>
@@ -17,17 +18,14 @@
       </select>
     </div>
 
-    <!-- Grid kafelków -->
+    <!-- GRID ZADAŃ -->
     <div class="task-list__grid">
-      <div class="task-list__add-card" @click="createClass">
-        <div class="task-list__plus">+</div>
-        <div class="task-list__add-text">Dodaj klasę</div>
-      </div>
+      <slot></slot>
+
       <div v-if="!filteredAndSortedTasks.length" class="task-list__no-classes">
         Brak klas do wyświetlenia
       </div>
 
-      <!-- Kafelki klas -->
       <div v-for="taskItem in filteredAndSortedTasks.slice(0, sliceCount)" :key="taskItem.id">
         <TaskCard
           :taskData="taskItem"
@@ -38,83 +36,47 @@
         />
       </div>
     </div>
-    <div v-if="showMoreButton" class="task-list__show-more-wrapper">
-      <button class="task-list__show-more-button" @click="showMore">Pokaż więcej</button>
-    </div>
-    <div v-else class="task-list__show-more-wrapper">
-      <button class="task-list__show-more-button" @click="showLess">Pokaż mniej</button>
+
+    <!-- PRZYCISKI POKAŻ WIĘCEJ/MNIEJ -->
+    <div class="task-list__show-more-wrapper">
+      <button class="task-list__show-more-button" @click="showMoreButton ? showMore() : showLess()">
+        {{ showMoreButton ? 'Pokaż więcej' : 'Pokaż mniej' }}
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import TaskCard from '@/components/TaskCard.vue'
-import Swal from 'sweetalert2'
+// === IMPORTY ===
 import { ref, computed } from 'vue'
+import Swal from 'sweetalert2'
+import TaskCard from '@/components/TaskCard.vue'
 
-const levelOrder = ['A1', 'A2', 'B1']
-
+// === PROPS & EMITY ===
 const props = defineProps({
-  tasks: {
-    type: Array,
-    required: true,
-  },
-
-  editButton: {
-    type: Boolean,
-    default: false,
-  },
-  deleteButton: {
-    type: Boolean,
-    default: false,
-  },
+  tasks: { type: Array, required: true },
+  editButton: { type: Boolean, default: false },
+  deleteButton: { type: Boolean, default: false },
 })
 const emit = defineEmits(['delete', 'join'])
 
+// === STANY LOKALNE ===
 const searchQuery = ref('')
 const sortBy = ref('date_desc')
 const sliceCount = ref(5)
 const showMoreButton = ref(true)
 
+const levelOrder = ['A1', 'A2', 'B1']
+
+// === FUNKCJE ===
 function showMore() {
   sliceCount.value = props.tasks.length
   showMoreButton.value = false
 }
-const showLess = () => {
+function showLess() {
   sliceCount.value = 5
   showMoreButton.value = true
 }
-
-const filteredAndSortedTasks = computed(() => {
-  let result = [...props.tasks]
-
-  if (searchQuery.value.trim()) {
-    result = result.filter((cls) =>
-      cls.question.toLowerCase().includes(searchQuery.value.toLowerCase()),
-    )
-  }
-
-  switch (sortBy.value) {
-    case 'date_desc':
-      result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-      break
-    case 'date_asc':
-      result.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-      break
-    case 'difficulty_asc':
-      result.sort((a, b) => {
-        return levelOrder.indexOf(a.level) - levelOrder.indexOf(b.level)
-      })
-      break
-    case 'difficulty_desc':
-      result.sort((a, b) => {
-        return levelOrder.indexOf(b.level) - levelOrder.indexOf(a.level)
-      })
-      break
-  }
-
-  return result
-})
 
 function confirmAndDelete(deleteId) {
   Swal.fire({
@@ -126,13 +88,41 @@ function confirmAndDelete(deleteId) {
   }).then((result) => {
     if (result.isConfirmed) {
       emit('delete', deleteId)
-    } else {
-      console.log('Usuwanie anulowane')
     }
   })
 }
 
-function emitEdit(classID) {
-  console.log('Edit', classID)
+function emitEdit(taskId) {
+  emit('edit', taskId)
 }
+
+// === COMPUTED: FILTROWANIE + SORTOWANIE ===
+const filteredAndSortedTasks = computed(() => {
+  let result = [...props.tasks]
+
+  // Filtrowanie
+  if (searchQuery.value.trim()) {
+    result = result.filter((task) =>
+      task.question.toLowerCase().includes(searchQuery.value.toLowerCase()),
+    )
+  }
+
+  // Sortowanie
+  switch (sortBy.value) {
+    case 'date_desc':
+      result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      break
+    case 'date_asc':
+      result.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+      break
+    case 'difficulty_asc':
+      result.sort((a, b) => levelOrder.indexOf(a.level) - levelOrder.indexOf(b.level))
+      break
+    case 'difficulty_desc':
+      result.sort((a, b) => levelOrder.indexOf(b.level) - levelOrder.indexOf(a.level))
+      break
+  }
+
+  return result
+})
 </script>

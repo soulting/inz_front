@@ -57,6 +57,7 @@ defineExpose({
           </span>
           <span v-else>{{ segment }}</span>
         </template>
+        <span>{{ subtask.hint }}</span>
       </span>
     </li>
   </ol>

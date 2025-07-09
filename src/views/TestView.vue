@@ -5,7 +5,7 @@ import { useLoadingStore } from '../stores/loading'
 
 import FillInTask from '@/components/FillInTask.vue'
 import SelectionTask from '@/components/SelectionTask.vue'
-import CorrectionTask from '@/components/CorrectionTask.vue'
+import CorrectionTask from '@/components/MultiTask.vue'
 import CorrectionWordTask from '@/components/CorrectionWordTask.vue'
 import TestStartingScreen from '@/components/TestStartingScreen.vue'
 import TestSummary from '@/components/TestSummary.vue'
@@ -210,6 +210,8 @@ onMounted(async () => {
     const response = await axios.get('http://localhost:5000/placement_test/get_test', {
       params: { id: props.level },
     })
+
+    console.log('Tasks fetched successfully:', response.data)
 
     tasks.value = response.data
   } catch (error) {

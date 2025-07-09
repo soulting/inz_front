@@ -1,38 +1,3 @@
-<script setup>
-import { ref, watch } from 'vue'
-const props = defineProps(['currentTask'])
-const emit = defineEmits(['submit', 'noAnswers'])
-
-const userInputs = ref([])
-const currentAnwsers = ref([])
-
-function submitAnswers() {
-  if (userInputs.value.some((input) => input === '')) {
-    emit('noAnswers')
-    return
-  }
-
-  const answers = currentAnwsers.value.map((row, index) =>
-    row.replace('%%[sel]%%', userInputs.value[index]),
-  )
-  emit('submit', answers)
-  console.log('Answers submitted from FillInTask.')
-}
-
-watch(
-  () => props.currentTask.subtasks,
-  (newSubtasks) => {
-    currentAnwsers.value = newSubtasks.map((subtask) => subtask.question)
-    userInputs.value = newSubtasks.map(() => '')
-  },
-  { immediate: true },
-)
-
-defineExpose({
-  submitAnswers,
-})
-</script>
-
 <template>
   <ol v-if="currentTask.subtasks">
     <li v-for="(sub, index1) in currentTask.subtasks" :key="sub.id" class="task-item">
@@ -84,6 +49,40 @@ defineExpose({
     </li>
   </ol>
 </template>
+<script setup>
+import { ref, watch } from 'vue'
+const props = defineProps(['currentTask'])
+const emit = defineEmits(['submit', 'noAnswers'])
+
+const userInputs = ref([])
+const currentAnwsers = ref([])
+
+function submitAnswers() {
+  if (userInputs.value.some((input) => input === '')) {
+    emit('noAnswers')
+    return
+  }
+
+  const answers = currentAnwsers.value.map((row, index) =>
+    row.replace('%%[sel]%%', userInputs.value[index]),
+  )
+  emit('submit', answers)
+  console.log('Answers submitted from FillInTask.')
+}
+
+watch(
+  () => props.currentTask.subtasks,
+  (newSubtasks) => {
+    currentAnwsers.value = newSubtasks.map((subtask) => subtask.question)
+    userInputs.value = newSubtasks.map(() => '')
+  },
+  { immediate: true },
+)
+
+defineExpose({
+  submitAnswers,
+})
+</script>
 
 <style scoped>
 .select {

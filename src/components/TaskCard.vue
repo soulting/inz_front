@@ -1,10 +1,5 @@
 <template>
-  <div
-    class="task-card"
-    :style="{
-      backgroundImage: `url('https://xxofdfokqesjgcuvqsax.supabase.co/storage/v1/object/public/inzyniekrka-images/placeholder1.webp')`,
-    }"
-  >
+  <div class="task-card">
     <div class="task-card__header">
       <div class="task-card__title">
         {{ props.taskData.question }}
@@ -14,7 +9,7 @@
           v-if="editButton"
           class="task-card__button"
           aria-label="Edytuj zadanie"
-          @click="emitEdit"
+          @click="editTask"
         >
           <img class="task-card__icon" src="../assets/icons/editing.png" alt="edit icon" />
         </button>
@@ -51,6 +46,10 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 const props = defineProps({
   taskData: {
     type: Object,
@@ -72,7 +71,17 @@ const emitDelete = () => {
   emit('delete', props.taskData.id)
 }
 
-const emitEdit = () => {
-  emit('edit', props.taskData.id)
+const editTask = () => {
+  router.push({
+    name: 'create-task',
+    query: {
+      id: props.taskData.id,
+      selectedMainCategory: props.taskData.main_category,
+      selectedFirstCategory: props.taskData.first_category,
+      taskType: props.taskData.task_type,
+      level: props.taskData.level,
+      question: props.taskData.question,
+    },
+  })
 }
 </script>
