@@ -44,12 +44,19 @@
     </ClassGrid>
 
     <!-- ZADANIA -->
-    <TaskGrid :tasks="tasks" :deleteButton="true" :editButton="true">
-      <div class="task-list__add-card" @click="goToCreateTask">
-        <div class="task-list__plus">+</div>
-        <div class="task-list__add-text">Dodaj klasę</div>
+    <TaskList :tasks="tasks" :deleteButton="true" :editButton="true">
+      <div class="list__add-card" @click="goToCreateTask">
+        <div class="list__plus">+</div>
+        <div class="list__add-text">Dodaj zadanie</div>
       </div>
-    </TaskGrid>
+    </TaskList>
+
+    <LessonList :lessons="lessons">
+      <div class="list__add-card" @click="goToCreateLesson">
+        <div class="list__plus">+</div>
+        <div class="list__add-text">Dodaj lekcję</div>
+      </div>
+    </LessonList>
   </div>
 </template>
 
@@ -62,7 +69,8 @@ import Swal from 'sweetalert2'
 import { storeToRefs } from 'pinia'
 
 import ClassGrid from '@/components/ClassGrid.vue'
-import TaskGrid from '@/components/TaskGrid.vue'
+import TaskList from '@/components/TaskList.vue'
+import LessonList from '@/components/LessonList.vue'
 
 import { useLoadingStore } from '@/stores/loading'
 import { useAuthStore } from '@/stores/auth'
@@ -77,6 +85,7 @@ const { jwtToken } = storeToRefs(authStore)
 // === STANY ===
 const classes = ref([])
 const tasks = ref([])
+const lessons = ref([])
 
 const showCreateForm = ref(false)
 const newClassName = ref('')
@@ -97,6 +106,10 @@ const cancelCreateClass = () => {
 
 function goToCreateTask() {
   router.push({ name: 'create-task' })
+}
+
+function goToCreateLesson() {
+  router.push({ name: 'create-lesson' })
 }
 
 // === ŻĄDANIA DO API ===
@@ -170,15 +183,18 @@ onMounted(async () => {
       },
     }
 
-    const [classResponse, taskResponse] = await axios.all([
+    const [classResponse, taskResponse, lessonsResponse] = await axios.all([
       axios.get('http://localhost:5000/classes/get_teacher_classes', config),
       axios.get('http://localhost:5000/tasks/get_teacher_tasks', config),
+      axios.get('http://localhost:5000/lessons/get_teacher_lessons', config),
     ])
 
     classes.value = classResponse.data
     tasks.value = taskResponse.data
+    lessons.value = lessonsResponse.data // <--- przypisujemy lekcje
   } catch (error) {
     handleApiError(error, router)
+    router.push('/') // <--- przekierowanie do widoku klas nauczyciela
   } finally {
     loadingStore.stopLoading()
   }

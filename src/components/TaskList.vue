@@ -1,16 +1,16 @@
 <template>
-  <div class="task-list">
-    <h1 class="task-list_title">Moje zadania</h1>
+  <div class="list">
+    <h1 class="list_title">Moje zadania</h1>
 
     <!-- FILTRY I SORTOWANIE -->
-    <div class="task-list__controls">
+    <div class="list__controls">
       <input
         v-model="searchQuery"
         type="text"
         placeholder="Szukaj zadania..."
-        class="task-list__search-input"
+        class="list__search-input"
       />
-      <select v-model="sortBy" class="task-list__sort-select">
+      <select v-model="sortBy" class="list__sort-select">
         <option value="date_desc">Sortuj: Data (najnowsze)</option>
         <option value="date_asc">Sortuj: Data (najstarsze)</option>
         <option value="difficulty_asc">Sortuj: Poziom trudności (rosnąco)</option>
@@ -19,10 +19,10 @@
     </div>
 
     <!-- GRID ZADAŃ -->
-    <div class="task-list__grid">
+    <div class="list__grid">
       <slot></slot>
 
-      <div v-if="!filteredAndSortedTasks.length" class="task-list__no-classes">
+      <div v-if="!filteredAndSortedTasks.length" class="list__no-classes">
         Brak klas do wyświetlenia
       </div>
 
@@ -38,8 +38,8 @@
     </div>
 
     <!-- PRZYCISKI POKAŻ WIĘCEJ/MNIEJ -->
-    <div class="task-list__show-more-wrapper">
-      <button class="task-list__show-more-button" @click="showMoreButton ? showMore() : showLess()">
+    <div class="list__show-more-wrapper">
+      <button class="list__show-more-button" @click="showMoreButton ? showMore() : showLess()">
         {{ showMoreButton ? 'Pokaż więcej' : 'Pokaż mniej' }}
       </button>
     </div>

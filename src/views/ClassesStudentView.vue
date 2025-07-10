@@ -16,7 +16,7 @@ import { useLoadingStore } from '@/stores/loading'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
-import Swal from 'sweetalert2'
+
 import ClassGrid from '@/components/ClassGrid.vue'
 import { handleApiError } from '@/composables/errorHandling'
 import { useRouter } from 'vue-router'

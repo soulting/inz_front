@@ -82,7 +82,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue'
+import { onMounted, reactive } from 'vue'
 import TaskSelect from '@/components/TaskSelection.vue'
 import MultiTask from '@/components/MultiTask.vue'
 
