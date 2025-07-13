@@ -1,6 +1,6 @@
 <template>
   <div class="correction-task">
-    <div v-for="(task, index) in tasks" :key="index" class="correction-task__block">
+    <div v-for="(task, index) in task" :key="index" class="correction-task__block">
       <h2 class="correction-task__header">Podpunkt {{ index + 1 }}</h2>
 
       <div v-if="props.type === 'correction_word'" class="correction-task__word-block">
@@ -9,7 +9,7 @@
             >Słowo przed przekształceniem</label
           >
           <input
-            v-model="task.originalSentence"
+            v-model="task.template"
             :id="'original-' + index"
             placeholder="der Apfel"
             class="correction-task__textarea"
@@ -20,7 +20,7 @@
         <div>
           <label class="correction-task__label" :for="'hint-' + index">Podpowiedź </label>
           <input
-            v-model="task.hint"
+            v-model="task.bonus_information"
             :id="'hint-' + index"
             placeholder="Plural"
             class="correction-task__textarea correction-task__textarea--hint"
@@ -38,7 +38,7 @@
             >Przekształcone słowo</label
           >
           <input
-            v-model="task.correctedSentence"
+            v-model="task.correct_answer"
             :id="'corrected-' + index"
             placeholder="die Äpfel"
             class="correction-task__textarea"
@@ -51,7 +51,7 @@
           >Zdanie do przekształcenia</label
         >
         <textarea
-          v-model="task.originalSentence"
+          v-model="task.template"
           :id="'original-' + index"
           placeholder="Ich esse einen Apfel."
           class="correction-task__textarea"
@@ -61,7 +61,7 @@
         <div>
           <label class="correction-task__label" :for="'hint-' + index">Podpowiedź </label>
           <input
-            v-model="task.hint"
+            v-model="task.bonus_information"
             :id="'hint-' + index"
             placeholder="Perfekt"
             class="correction-task__textarea correction-task__textarea--hint"
@@ -70,7 +70,7 @@
 
         <label class="correction-task__label" :for="'corrected-' + index">Poprawione zdanie</label>
         <textarea
-          v-model="task.correctedSentence"
+          v-model="task.correct_answer"
           :id="'corrected-' + index"
           placeholder="Ich habe einen Apfel gegessen."
           class="correction-task__textarea"
@@ -82,7 +82,7 @@
           >Zdanie do przekształcenia</label
         >
         <textarea
-          v-model="task.originalSentence"
+          v-model="task.template"
           :id="'original-' + index"
           placeholder="Ich esse %%[inp]%%."
           class="correction-task__textarea"
@@ -92,7 +92,7 @@
         <div>
           <label class="correction-task__label" :for="'hint-' + index">Podpowiedź </label>
           <input
-            v-model="task.hint"
+            v-model="task.bonus_information"
             :id="'hint-' + index"
             placeholder="ein"
             class="correction-task__textarea correction-task__textarea--hint"
@@ -101,7 +101,7 @@
 
         <label class="correction-task__label" :for="'corrected-' + index">Poprawione zdanie</label>
         <textarea
-          v-model="task.correctedSentence"
+          v-model="task.correct_answer"
           :id="'corrected-' + index"
           placeholder="Ich esse einen Apfel."
           class="correction-task__textarea"
@@ -111,7 +111,7 @@
     </div>
 
     <div class="correction-task__buttons-row">
-      <button class="correction-task__submit-button" @click="submitTasks">Zakończ</button>
+      <button class="correction-task__submit-button" @click="submitTask">Zakończ</button>
       <button class="correction-task__add-button" @click="addTask">+ Dodaj kolejne zdanie</button>
     </div>
   </div>
@@ -127,35 +127,35 @@ const props = defineProps({
     type: String,
     default: 'correction',
   },
-  subpoints: {
+  task_items: {
     type: Array,
     default: () => [],
   },
 })
 
-console.log('subpointy z props', props.subpoints)
+console.log('task_itemy z props', props.task_items)
 
-const tasks = reactive([
+const task = reactive([
   {
     id: null,
-    originalSentence: '',
-    correctedSentence: '',
-    hint: '',
+    template: '',
+    bonus_information: null,
+    correct_answer: '',
   },
 ])
 
 watch(
-  () => props.subpoints,
-  (newSubpoints) => {
-    if (newSubpoints && newSubpoints.length > 0) {
-      tasks.splice(
+  () => props.task_items,
+  (new_task_items) => {
+    if (new_task_items && new_task_items.length > 0) {
+      task.splice(
         0,
-        tasks.length,
-        ...newSubpoints.map((subpoint) => ({
-          id: subpoint.id ?? null,
-          originalSentence: subpoint.question || '',
-          correctedSentence: subpoint.correct_answer || '',
-          hint: subpoint.hint || '',
+        task.length,
+        ...new_task_items.map((task_item) => ({
+          id: task_item.id ?? null,
+          template: task_item.template || '',
+          correct_answer: task_item.correct_answer || '',
+          bonus_information: task_item.bonus_information || '',
         })),
       )
     }
@@ -163,13 +163,11 @@ watch(
   { immediate: true },
 )
 
-console.log('Tasks ', tasks)
+function validateTask() {
+  for (let i = 0; i < task.length; i++) {
+    const t = task[i]
 
-function validateTasks() {
-  for (let i = 0; i < tasks.length; i++) {
-    const task = tasks[i]
-
-    if (!task.correctedSentence.trim()) {
+    if (!t.correct_answer || !t.correct_answer.trim()) {
       alert(`Proszę wpisać poprawioną wersję zdania w podpunkcie ${i + 1}`)
       return false
     }
@@ -177,18 +175,18 @@ function validateTasks() {
   return true
 }
 
-function submitTasks() {
-  if (validateTasks()) {
-    emit('taskCreated', tasks)
+function submitTask() {
+  if (validateTask()) {
+    emit('taskCreated', task)
   }
 }
 
 function addTask() {
-  tasks.push({
+  task.push({
     id: null,
-    originalSentence: '',
-    correctedSentence: '',
-    hint: '',
+    template: '',
+    bonus_information: null,
+    correct_answer: '',
   })
 }
 </script>

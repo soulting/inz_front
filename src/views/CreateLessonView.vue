@@ -3,7 +3,11 @@
     <div class="create-lesson">
       <h1 class="create-lesson__title">Utwórz nową lekcję</h1>
 
-      <form @submit.prevent="submitLesson" class="create-lesson__form">
+      <form
+        id='@submit.prevent="submitLesson"'
+        @submit.prevent="getEditorContent"
+        class="create-lesson__form"
+      >
         <!-- Tytuł -->
         <div class="create-lesson__group">
           <label for="title" class="create-lesson__label">Tytuł lekcji</label>
@@ -80,15 +84,16 @@
         <div class="create-lesson__group">
           <label class="create-lesson__label">Kontekst</label>
           <Editor
+            ref="tinyEditor"
             v-model="lessonData.context"
             api-key="k0efnljtvefg89se78os1oopj0hhvfyohqfko19nnrqo5x7j"
             :init="{
               height: 700,
-              menubar: false,
+              menubar: true,
               plugins:
-                'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount hr fullscreen code preview paste help',
               toolbar:
-                'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+                'undo redo | formatselect blocks fontfamily fontsize | bold italic underline strikethrough | link image media table hr | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat | fullscreen preview code help',
               toolbar_mode: 'sliding',
               statusbar: false,
             }"
@@ -121,7 +126,7 @@ const router = useRouter()
 const grammarTopics = [
   {
     main_category: 'Rzeczowniki',
-    first_categorys: [
+    sub_categories: [
       'Rodzaj (męski, żeński, nijaki)',
       'Liczba mnoga',
       'Odmiana (słaba, mocna, mieszana)',
@@ -132,7 +137,7 @@ const grammarTopics = [
   },
   {
     main_category: 'Czasowniki',
-    first_categorys: [
+    sub_categories: [
       'Odmiana (regularne)',
       'Odmiana (nieregularna)',
       'Czasowniki modalne',
@@ -158,7 +163,7 @@ const lessonData = reactive({
 
 function getSubCategories(mainCategory) {
   const topic = grammarTopics.find((t) => t.main_category === mainCategory)
-  return topic ? topic.first_categorys : []
+  return topic ? topic.sub_categories : []
 }
 
 async function submitLesson() {

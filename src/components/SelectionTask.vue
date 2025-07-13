@@ -1,9 +1,9 @@
 <template>
-  <ol v-if="currentTask.subtasks">
-    <li v-for="(sub, index1) in currentTask.subtasks" :key="sub.id" class="task-item">
+  <ol v-if="currentTask.task_items">
+    <li v-for="(sub, index1) in currentTask.task_items" :key="sub.id" class="task-item">
       <div class="sellection-container">
         <span>
-          <template v-for="(word, index2) in sub.question.split('%%')" :key="index2">
+          <template v-for="(word, index2) in sub.template.split('%%')" :key="index2">
             <span v-if="word === '[sel]'">
               <input class="task-item-input select" type="text" />
             </span>
@@ -71,10 +71,10 @@ function submitAnswers() {
 }
 
 watch(
-  () => props.currentTask.subtasks,
-  (newSubtasks) => {
-    currentAnwsers.value = newSubtasks.map((subtask) => subtask.question)
-    userInputs.value = newSubtasks.map(() => '')
+  () => props.currentTask.task_items,
+  (newTaskItems) => {
+    currentAnwsers.value = newTaskItems.map((task_item) => task_item.template)
+    userInputs.value = newTaskItems.map(() => '')
   },
   { immediate: true },
 )

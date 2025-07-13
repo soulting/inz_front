@@ -9,12 +9,12 @@ const emit = defineEmits(['submit', 'noAnswers'])
 // Reactive state for user inputs
 const userInputs = ref([])
 
-// Watch for changes in subtasks and initialize input fields
+// Watch for changes in task_items and initialize input fields
 watch(
-  () => props.currentTask.subtasks,
-  (newSubtasks) => {
-    userInputs.value = newSubtasks.map((subtask) =>
-      subtask.question
+  () => props.currentTask.task_items,
+  (newTaskItems) => {
+    userInputs.value = newTaskItems.map((task_item) =>
+      task_item.template
         .replace(/^%%/, '')
         .split('%%')
         .map((segment) => (segment === '[inp]' ? '' : segment)),
@@ -41,11 +41,15 @@ defineExpose({
 </script>
 
 <template>
-  <ol v-if="currentTask.subtasks">
-    <li v-for="(subtask, rowIndex) in currentTask.subtasks" :key="subtask.id" class="task-item">
+  <ol v-if="currentTask.task_items">
+    <li
+      v-for="(task_item, rowIndex) in currentTask.task_items"
+      :key="task_item.id"
+      class="task-item"
+    >
       <span>
         <template
-          v-for="(segment, segmentIndex) in subtask.question.replace(/^%%/, '').split('%%')"
+          v-for="(segment, segmentIndex) in task_item.template.replace(/^%%/, '').split('%%')"
           :key="segmentIndex"
         >
           <span v-if="segment === '[inp]'">
@@ -57,7 +61,7 @@ defineExpose({
           </span>
           <span v-else>{{ segment }}</span>
         </template>
-        <span>{{ subtask.hint }}</span>
+        <span> {{ task_item.bonus_information }}</span>
       </span>
     </li>
   </ol>

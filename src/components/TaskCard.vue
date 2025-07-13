@@ -33,9 +33,9 @@
         <span class="label">Kategoria główna:</span>
         <span class="value">{{ props.taskData.main_category }}</span>
       </div>
-      <div class="info-item" v-if="props.taskData.first_category">
+      <div class="info-item" v-if="props.taskData.sub_category">
         <span class="label">Podkategoria:</span>
-        <span class="value">{{ props.taskData.first_category }}</span>
+        <span class="value">{{ props.taskData.sub_category }}</span>
       </div>
       <div class="info-item">
         <span class="label">Typ zadania:</span>
@@ -76,9 +76,9 @@ const editTask = () => {
     name: 'create-task',
     query: {
       id: props.taskData.id,
-      selectedMainCategory: props.taskData.main_category,
-      selectedFirstCategory: props.taskData.first_category,
-      taskType: props.taskData.task_type,
+      main_category: props.taskData.main_category,
+      sub_category: props.taskData.sub_category,
+      task_type: props.taskData.task_type,
       level: props.taskData.level,
       question: props.taskData.question,
     },

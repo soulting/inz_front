@@ -12,8 +12,12 @@ import TestSummary from '@/components/TestSummary.vue'
 import { useAuthStore } from '../stores/auth'
 import Swal from 'sweetalert2'
 import { storeToRefs } from 'pinia'
+import { handleApiError } from '@/composables/errorHandling'
+import { useRouter } from 'vue-router'
 
 const { jwtToken } = storeToRefs(useAuthStore())
+
+const router = useRouter()
 
 const alert = {
   icon: 'error',
@@ -45,6 +49,7 @@ const testState = ref('not_started')
 
 async function finishTest() {
   try {
+    loadingStore.startLoading()
     const response = await axios.post(
       'http://localhost:5000/placement_test/submit_test',
       {
@@ -59,25 +64,9 @@ async function finishTest() {
     )
     console.log('Test submitted successfully:', response.data)
   } catch (error) {
-    if (error.response) {
-      console.error('Backend error:', error.response.status, error.response.data)
-
-      return {
-        success: false,
-      }
-    } else if (error.request) {
-      console.error('No response from server:', error.request)
-
-      return {
-        success: false,
-      }
-    } else {
-      console.error('Axios error:', error.message)
-
-      return {
-        success: false,
-      }
-    }
+    handleApiError(error, router)
+  } finally {
+    loadingStore.stopLoading()
   }
 
   testState.value = 'finished'
@@ -137,9 +126,9 @@ function handleSubmitAnswers(answers) {
   )
 
   const scoredAnswers = trimmedAnswers.map((answer, index) => {
-    const correctAnswer = currentTask.value.subtasks[index].correct_answer
+    const correctAnswer = currentTask.value.task_items[index].correct_answer
     return {
-      [currentTask.value.subtasks[index].id]: {
+      [currentTask.value.task_items[index].id]: {
         point: answer === correctAnswer ? 1 : 0,
         uncertain: answer.includes('???') ? 1 : 0,
         error: answer === correctAnswer ? 0 : answer.includes('???') ? 0 : 1,
@@ -161,7 +150,7 @@ function handleSubmitAnswers(answers) {
     taskError,
     taskUncertainty,
     main_category: currentTask.value.main_category,
-    first_category: currentTask.value.first_category,
+    sub_category: currentTask.value.sub_category,
     second_category: currentTask.value.second_category,
     question: currentTask.value.question,
     difficulty: taskDifficulty.value,
@@ -215,25 +204,7 @@ onMounted(async () => {
 
     tasks.value = response.data
   } catch (error) {
-    if (error.response) {
-      console.error('Backend error:', error.response.status, error.response.data)
-
-      return {
-        success: false,
-      }
-    } else if (error.request) {
-      console.error('No response from server:', error.request)
-
-      return {
-        success: false,
-      }
-    } else {
-      console.error('Axios error:', error.message)
-
-      return {
-        success: false,
-      }
-    }
+    handleApiError(error, router)
   } finally {
     loadingStore.stopLoading()
   }

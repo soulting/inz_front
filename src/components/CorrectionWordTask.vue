@@ -16,9 +16,9 @@ function submitAnswers() {
 }
 
 watch(
-  () => props.currentTask.subtasks,
-  (newSubtasks) => {
-    userInputs.value = newSubtasks.map(() => '')
+  () => props.currentTask.task_items,
+  (newTaskItems) => {
+    userInputs.value = newTaskItems.map(() => '')
   },
   { immediate: true },
 )
@@ -29,10 +29,10 @@ defineExpose({
 </script>
 
 <template>
-  <ol v-if="currentTask.subtasks">
-    <li v-for="(sub, index) in currentTask.subtasks" :key="sub.id" class="task-item">
+  <ol v-if="currentTask.task_items">
+    <li v-for="(task_item, index) in currentTask.task_items" :key="task_item.id" class="task-item">
       <div class="correction-word-container">
-        <span>{{ sub.question }} : </span>
+        <span>{{ task_item.template }} {{ task_item.bonus_information }}: </span>
         <input type="text" class="task-item-input correction" v-model="userInputs[index]" />
       </div>
     </li>

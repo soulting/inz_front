@@ -1,19 +1,19 @@
 <template>
   <div class="task-select">
-    <div v-for="(task, index) in tasks" :key="index" class="task-select__task-block">
+    <div v-for="(taskItem, index) in task" :key="index" class="task-select__task-block">
       <h2 class="task-select__header">Podpunkt {{ index + 1 }}</h2>
 
       <label class="task-select__label">Treść podpunktu</label>
       <input
-        v-model="task.originalSentence"
+        v-model="taskItem.template"
         type="text"
         placeholder="Wpisz pytanie z %%[sel]%% jako miejscem wyboru"
         class="task-select__input"
       />
 
-      <label class="task-select__label">Podpowiedź</label>
+      <label class="task-select__label">Informacje dodatkowe</label>
       <input
-        v-model="task.hint"
+        v-model="taskItem.bonus_information"
         type="text"
         placeholder="np. rodzajnik określony"
         class="task-select__input"
@@ -22,7 +22,7 @@
       <label class="task-select__label">Opcje do wyboru</label>
       <div class="task-select__options">
         <div
-          v-for="(option, optIndex) in task.options"
+          v-for="(option, optIndex) in taskItem.options"
           :key="optIndex"
           class="task-select__option-item"
         >
@@ -31,12 +31,12 @@
               type="radio"
               :name="'correct-' + index"
               :value="optIndex"
-              v-model="task.correctIndex"
+              v-model="taskItem.correct_index"
             />
             {{ optionLabels[optIndex] }}
           </label>
           <input
-            v-model="task.options[optIndex]"
+            v-model="taskItem.options[optIndex]"
             type="text"
             class="task-select__input task-select__input--option"
             :placeholder="`Opcja ${optionLabels[optIndex]}`"
@@ -56,7 +56,7 @@
 import { reactive, watch } from 'vue'
 
 const props = defineProps({
-  subpoints: {
+  task_items: {
     type: Array,
     default: () => [],
   },
@@ -66,27 +66,28 @@ const emit = defineEmits(['taskCreated'])
 
 const optionLabels = ['A', 'B', 'C']
 
-const tasks = reactive([
+const task = reactive([
   {
     id: null,
-    originalSentence: '',
+    template: '',
     options: ['', '', ''],
-    correctIndex: 0,
-    hint: '',
+    correct_index: 0,
+    bonus_information: null,
+    correct_answer: '',
   },
 ])
 
 function validateTasks() {
-  for (let i = 0; i < tasks.length; i++) {
-    const task = tasks[i]
+  for (let i = 0; i < task.length; i++) {
+    const t = task[i]
 
-    if (!task.originalSentence.trim()) {
+    if (!t.template.trim()) {
       alert(`Proszę wpisać treść pytania w podpunkcie ${i + 1}`)
       return false
     }
 
-    for (let j = 0; j < task.options.length; j++) {
-      if (!task.options[j].trim()) {
+    for (let j = 0; j < t.options.length; j++) {
+      if (!t.options[j].trim()) {
         alert(`Proszę uzupełnić opcję ${optionLabels[j]} w podpunkcie ${i + 1}`)
         return false
       }
@@ -97,39 +98,36 @@ function validateTasks() {
 
 function submitTasks() {
   if (validateTasks()) {
-    tasks.forEach((task) => {
-      task.correctedSentence = task.originalSentence.replace(
-        '%%[sel]%%',
-        task.options[task.correctIndex],
-      )
+    task.forEach((t) => {
+      t.correct_answer = t.template.replace('%%[sel]%%', t.options[t.correct_index])
     })
-    emit('taskCreated', tasks)
+    emit('taskCreated', task)
   }
 }
 
 function addTask() {
-  tasks.push({
+  task.push({
     id: null,
-    originalSentence: '',
+    template: '',
     options: ['', '', ''],
-    correctIndex: 0,
-    correctedSentence: '',
-    hint: '',
+    correct_index: 0,
+    correct_answer: '',
+    bonus_information: null,
   })
 }
 
 watch(
-  () => props.subpoints,
-  (newSubpoints) => {
-    tasks.length = 0
-    newSubpoints.forEach((sp) => {
-      tasks.push({
-        id: sp.id ?? null, // ← dodane
-        originalSentence: sp.question || '',
-        options: sp.options || ['', '', ''],
-        correctIndex: sp.correct_index || 0,
-        correctedSentence: sp.correctedSentence || '',
-        hint: sp.hint || '',
+  () => props.task_items,
+  (newItems) => {
+    task.length = 0
+    newItems.forEach((task_item) => {
+      task.push({
+        id: task_item.id ?? null,
+        template: task_item.template || '',
+        options: task_item.options || ['', '', ''],
+        correct_index: task_item.correct_index || 0,
+        correct_answer: task_item.correct_answer || '',
+        bonus_information: task_item.bonus_information || null,
       })
     })
   },

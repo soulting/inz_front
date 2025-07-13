@@ -5,7 +5,7 @@
       <div class="create-task__form-row">
         <div class="create-task__form-group">
           <label for="mainCategory">Główna kategoria</label>
-          <select v-model="taskData.selectedMainCategory" id="mainCategory">
+          <select v-model="taskData.main_category" id="mainCategory">
             <option disabled value="">Wybierz kategorię</option>
             <option
               v-for="topic in grammarTopics"
@@ -19,10 +19,10 @@
 
         <div class="create-task__form-group">
           <label for="firstCategory">Pierwsza kategoria</label>
-          <select v-model="taskData.selectedFirstCategory" id="firstCategory">
+          <select v-model="taskData.sub_category" id="firstCategory">
             <option disabled value="">Wybierz podkategorię</option>
             <option
-              v-for="cat in getFirstCategories(taskData.selectedMainCategory)"
+              v-for="cat in getFirstCategories(taskData.main_category)"
               :key="cat"
               :value="cat"
             >
@@ -53,7 +53,7 @@
 
       <div class="create-task__form-group create-task__form-group--task-type">
         <label for="taskType">Typ zadania</label>
-        <select v-model="taskData.taskType" id="taskType">
+        <select v-model="taskData.task_type" id="taskType">
           <option value="selection">Wybór z listy</option>
           <option value="correction_word">Popraw wyraz</option>
           <option value="fill_in">Uzupełnij lukę</option>
@@ -61,21 +61,21 @@
         </select>
       </div>
 
-      <div v-if="taskData.taskType === 'selection'" class="create-task__placeholder">
-        <TaskSelect @taskCreated="createTask" :subpoints="taskData.subpoints" />
+      <div v-if="taskData.task_type === 'selection'" class="create-task__placeholder">
+        <TaskSelect @taskCreated="createTask" :task_items="taskData.task_items" />
       </div>
-      <div v-if="taskData.taskType === 'correction_word'" class="create-task__placeholder">
+      <div v-if="taskData.task_type === 'correction_word'" class="create-task__placeholder">
         <MultiTask
           @taskCreated="createTask"
-          :subpoints="taskData.subpoints"
+          :task_items="taskData.task_items"
           type="correction_word"
         />
       </div>
-      <div v-if="taskData.taskType === 'fill_in'" class="create-task__placeholder">
-        <MultiTask @taskCreated="createTask" :subpoints="taskData.subpoints" type="fill_in" />
+      <div v-if="taskData.task_type === 'fill_in'" class="create-task__placeholder">
+        <MultiTask @taskCreated="createTask" :task_items="taskData.task_items" type="fill_in" />
       </div>
-      <div v-if="taskData.taskType === 'correction'" class="create-task__placeholder">
-        <MultiTask @taskCreated="createTask" :subpoints="taskData.subpoints" type="correction" />
+      <div v-if="taskData.task_type === 'correction'" class="create-task__placeholder">
+        <MultiTask @taskCreated="createTask" :task_items="taskData.task_items" type="correction" />
       </div>
     </div>
   </div>
@@ -103,12 +103,12 @@ const router = useRouter()
 
 const taskData = reactive({
   id: null,
-  selectedMainCategory: '',
-  selectedFirstCategory: '',
-  taskType: 'selection',
+  main_category: '',
+  sub_category: '',
+  task_type: 'selection',
   level: 'A1',
   question: '',
-  subpoints: [],
+  task_items: [],
 })
 
 const route = useRoute()
@@ -116,7 +116,7 @@ const route = useRoute()
 const grammarTopics = [
   {
     main_category: 'Rzeczowniki',
-    first_categorys: [
+    sub_categories: [
       'Rodzaj (męski, żeński, nijaki)',
       'Liczba mnoga',
       'Odmiana (słaba, mocna, mieszana)',
@@ -127,7 +127,7 @@ const grammarTopics = [
   },
   {
     main_category: 'Czasowniki',
-    first_categorys: [
+    sub_categories: [
       'Odmiana (regularne)',
       'Odmiana (nieregularna)',
       'Czasowniki modalne',
@@ -141,7 +141,7 @@ const grammarTopics = [
   },
   {
     main_category: 'Przymiotniki',
-    first_categorys: [
+    sub_categories: [
       'Odmiana (z różnymi rodzajnikami)',
       'Stopniowanie (wyższy, najwyższy)',
       'Tworzenie, antonimy',
@@ -150,7 +150,7 @@ const grammarTopics = [
   },
   {
     main_category: 'Liczebniki',
-    first_categorys: [
+    sub_categories: [
       'Główne, porządkowe, ułamkowe',
       'Czas (zegary, daty)',
       '„Wie viel” vs. „Wie viele”',
@@ -158,7 +158,7 @@ const grammarTopics = [
   },
   {
     main_category: 'Inne części mowy',
-    first_categorys: [
+    sub_categories: [
       'Partykuły (aber, doch, denn, mal; hin, her)',
       'Przyimki (z przypadkami, miejsca, czasu, przyczyny)',
       'Przysłówki (stopniowanie)',
@@ -168,7 +168,7 @@ const grammarTopics = [
   },
   {
     main_category: 'Czasy',
-    first_categorys: [
+    sub_categories: [
       'Imperfekt (słabe, mocne, nieregularne/modalne)',
       'Perfekt (słabe, mocne, nieregularne/modalne)',
       'Plusquamperfekt',
@@ -177,7 +177,7 @@ const grammarTopics = [
   },
   {
     main_category: 'Budowa zdań i konstrukcje',
-    first_categorys: [
+    sub_categories: [
       'Szyk wyrazów (zdania pojedyncze, współrzędne, poboczne)',
       'Zdania pytające (tak/nie, pytające, z przyimkami, zależne)',
       'Zdania okolicznikowe (czasu, przyczyny, celu, następstwa, sposobu)',
@@ -190,26 +190,19 @@ const grammarTopics = [
 
 function getFirstCategories(mainCat) {
   const topic = grammarTopics.find((t) => t.main_category === mainCat)
-  return topic ? topic.first_categorys : []
+  return topic ? topic.sub_categories : []
 }
 
-async function createTask(subpoints) {
-  taskData.subpoints = subpoints
+async function createTask(task_items) {
+  taskData.task_items = task_items
 
-  const {
-    selectedMainCategory,
-    selectedFirstCategory,
-    level,
-    question,
-    taskType,
-    subpoints: sp,
-  } = taskData
+  const { main_category, sub_category, level, question, task_type, task_items: sp } = taskData
 
-  if (!selectedMainCategory) {
+  if (!main_category) {
     alert('Proszę wybrać główną kategorię')
     return
   }
-  if (!selectedFirstCategory) {
+  if (!sub_category) {
     alert('Proszę wybrać pierwszą kategorię')
     return
   }
@@ -221,7 +214,7 @@ async function createTask(subpoints) {
     alert('Proszę wpisać pytanie')
     return
   }
-  if (!taskType) {
+  if (!task_type) {
     alert('Proszę wybrać typ zadania')
     return
   }
@@ -266,23 +259,26 @@ onMounted(async () => {
   window.scrollTo(0, 0)
 
   taskData.id = route.query.id || null
-  taskData.selectedMainCategory = route.query.selectedMainCategory || ''
-  taskData.selectedFirstCategory = route.query.selectedFirstCategory || ''
-  taskData.taskType = route.query.taskType || 'selection'
+  taskData.main_category = route.query.main_category || ''
+  taskData.sub_category = route.query.sub_category || ''
+  taskData.task_type = route.query.task_type || 'selection'
   taskData.level = route.query.level || 'A1'
   taskData.question = route.query.question || ''
-  taskData.subpoints = []
+  taskData.task_items = []
 
   if (taskData.id) {
     try {
       loadingStore.startLoading()
-      const response = await axios.get(`http://localhost:5000/tasks/get_subpoints/${taskData.id}`, {
-        headers: {
-          Authorization: `Bearer ${jwtToken.value}`,
+      const response = await axios.get(
+        `http://localhost:5000/tasks/get_task_items/${taskData.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken.value}`,
+          },
         },
-      })
-      taskData.subpoints = response.data.subpoints || []
-      console.log('Pobrano subpunkty:', taskData.subpoints)
+      )
+      taskData.task_items = response.data.task_items || []
+      console.log('Pobrano subpunkty:', taskData.task_items)
     } catch (error) {
       handleApiError(error, router)
     } finally {
