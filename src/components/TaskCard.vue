@@ -2,7 +2,7 @@
   <div class="task-card">
     <div class="task-card__header">
       <div class="task-card__title">
-        {{ props.taskData.question }}
+        {{ `${props.taskData.level}: ${props.taskData.question}` }}
       </div>
       <div class="task-card__actions">
         <button
@@ -25,10 +25,6 @@
     </div>
 
     <div class="task-card__info-grid">
-      <div class="info-item">
-        <span class="label">Poziom:</span>
-        <span class="value">{{ props.taskData.level }}</span>
-      </div>
       <div class="info-item">
         <span class="label">Kategoria główna:</span>
         <span class="value">{{ props.taskData.main_category }}</span>

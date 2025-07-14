@@ -51,7 +51,7 @@
       </div>
     </TaskList>
 
-    <LessonList :lessons="lessons">
+    <LessonList :lessons="lessons" :deleteButton="true" :editButton="true" :previewButton="true">
       <div class="list__add-card" @click="goToCreateLesson">
         <div class="list__plus">+</div>
         <div class="list__add-text">Dodaj lekcję</div>

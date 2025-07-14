@@ -26,11 +26,12 @@
         Brak klas do wyświetlenia
       </div>
 
-      <div v-for="taskItem in filteredAndSortedLessons.slice(0, sliceCount)" :key="taskItem.id">
-        <TaskCard
-          :taskData="taskItem"
+      <div v-for="lessonItem in filteredAndSortedLessons.slice(0, sliceCount)" :key="lessonItem.id">
+        <LessonCard
+          :lessonData="lessonItem"
           :editButton="editButton"
           :deleteButton="deleteButton"
+          :previewButton="previewButton"
           @delete="confirmAndDelete"
           @edit="emitEdit"
         />
@@ -50,13 +51,14 @@
 // === IMPORTY ===
 import { ref, computed } from 'vue'
 import Swal from 'sweetalert2'
-import TaskCard from '@/components/TaskCard.vue'
+import LessonCard from '@/components/LessonCard.vue'
 
 // === PROPS & EMITY ===
 const props = defineProps({
   lessons: { type: Array, required: true },
   editButton: { type: Boolean, default: false },
   deleteButton: { type: Boolean, default: false },
+  previewButton: { type: Boolean, default: false },
 })
 const emit = defineEmits(['delete', 'join'])
 
@@ -92,8 +94,8 @@ function confirmAndDelete(deleteId) {
   })
 }
 
-function emitEdit(taskId) {
-  emit('edit', taskId)
+function emitEdit(lessonId) {
+  emit('edit', lessonId)
 }
 
 // === COMPUTED: FILTROWANIE + SORTOWANIE ===
@@ -102,8 +104,8 @@ const filteredAndSortedLessons = computed(() => {
 
   // Filtrowanie
   if (searchQuery.value.trim()) {
-    result = result.filter((task) =>
-      task.question.toLowerCase().includes(searchQuery.value.toLowerCase()),
+    result = result.filter((lesson) =>
+      lesson.question.toLowerCase().includes(searchQuery.value.toLowerCase()),
     )
   }
 
