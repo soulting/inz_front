@@ -13,6 +13,7 @@ import { useAuthStore } from '@/stores/auth'
 import ClassTeacher from '@/views/ClassesTeacherView.vue'
 import CreateTaskView from '@/views/CreateTaskView.vue'
 import CreateLessonView from '@/views/CreateLessonView.vue'
+import PreviewView from '@/views/PreviewView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -106,6 +107,14 @@ const router = createRouter({
       path: '/create-lesson',
       name: 'create-lesson',
       component: CreateLessonView,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/preview',
+      name: 'preview',
+      component: PreviewView,
       meta: {
         requiresAuth: true,
       },
