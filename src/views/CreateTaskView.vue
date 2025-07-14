@@ -92,6 +92,8 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
+
+import categories from '@/assets/data/categories.json'
 import axios from 'axios'
 const authStore = useAuthStore()
 
@@ -113,80 +115,7 @@ const taskData = reactive({
 
 const route = useRoute()
 
-const grammarTopics = [
-  {
-    main_category: 'Rzeczowniki',
-    sub_categories: [
-      'Rodzaj (męski, żeński, nijaki)',
-      'Liczba mnoga',
-      'Odmiana (słaba, mocna, mieszana)',
-      'Przypadki (Nominativ, Genitiv, Dativ, Akkusativ)',
-      'Rodzajniki (określony, nieokreślony, zerowy)',
-      'Rzeczowniki złożone',
-    ],
-  },
-  {
-    main_category: 'Czasowniki',
-    sub_categories: [
-      'Odmiana (regularne)',
-      'Odmiana (nieregularna)',
-      'Czasowniki modalne',
-      'Czasowniki zwrotne',
-      'Czasowniki złożone (rozdzielnie i nierozdzielnie złożone)',
-      'Bezokoliczniki (z/bez „zu”)',
-      'Partizip II',
-      'Partizip I',
-      'Rekcja (przypadki i przyimki)',
-    ],
-  },
-  {
-    main_category: 'Przymiotniki',
-    sub_categories: [
-      'Odmiana (z różnymi rodzajnikami)',
-      'Stopniowanie (wyższy, najwyższy)',
-      'Tworzenie, antonimy',
-      'Rekcja',
-    ],
-  },
-  {
-    main_category: 'Liczebniki',
-    sub_categories: [
-      'Główne, porządkowe, ułamkowe',
-      'Czas (zegary, daty)',
-      '„Wie viel” vs. „Wie viele”',
-    ],
-  },
-  {
-    main_category: 'Inne części mowy',
-    sub_categories: [
-      'Partykuły (aber, doch, denn, mal; hin, her)',
-      'Przyimki (z przypadkami, miejsca, czasu, przyczyny)',
-      'Przysłówki (stopniowanie)',
-      'Zaimek (osobowy, nieosobowy, dzierżawczy, zwrotny, wskazujący, pytający, nieokreślony, przysłówki zaimkowe)',
-      'Przydawka i zdania przydawkowe',
-    ],
-  },
-  {
-    main_category: 'Czasy',
-    sub_categories: [
-      'Imperfekt (słabe, mocne, nieregularne/modalne)',
-      'Perfekt (słabe, mocne, nieregularne/modalne)',
-      'Plusquamperfekt',
-      'Futur I',
-    ],
-  },
-  {
-    main_category: 'Budowa zdań i konstrukcje',
-    sub_categories: [
-      'Szyk wyrazów (zdania pojedyncze, współrzędne, poboczne)',
-      'Zdania pytające (tak/nie, pytające, z przyimkami, zależne)',
-      'Zdania okolicznikowe (czasu, przyczyny, celu, następstwa, sposobu)',
-      'Inne zdania (dopełnieniowe, warunkowe, przyzwalające, porównawcze, skutkowe, podmiotowe, dopowiedzenia)',
-      'Spójniki wieloczłonowe',
-      'Wyrażenia czasownikowo-rzeczownikowe',
-    ],
-  },
-]
+const grammarTopics = categories.categories_list
 
 function getFirstCategories(mainCat) {
   const topic = grammarTopics.find((t) => t.main_category === mainCat)
