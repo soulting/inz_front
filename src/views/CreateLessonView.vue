@@ -3,11 +3,7 @@
     <div class="create-lesson">
       <h1 class="create-lesson__title">Utwórz nową lekcję</h1>
 
-      <form
-        id='@submit.prevent="submitLesson"'
-        @submit.prevent="getEditorContent"
-        class="create-lesson__form"
-      >
+      <form @submit.prevent="submitLesson" class="create-lesson__form">
         <!-- Tytuł -->
         <div class="create-lesson__group">
           <label for="title" class="create-lesson__label">Tytuł lekcji</label>
@@ -155,7 +151,7 @@ const lessonData = reactive({
   title: '',
   description: '',
   context: '',
-  author_id: user.value?.id || null,
+  owner: user.value?.id || null,
   main_category: '',
   sub_category: '',
   level: 'A1',
@@ -191,14 +187,13 @@ async function submitLesson() {
   try {
     loadingStore.startLoading()
 
-    await axios.post('http://localhost:5000/lessons/create', lessonData, {
+    await axios.post('http://localhost:5000/lessons/create_lesson', lessonData, {
       headers: {
         Authorization: `Bearer ${jwtToken.value}`,
       },
     })
 
-    alert('Lekcja została utworzona!')
-    router.push('/lessons')
+    router.push('/classes-teacher')
   } catch (error) {
     handleApiError(error, router)
   } finally {
