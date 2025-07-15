@@ -14,6 +14,11 @@
   font-family: sans-serif;
   position: relative;
   color: variables.$yellowBtnText;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 
   // background-image: url('https://xxofdfokqesjgcuvqsax.supabase.co/storage/v1/object/public/inzyniekrka-images/placeholder1.webp');
 

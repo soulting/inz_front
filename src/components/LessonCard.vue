@@ -62,6 +62,11 @@ const props = defineProps({
 
 const emit = defineEmits(['delete', 'edit'])
 
+function previewLesson() {
+  const url = `${window.location.origin}/preview?id=${props.lessonData.id}`
+  window.open(url, '_blank')
+}
+
 const emitDelete = () => {
   emit('delete', props.lessonData.id)
 }
@@ -94,6 +99,11 @@ const editLesson = () => {
   color: #333;
   cursor: pointer;
   transition: transform 0.2s;
+  margin: 0;
+}
+.lesson-card__title {
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .lesson-card:hover {

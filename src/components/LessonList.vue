@@ -39,7 +39,7 @@
     </div>
 
     <!-- PRZYCISKI POKAŻ WIĘCEJ/MNIEJ -->
-    <div class="list__show-more-wrapper">
+    <div v-if="filteredAndSortedLessons.length > 5" class="list__show-more-wrapper">
       <button class="list__show-more-button" @click="showMoreButton ? showMore() : showLess()">
         {{ showMoreButton ? 'Pokaż więcej' : 'Pokaż mniej' }}
       </button>

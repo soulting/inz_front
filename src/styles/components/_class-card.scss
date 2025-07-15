@@ -13,6 +13,11 @@
   background-color: #fff;
   position: relative;
   font-family: sans-serif;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 
   &__background {
     flex: 2;

@@ -193,8 +193,7 @@ async function submitLesson() {
       },
     })
 
-    alert('Lekcja została utworzona!')
-    router.push('/lessons')
+    router.push('/classes-teacher')
   } catch (error) {
     handleApiError(error, router)
   } finally {
