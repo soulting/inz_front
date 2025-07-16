@@ -104,50 +104,26 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
 import { useLoadingStore } from '@/stores/loading'
 import { handleApiError } from '@/composables/errorHandling'
 import Editor from '@tinymce/tinymce-vue'
+import categories from '@/assets/data/categories.json'
 
 const authStore = useAuthStore()
 const { jwtToken, user } = storeToRefs(authStore)
-
 const loadingStore = useLoadingStore()
 const router = useRouter()
+const route = useRoute()
 
-const grammarTopics = [
-  {
-    main_category: 'Rzeczowniki',
-    sub_categories: [
-      'Rodzaj (męski, żeński, nijaki)',
-      'Liczba mnoga',
-      'Odmiana (słaba, mocna, mieszana)',
-      'Przypadki (Nominativ, Genitiv, Dativ, Akkusativ)',
-      'Rodzajniki (określony, nieokreślony, zerowy)',
-      'Rzeczowniki złożone',
-    ],
-  },
-  {
-    main_category: 'Czasowniki',
-    sub_categories: [
-      'Odmiana (regularne)',
-      'Odmiana (nieregularna)',
-      'Czasowniki modalne',
-      'Czasowniki zwrotne',
-      'Czasowniki złożone (rozdzielnie i nierozdzielnie złożone)',
-      'Bezokoliczniki (z/bez „zu”)',
-      'Partizip II',
-      'Partizip I',
-      'Rekcja (przypadki i przyimki)',
-    ],
-  },
-]
+const grammarTopics = categories.categories_list
 
 const lessonData = reactive({
+  id: null,
   title: '',
   description: '',
   context: '',
@@ -162,37 +138,47 @@ function getSubCategories(mainCategory) {
   return topic ? topic.sub_categories : []
 }
 
-async function submitLesson() {
-  if (!lessonData.title.trim()) {
-    alert('Proszę podać tytuł lekcji')
-    return
-  }
-  if (!lessonData.description.trim()) {
-    alert('Proszę podać opis lekcji')
-    return
-  }
-  if (!lessonData.context.trim()) {
-    alert('Proszę podać kontekst lekcji')
-    return
-  }
-  if (!lessonData.main_category) {
-    alert('Proszę wybrać główną kategorię')
-    return
-  }
-  if (!lessonData.level) {
-    alert('Proszę wybrać poziom')
-    return
-  }
-
+async function loadLesson(id) {
   try {
     loadingStore.startLoading()
-
-    await axios.post('http://localhost:5000/lessons/create_lesson', lessonData, {
+    const { data } = await axios.get(`http://localhost:5000/lessons/get_lesson/${id}`, {
       headers: {
         Authorization: `Bearer ${jwtToken.value}`,
       },
     })
 
+    lessonData.id = data.id
+    lessonData.title = data.title
+    lessonData.description = data.description || ''
+    lessonData.context = data.context
+    lessonData.main_category = data.main_category
+    lessonData.sub_category = data.sub_category
+    lessonData.level = data.level
+  } catch (error) {
+    handleApiError(error, router)
+  } finally {
+    loadingStore.stopLoading()
+  }
+}
+
+async function submitLesson() {
+  if (!lessonData.title.trim()) return alert('Proszę podać tytuł lekcji')
+  if (!lessonData.description.trim()) return alert('Proszę podać opis lekcji')
+  if (!lessonData.context.trim()) return alert('Proszę podać kontekst lekcji')
+  if (!lessonData.main_category) return alert('Proszę wybrać główną kategorię')
+  if (!lessonData.level) return alert('Proszę wybrać poziom')
+
+  try {
+    loadingStore.startLoading()
+    if (lessonData.id) {
+      await axios.put(`http://localhost:5000/lessons/update_lesson/${lessonData.id}`, lessonData, {
+        headers: { Authorization: `Bearer ${jwtToken.value}` },
+      })
+    } else {
+      await axios.post('http://localhost:5000/lessons/create_lesson', lessonData, {
+        headers: { Authorization: `Bearer ${jwtToken.value}` },
+      })
+    }
     router.push('/classes-teacher')
   } catch (error) {
     handleApiError(error, router)
@@ -200,85 +186,93 @@ async function submitLesson() {
     loadingStore.stopLoading()
   }
 }
+
+onMounted(() => {
+  const id = route.query.id
+  if (id) {
+    loadLesson(id)
+  }
+})
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .create-lesson--wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   background-color: #f0f2f5;
-}
-.create-lesson {
-  width: 100%;
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 16px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-  color: #333;
-}
 
-.create-lesson__title {
-  text-align: center;
-  margin-bottom: 24px;
-}
+  .create-lesson {
+    width: 100%;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 16px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    color: #333;
 
-.create-lesson__form {
-  display: flex;
-  flex-direction: column;
-}
+    &__title {
+      text-align: center;
+      margin-bottom: 24px;
+    }
 
-.create-lesson__group {
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-}
+    &__form {
+      display: flex;
+      flex-direction: column;
+    }
 
-.create-lesson__group--row {
-  flex-direction: row;
-  gap: 16px;
-  flex-wrap: wrap;
-}
+    &__group {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
 
-.create-lesson__select-group {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 150px;
-}
+      &--row {
+        flex-direction: row;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+    }
 
-.create-lesson__label {
-  margin-bottom: 6px;
-  font-weight: 600;
-}
+    &__select-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 150px;
+    }
 
-.create-lesson__input,
-.create-lesson__textarea,
-.create-lesson__select {
-  padding: 8px 12px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  resize: vertical;
-}
+    &__label {
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
 
-.create-lesson__button {
-  padding: 10px 16px;
-  font-size: 18px;
-  background-color: #3b4bdc;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 100%;
-  font-weight: 700;
-  transition: background-color 0.3s ease;
-}
+    &__input,
+    &__textarea,
+    &__select {
+      padding: 8px 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: vertical;
+    }
 
-.create-lesson__button:hover {
-  background-color: #2f3fc2;
+    &__button {
+      padding: 10px 16px;
+      font-size: 18px;
+      background-color: #3b4bdc;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: 700;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #2f3fc2;
+      }
+    }
+  }
 }
 </style>

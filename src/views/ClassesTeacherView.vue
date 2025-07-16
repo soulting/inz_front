@@ -44,14 +44,20 @@
     </ClassGrid>
 
     <!-- ZADANIA -->
-    <TaskList :tasks="tasks" :deleteButton="true" :editButton="true">
+    <TaskList :tasks="tasks" :deleteButton="true" :editButton="true" @delete="deleteTask">
       <div class="list__add-card" @click="goToCreateTask">
         <div class="list__plus">+</div>
         <div class="list__add-text">Dodaj zadanie</div>
       </div>
     </TaskList>
 
-    <LessonList :lessons="lessons" :deleteButton="true" :editButton="true" :previewButton="true">
+    <LessonList
+      :lessons="lessons"
+      :deleteButton="true"
+      :editButton="true"
+      :previewButton="true"
+      @delete="deleteLesson"
+    >
       <div class="list__add-card" @click="goToCreateLesson">
         <div class="list__plus">+</div>
         <div class="list__add-text">Dodaj lekcję</div>
@@ -165,6 +171,42 @@ async function deleteClass(deleteId) {
     )
 
     classes.value = response.data
+  } catch (error) {
+    handleApiError(error, router)
+  } finally {
+    loadingStore.stopLoading()
+  }
+}
+
+async function deleteTask(deleteId) {
+  try {
+    loadingStore.startLoading()
+
+    const response = await axios.delete(`http://localhost:5000/tasks/delete_task/${deleteId}`, {
+      headers: {
+        Authorization: `Bearer ${jwtToken.value}`,
+      },
+    })
+
+    tasks.value = response.data
+  } catch (error) {
+    handleApiError(error, router)
+  } finally {
+    loadingStore.stopLoading()
+  }
+}
+
+async function deleteLesson(deleteId) {
+  try {
+    loadingStore.startLoading()
+
+    const response = await axios.delete(`http://localhost:5000/lessons/delete_lesson/${deleteId}`, {
+      headers: {
+        Authorization: `Bearer ${jwtToken.value}`,
+      },
+    })
+
+    lessons.value = response.data
   } catch (error) {
     handleApiError(error, router)
   } finally {

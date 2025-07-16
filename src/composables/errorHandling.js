@@ -4,62 +4,45 @@ import { useAuthStore } from '@/stores/auth'
 export function handleApiError(error, router) {
   const authStore = useAuthStore()
 
+  const showError = (title, text) => {
+    return Swal.fire({
+      icon: 'error',
+      title,
+      text,
+    })
+  }
+
   if (error.response) {
     const { status, data } = error.response
 
     switch (status) {
       case 400:
-        Swal.fire({
-          icon: 'error',
-          title: 'Błąd',
-          text: data?.error || 'Błędne dane.',
-        })
+        showError('Błąd', data?.error || 'Błędne dane.')
         break
+
       case 401:
-        Swal.fire({
-          icon: 'error',
-          title: 'Sesja wygasła',
-          text: 'Zaloguj się ponownie.',
-        }).then(() => {
+        showError('Sesja wygasła', 'Zaloguj się ponownie.').then(() => {
           authStore.piniaLogout()
           router.push('/login')
         })
         break
+
       case 403:
-        Swal.fire({
-          icon: 'error',
-          title: 'Brak dostępu',
-          text: 'Nie masz uprawnień do wykonania tej akcji.',
-        })
+        showError('Brak dostępu', 'Nie masz uprawnień do wykonania tej akcji.')
         break
+
       case 404:
-        Swal.fire({
-          icon: 'error',
-          title: 'Nie znaleziono',
-          text: data?.error || 'Zasób nie istnieje.',
-        })
+        showError('Nie znaleziono', data?.error || 'Zasób nie istnieje.')
         break
+
       default:
-        Swal.fire({
-          icon: 'error',
-          title: 'Błąd',
-          text: data?.error || 'Wystąpił nieoczekiwany błąd.',
-        })
-        break
+        showError('Błąd', data?.error || 'Wystąpił nieoczekiwany błąd.')
     }
   } else if (error.request) {
     console.error('Brak odpowiedzi od serwera:', error.request)
-    Swal.fire({
-      icon: 'error',
-      title: 'Brak odpowiedzi',
-      text: 'Serwer nie odpowiada.',
-    })
+    showError('Brak odpowiedzi', 'Serwer nie odpowiada.')
   } else {
     console.error('Błąd Axios:', error.message)
-    Swal.fire({
-      icon: 'error',
-      title: 'Błąd',
-      text: 'Wystąpił problem z zapytaniem.',
-    })
+    showError('Błąd', 'Wystąpił problem z zapytaniem.')
   }
 }

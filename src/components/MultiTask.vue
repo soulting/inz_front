@@ -133,8 +133,6 @@ const props = defineProps({
   },
 })
 
-console.log('task_itemy z props', props.task_items)
-
 const task = reactive([
   {
     id: null,
