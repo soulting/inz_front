@@ -1,5 +1,5 @@
 <template>
-  <div class="class-card">
+  <div class="class-card" @click="goToClass">
     <div class="class-card__background" :style="{ backgroundImage: `url(${classData.image_url})` }">
       <div class="class-card__actions">
         <button
@@ -51,6 +51,7 @@
 
 <script setup>
 import { showSwal } from '@/composables/swal'
+import { useRouter } from 'vue-router'
 
 import { ref } from 'vue'
 
@@ -62,10 +63,13 @@ const props = defineProps({
 
 const emit = defineEmits(['delete', 'join'])
 
+const router = useRouter()
+
 const showJoinForm = ref(false)
 const joinPassword = ref('')
 
-function emitDelete() {
+function emitDelete(event) {
+  event.stopPropagation()
   emit('delete', props.classData.id)
 }
 
@@ -94,5 +98,12 @@ function cancelJoin() {
 function resetJoinForm() {
   showJoinForm.value = false
   joinPassword.value = ''
+}
+
+function goToClass() {
+  router.push({
+    name: 'class-teacher',
+    params: { id: props.classData.id, name: props.classData.name },
+  })
 }
 </script>

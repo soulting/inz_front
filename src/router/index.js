@@ -1,19 +1,21 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import LoginView from '@/views/LoginView.vue'
-import SignupView from '@/views/SignupView.vue'
-import ClassView from '@/views/ClassesStudentView.vue'
-import ThemesView from '@/views/ThemesView.vue'
-import SettingsView from '@/views/SettingsView.vue'
-import ProfileView from '@/views/ProfileView.vue'
-import PrivacyPolicyView from '@/views/PrivacyPolicyView.vue'
-import TestsView from '@/views/TestsView.vue'
-import TestView from '@/views/TestView.vue'
 import { useAuthStore } from '@/stores/auth'
-import ClassTeacher from '@/views/ClassesTeacherView.vue'
-import CreateTaskView from '@/views/CreateTaskView.vue'
+import ClassTeacherView from '@/views/ClassTeacherView.vue'
+import ClassView from '@/views/ClassesStudentView.vue'
+import ClassesTeacher from '@/views/ClassesTeacherView.vue'
 import CreateLessonView from '@/views/CreateLessonView.vue'
+import CreateTaskView from '@/views/CreateTaskView.vue'
+import LoginView from '@/views/LoginView.vue'
 import PreviewView from '@/views/PreviewView.vue'
+import PrivacyPolicyView from '@/views/PrivacyPolicyView.vue'
+import ProfileView from '@/views/ProfileView.vue'
+import SettingsView from '@/views/SettingsView.vue'
+import SignupView from '@/views/SignupView.vue'
+import TestView from '@/views/TestView.vue'
+import TestsView from '@/views/TestsView.vue'
+import ThemesView from '@/views/ThemesView.vue'
+import { createRouter, createWebHistory } from 'vue-router'
+
+import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -43,8 +45,8 @@ const router = createRouter({
     },
     {
       path: '/classes-teacher',
-      name: 'class-teacher',
-      component: ClassTeacher,
+      name: 'classes-teacher',
+      component: ClassesTeacher,
       meta: {
         requiresAuth: true,
       },
@@ -115,6 +117,15 @@ const router = createRouter({
       path: '/preview',
       name: 'preview',
       component: PreviewView,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/class-teacher/:id/:name',
+      name: 'class-teacher',
+      component: ClassTeacherView,
+      props: true,
       meta: {
         requiresAuth: true,
       },
