@@ -92,6 +92,8 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { onMounted, reactive } from 'vue'
 
+import { URL } from '@/enums'
+
 import MultiTask from '@/components/MultiTask.vue'
 import TaskSelect from '@/components/TaskSelection.vue'
 
@@ -155,9 +157,7 @@ async function createTask(task_items) {
   try {
     loadingStore.startLoading()
 
-    const url = taskData.id
-      ? `http://localhost:5000/tasks/update_task/${taskData.id}`
-      : 'http://localhost:5000/tasks/create_task'
+    const url = taskData.id ? `${URL.TASKS}/update_task/${taskData.id}` : `${URL.TASKS}/create_task`
 
     const method = taskData.id ? 'PUT' : 'POST'
 
@@ -198,14 +198,11 @@ onMounted(async () => {
   if (taskData.id) {
     try {
       loadingStore.startLoading()
-      const response = await axios.get(
-        `http://localhost:5000/tasks/get_task_items/${taskData.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwtToken.value}`,
-          },
+      const response = await axios.get(`${URL.TASKS}/get_task_items/${taskData.id}`, {
+        headers: {
+          Authorization: `Bearer ${jwtToken.value}`,
         },
-      )
+      })
       taskData.task_items = response.data.task_items || []
       console.log('Pobrano subpunkty:', taskData.task_items)
     } catch (error) {

@@ -7,6 +7,8 @@ import { useRouter } from 'vue-router'
 
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 
+import { URL } from '@/enums'
+
 import CorrectionWordTask from '@/components/CorrectionWordTask.vue'
 import FillInTask from '@/components/FillInTask.vue'
 import CorrectionTask from '@/components/MultiTask.vue'
@@ -53,7 +55,7 @@ async function finishTest() {
   try {
     loadingStore.startLoading()
     const response = await axios.post(
-      'http://localhost:5000/placement_test/submit_test',
+      `${URL.PLACEMENT_TEST}/submit_test`,
       {
         answers: testAnswers.value,
       },
@@ -198,7 +200,7 @@ onMounted(async () => {
   try {
     loadingStore.startLoading()
 
-    const response = await axios.get('http://localhost:5000/placement_test/get_test', {
+    const response = await axios.get(`${URL.PLACEMENT_TEST}/get_test`, {
       params: { id: props.level },
     })
 

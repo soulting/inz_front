@@ -78,6 +78,8 @@ import { useRouter } from 'vue-router'
 
 import { onMounted, ref } from 'vue'
 
+import { URL } from '@/enums'
+
 import ClassGrid from '@/components/ClassGrid.vue'
 import LessonList from '@/components/LessonList.vue'
 import TaskList from '@/components/TaskList.vue'
@@ -134,7 +136,7 @@ const submitNewClass = async () => {
     loadingStore.startLoading()
 
     const response = await axios.post(
-      'http://localhost:5000/classes/create_class',
+      `${URL.CLASSES}/create_class`,
       {
         name: newClassName.value,
         password: newClassPassword.value,
@@ -161,14 +163,11 @@ async function deleteClass(deleteId) {
   try {
     loadingStore.startLoading()
 
-    const response = await axios.delete(
-      `http://localhost:5000/classes/delete_teacher_class/${deleteId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${jwtToken.value}`,
-        },
+    const response = await axios.delete(`${URL.CLASSES}/delete_teacher_class/${deleteId}`, {
+      headers: {
+        Authorization: `Bearer ${jwtToken.value}`,
       },
-    )
+    })
 
     classes.value = response.data
   } catch (error) {
@@ -182,7 +181,7 @@ async function deleteTask(deleteId) {
   try {
     loadingStore.startLoading()
 
-    const response = await axios.delete(`http://localhost:5000/tasks/delete_task/${deleteId}`, {
+    const response = await axios.delete(`${URL.TASKS}/delete_task/${deleteId}`, {
       headers: {
         Authorization: `Bearer ${jwtToken.value}`,
       },
@@ -200,7 +199,7 @@ async function deleteLesson(deleteId) {
   try {
     loadingStore.startLoading()
 
-    const response = await axios.delete(`http://localhost:5000/lessons/delete_lesson/${deleteId}`, {
+    const response = await axios.delete(`${URL.LESSONS}/delete_lesson/${deleteId}`, {
       headers: {
         Authorization: `Bearer ${jwtToken.value}`,
       },
@@ -226,9 +225,9 @@ onMounted(async () => {
     }
 
     const [classResponse, taskResponse, lessonsResponse] = await axios.all([
-      axios.get('http://localhost:5000/classes/get_teacher_classes', config),
-      axios.get('http://localhost:5000/tasks/get_teacher_tasks', config),
-      axios.get('http://localhost:5000/lessons/get_teacher_lessons', config),
+      axios.get(`${URL.CLASSES}/get_teacher_classes`, config),
+      axios.get(`${URL.TASKS}/get_teacher_tasks`, config),
+      axios.get(`${URL.LESSONS}/get_teacher_lessons`, config),
     ])
 
     classes.value = classResponse.data

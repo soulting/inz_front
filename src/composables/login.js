@@ -1,8 +1,10 @@
 import axios from 'axios'
 
+import { URL } from '@/enums'
+
 export default async function login(email, password) {
   try {
-    const response = await axios.post('http://localhost:5000/auth/login', {
+    const response = await axios.post(`${URL.AUTH}/login`, {
       email: email,
       password: password,
     })

@@ -115,6 +115,8 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { onMounted, reactive } from 'vue'
 
+import { URL } from '@/enums'
+
 const authStore = useAuthStore()
 const { jwtToken, user } = storeToRefs(authStore)
 const loadingStore = useLoadingStore()
@@ -142,7 +144,7 @@ function getSubCategories(mainCategory) {
 async function loadLesson(id) {
   try {
     loadingStore.startLoading()
-    const { data } = await axios.get(`http://localhost:5000/lessons/get_lesson/${id}`, {
+    const { data } = await axios.get(`${URL.LESSONS}/get_lesson/${id}`, {
       headers: {
         Authorization: `Bearer ${jwtToken.value}`,
       },
@@ -172,11 +174,11 @@ async function submitLesson() {
   try {
     loadingStore.startLoading()
     if (lessonData.id) {
-      await axios.put(`http://localhost:5000/lessons/update_lesson/${lessonData.id}`, lessonData, {
+      await axios.put(`${URL.LESSONS}/update_lesson/${lessonData.id}`, lessonData, {
         headers: { Authorization: `Bearer ${jwtToken.value}` },
       })
     } else {
-      await axios.post('http://localhost:5000/lessons/create_lesson', lessonData, {
+      await axios.post(`${URL.LESSONS}/create_lesson`, lessonData, {
         headers: { Authorization: `Bearer ${jwtToken.value}` },
       })
     }

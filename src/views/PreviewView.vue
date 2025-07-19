@@ -12,6 +12,8 @@ import { useRoute } from 'vue-router'
 
 import { onMounted, ref } from 'vue'
 
+import { URL } from '@/enums'
+
 const loadingStore = useLoadingStore()
 
 const lessonHtml = ref('')
@@ -21,7 +23,7 @@ const route = useRoute()
 async function loadLesson(id) {
   try {
     loadingStore.startLoading()
-    const { data } = await axios.get(`http://localhost:5000/lessons/get_lesson/${id}`)
+    const { data } = await axios.get(`${URL.LESSONS}/get_lesson/${id}`)
     console.log(data)
     lessonHtml.value = data.context
     lessonTitle.value = data.title

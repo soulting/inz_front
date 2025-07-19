@@ -44,6 +44,8 @@ import { useRouter } from 'vue-router'
 
 import { ref } from 'vue'
 
+import { URL } from '@/enums'
+
 const alert = {
   icon: 'error',
   confirmButtonText: 'OK',
@@ -83,7 +85,7 @@ const signup = async () => {
   isLoading.value = true
 
   try {
-    const response = await axios.post('http://localhost:5000/auth/register', {
+    const response = await axios.post(`${URL.AUTH}/register`, {
       name: name.value,
       email: email.value,
       password: password.value,

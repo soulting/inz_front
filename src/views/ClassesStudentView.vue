@@ -20,6 +20,8 @@ import { useRouter } from 'vue-router'
 
 import { computed, onMounted, ref } from 'vue'
 
+import { URL } from '@/enums'
+
 import ClassGrid from '@/components/ClassGrid.vue'
 
 const loadingStore = useLoadingStore()
@@ -43,7 +45,7 @@ const joinClass = async (classID, joinPassword) => {
     loadingStore.startLoading()
 
     const response = await axios.post(
-      'http://localhost:5000/classes/join_class',
+      `${URL.CLASSES}/join_class`,
       {
         classID: classID,
         joinPassword: joinPassword,
@@ -67,7 +69,7 @@ async function leaveClass(deleteId) {
   try {
     loadingStore.startLoading()
 
-    const response = await axios.delete(`http://localhost:5000/classes/leave_class/${deleteId}`, {
+    const response = await axios.delete(`${URL.CLASSES}/leave_class/${deleteId}`, {
       headers: {
         Authorization: `Bearer ${jwtToken.value}`,
       },
@@ -85,7 +87,7 @@ onMounted(async () => {
   try {
     loadingStore.startLoading()
 
-    const response = await axios.get('http://localhost:5000/classes/get_student_classes', {
+    const response = await axios.get(`${URL.CLASSES}/get_student_classes`, {
       headers: {
         Authorization: `Bearer ${jwtToken.value}`,
       },
