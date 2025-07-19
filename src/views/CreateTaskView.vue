@@ -82,19 +82,19 @@
 </template>
 
 <script setup>
-import { onMounted, reactive } from 'vue'
-import TaskSelect from '@/components/TaskSelection.vue'
-import MultiTask from '@/components/MultiTask.vue'
-
-import { useLoadingStore } from '@/stores/loading'
+import categories from '@/assets/data/categories.json'
 import { handleApiError } from '@/composables/errorHandling'
+import { useAuthStore } from '@/stores/auth'
+import { useLoadingStore } from '@/stores/loading'
+import axios from 'axios'
+import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 
-import { useAuthStore } from '@/stores/auth'
-import { storeToRefs } from 'pinia'
+import { onMounted, reactive } from 'vue'
 
-import categories from '@/assets/data/categories.json'
-import axios from 'axios'
+import MultiTask from '@/components/MultiTask.vue'
+import TaskSelect from '@/components/TaskSelection.vue'
+
 const authStore = useAuthStore()
 
 const { jwtToken } = storeToRefs(authStore)

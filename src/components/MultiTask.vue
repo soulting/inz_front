@@ -120,12 +120,14 @@
 <script setup>
 import { reactive, watch } from 'vue'
 
+import { TASK_TYPES } from '@/enums'
+
 const emit = defineEmits(['taskCreated'])
 
 const props = defineProps({
   type: {
     type: String,
-    default: 'correction',
+    default: TASK_TYPES.CORRECTION,
   },
   task_items: {
     type: Array,

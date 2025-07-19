@@ -43,9 +43,11 @@
 </template>
 
 <script setup>
-import ClassCard from '@/components/ClassCard.vue'
 import Swal from 'sweetalert2'
-import { ref, computed } from 'vue'
+
+import { computed, ref } from 'vue'
+
+import ClassCard from '@/components/ClassCard.vue'
 
 const props = defineProps({
   classes: Array,

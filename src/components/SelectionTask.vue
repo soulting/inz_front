@@ -51,6 +51,7 @@
 </template>
 <script setup>
 import { ref, watch } from 'vue'
+
 const props = defineProps(['currentTask'])
 const emit = defineEmits(['submit', 'noAnswers'])
 

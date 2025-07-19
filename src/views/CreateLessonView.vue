@@ -104,15 +104,16 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue'
-import { useAuthStore } from '@/stores/auth'
-import { storeToRefs } from 'pinia'
-import { useRouter, useRoute } from 'vue-router'
-import axios from 'axios'
-import { useLoadingStore } from '@/stores/loading'
-import { handleApiError } from '@/composables/errorHandling'
-import Editor from '@tinymce/tinymce-vue'
 import categories from '@/assets/data/categories.json'
+import { handleApiError } from '@/composables/errorHandling'
+import { useAuthStore } from '@/stores/auth'
+import { useLoadingStore } from '@/stores/loading'
+import Editor from '@tinymce/tinymce-vue'
+import axios from 'axios'
+import { storeToRefs } from 'pinia'
+import { useRoute, useRouter } from 'vue-router'
+
+import { onMounted, reactive } from 'vue'
 
 const authStore = useAuthStore()
 const { jwtToken, user } = storeToRefs(authStore)

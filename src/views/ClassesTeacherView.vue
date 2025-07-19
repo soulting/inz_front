@@ -68,19 +68,19 @@
 
 <script setup>
 // === IMPORTY ===
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { handleApiError } from '@/composables/errorHandling'
+import { useAuthStore } from '@/stores/auth'
+import { useLoadingStore } from '@/stores/loading'
 import axios from 'axios'
-import Swal from 'sweetalert2'
 import { storeToRefs } from 'pinia'
+import Swal from 'sweetalert2'
+import { useRouter } from 'vue-router'
+
+import { onMounted, ref } from 'vue'
 
 import ClassGrid from '@/components/ClassGrid.vue'
-import TaskList from '@/components/TaskList.vue'
 import LessonList from '@/components/LessonList.vue'
-
-import { useLoadingStore } from '@/stores/loading'
-import { useAuthStore } from '@/stores/auth'
-import { handleApiError } from '@/composables/errorHandling'
+import TaskList from '@/components/TaskList.vue'
 
 // === INSTANCJE ===
 const router = useRouter()

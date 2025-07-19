@@ -52,10 +52,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
+import { RouterLink } from 'vue-router'
+
+import { ref } from 'vue'
 
 const isDropdownOpen = ref(false)
 const authStore = useAuthStore()

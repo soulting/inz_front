@@ -49,8 +49,10 @@
 
 <script setup>
 // === IMPORTY ===
-import { ref, computed } from 'vue'
 import Swal from 'sweetalert2'
+
+import { computed, ref } from 'vue'
+
 import LessonCard from '@/components/LessonCard.vue'
 
 // === PROPS & EMITY ===

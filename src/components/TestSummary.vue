@@ -34,6 +34,7 @@
 
 <script setup>
 import { computed } from 'vue'
+
 import CircularProgressBar from './CircularProgressBar.vue'
 
 const props = defineProps({

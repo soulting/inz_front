@@ -6,10 +6,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { useLoadingStore } from '@/stores/loading'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
-import { useLoadingStore } from '@/stores/loading'
+
+import { onMounted, ref } from 'vue'
 
 const loadingStore = useLoadingStore()
 

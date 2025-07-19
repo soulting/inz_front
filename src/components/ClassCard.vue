@@ -1,9 +1,6 @@
 <template>
   <div class="class-card">
-    <div
-      class="class-card__background"
-      :style="{ backgroundImage: `url(${props.classData.image_url})` }"
-    >
+    <div class="class-card__background" :style="{ backgroundImage: `url(${classData.image_url})` }">
       <div class="class-card__actions">
         <button
           v-if="joinButton"
@@ -11,7 +8,7 @@
           aria-label="Dołącz do klasy"
           @click="openJoinForm"
         >
-          <img class="class-card__icon" src="../assets/icons/join-group.png" alt="edit icon" />
+          <img class="class-card__icon" src="../assets/icons/join-group.png" alt="dołącz ikonka" />
         </button>
         <button
           v-if="deleteButton"
@@ -19,19 +16,21 @@
           aria-label="Usuń klasę"
           @click="emitDelete"
         >
-          <img class="class-card__icon" src="../assets/icons/delete.png" alt="edit icon" />
+          <img class="class-card__icon" src="../assets/icons/delete.png" alt="usuń ikonka" />
         </button>
       </div>
     </div>
+
     <div class="class-card__info">
-      <h3 class="class-card__title">{{ props.classData.name }}</h3>
+      <h3 class="class-card__title">{{ classData.name }}</h3>
     </div>
+
     <div
       v-if="showJoinForm"
       class="class-card__join-form"
-      :style="{ backgroundImage: `url(${props.classData.image_url})` }"
+      :style="{ backgroundImage: `url(${classData.image_url})` }"
     >
-      <h3 class="class-card__join-title">{{ props.classData.name }}</h3>
+      <h3 class="class-card__join-title">{{ classData.name }}</h3>
       <input
         v-model="joinPassword"
         type="password"
@@ -51,46 +50,48 @@
 </template>
 
 <script setup>
+import { showSwal } from '@/composables/swal'
+
 import { ref } from 'vue'
+
 const props = defineProps({
-  classData: {
-    type: Object,
-    required: true,
-  },
-  joinButton: {
-    type: Boolean,
-    default: false,
-  },
-  deleteButton: {
-    type: Boolean,
-    default: false,
-  },
+  classData: { type: Object, required: true },
+  joinButton: { type: Boolean, default: false },
+  deleteButton: { type: Boolean, default: false },
 })
+
+const emit = defineEmits(['delete', 'join'])
 
 const showJoinForm = ref(false)
 const joinPassword = ref('')
 
-const emit = defineEmits(['delete', 'join'])
-
-const emitDelete = () => {
+function emitDelete() {
   emit('delete', props.classData.id)
 }
 
-const emitJoin = () => {
+function emitJoin() {
   if (!joinPassword.value.trim()) {
-    alert('Hasło nie może być puste')
+    showSwal({
+      title: 'Brak hasła',
+      text: 'Proszę podać hasło do klasy.',
+      status: 'error',
+    })
     return
   }
+
   emit('join', props.classData.id, joinPassword.value)
-  showJoinForm.value = false
-  joinPassword.value = ''
+  resetJoinForm()
 }
 
-const openJoinForm = () => {
+function openJoinForm() {
   showJoinForm.value = true
 }
 
-const cancelJoin = () => {
+function cancelJoin() {
+  resetJoinForm()
+}
+
+function resetJoinForm() {
   showJoinForm.value = false
   joinPassword.value = ''
 }

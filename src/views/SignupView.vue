@@ -38,10 +38,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import { useRouter } from 'vue-router'
+
+import { ref } from 'vue'
 
 const alert = {
   icon: 'error',

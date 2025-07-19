@@ -1,8 +1,9 @@
 <script setup>
-import { RouterView } from 'vue-router'
-import LoadingSpiner from './components/LoadingSpiner.vue'
 import { storeToRefs } from 'pinia'
+import { RouterView } from 'vue-router'
+
 import FooterView from './components/FooterView.vue'
+import LoadingSpiner from './components/LoadingSpiner.vue'
 import { useLoadingStore } from './stores/loading'
 import HeaderView from './views/HeaderView.vue'
 

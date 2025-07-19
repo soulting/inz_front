@@ -11,15 +11,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { handleApiError } from '@/composables/errorHandling'
+import { useAuthStore } from '@/stores/auth'
 import { useLoadingStore } from '@/stores/loading'
 import axios from 'axios'
-import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
+
+import { computed, onMounted, ref } from 'vue'
 
 import ClassGrid from '@/components/ClassGrid.vue'
-import { handleApiError } from '@/composables/errorHandling'
-import { useRouter } from 'vue-router'
 
 const loadingStore = useLoadingStore()
 const authStore = useAuthStore()

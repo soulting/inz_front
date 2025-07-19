@@ -1,19 +1,21 @@
 <script setup>
-import { onMounted, ref, computed, onUnmounted } from 'vue'
+import { handleApiError } from '@/composables/errorHandling'
 import axios from 'axios'
-import { useLoadingStore } from '../stores/loading'
+import { storeToRefs } from 'pinia'
+import Swal from 'sweetalert2'
+import { useRouter } from 'vue-router'
 
-import FillInTask from '@/components/FillInTask.vue'
-import SelectionTask from '@/components/SelectionTask.vue'
-import CorrectionTask from '@/components/MultiTask.vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+
 import CorrectionWordTask from '@/components/CorrectionWordTask.vue'
+import FillInTask from '@/components/FillInTask.vue'
+import CorrectionTask from '@/components/MultiTask.vue'
+import SelectionTask from '@/components/SelectionTask.vue'
 import TestStartingScreen from '@/components/TestStartingScreen.vue'
 import TestSummary from '@/components/TestSummary.vue'
+
 import { useAuthStore } from '../stores/auth'
-import Swal from 'sweetalert2'
-import { storeToRefs } from 'pinia'
-import { handleApiError } from '@/composables/errorHandling'
-import { useRouter } from 'vue-router'
+import { useLoadingStore } from '../stores/loading'
 
 const { jwtToken } = storeToRefs(useAuthStore())
 
