@@ -243,7 +243,7 @@ onUnmounted(() => {
         <h2>{{ currentTask.question }}</h2>
 
         <FillInTask
-          v-if="currentTask.task_type === 'fill_in'"
+          v-if="currentTask.task_type === TASK_TYPES.FILL_IN"
           :currentTask="currentTask"
           @submit="handleSubmitAnswers"
           @noAnswers="noAnswersAlert"
@@ -251,7 +251,7 @@ onUnmounted(() => {
         />
 
         <SelectionTask
-          v-else-if="currentTask.task_type === 'selection'"
+          v-else-if="currentTask.task_type === TASK_TYPES.SELECTION"
           :currentTask="currentTask"
           @submit="handleSubmitAnswers"
           @noAnswers="noAnswersAlert"
@@ -267,7 +267,7 @@ onUnmounted(() => {
         />
 
         <CorrectionWordTask
-          v-else-if="currentTask.task_type === 'correction_word'"
+          v-else-if="currentTask.task_type === TASK_TYPES.CORRECTION_WORD"
           :currentTask="currentTask"
           @submit="handleSubmitAnswers"
           @noAnswers="noAnswersAlert"

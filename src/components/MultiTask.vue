@@ -3,7 +3,7 @@
     <div v-for="(task, index) in task" :key="index" class="correction-task__block">
       <h2 class="correction-task__header">Podpunkt {{ index + 1 }}</h2>
 
-      <div v-if="props.type === 'correction_word'" class="correction-task__word-block">
+      <div v-if="props.type === TASK_TYPES.CORRECTION_WORD" class="correction-task__word-block">
         <div class="correction-task__word-block-inner">
           <label class="correction-task__label" :for="'original-' + index"
             >Słowo przed przekształceniem</label
@@ -77,7 +77,7 @@
           rows="2"
         />
       </div>
-      <div v-else-if="props.type === 'fill_in'">
+      <div v-else-if="props.type === TASK_TYPES.FILL_IN">
         <label class="correction-task__label" :for="'original-' + index"
           >Zdanie do przekształcenia</label
         >

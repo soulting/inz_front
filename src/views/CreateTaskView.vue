@@ -54,28 +54,39 @@
       <div class="create-task__form-group create-task__form-group--task-type">
         <label for="taskType">Typ zadania</label>
         <select v-model="taskData.task_type" id="taskType">
-          <option value="selection">Wybór z listy</option>
-          <option value="correction_word">Popraw wyraz</option>
-          <option value="fill_in">Uzupełnij lukę</option>
-          <option value="correction">Popraw zdanie</option>
+          <option :value="TASK_TYPES.SELECTION">Wybór z listy</option>
+          <option :value="TASK_TYPES.CORRECTION_WORD">Popraw wyraz</option>
+          <option :value="TASK_TYPES.FILL_IN">Uzupełnij lukę</option>
+          <option :value="TASK_TYPES.CORRECTION">Popraw zdanie</option>
         </select>
       </div>
 
-      <div v-if="taskData.task_type === 'selection'" class="create-task__placeholder">
+      <div v-if="taskData.task_type === TASK_TYPES.SELECTION" class="create-task__placeholder">
         <TaskSelect @taskCreated="createTask" :task_items="taskData.task_items" />
       </div>
-      <div v-if="taskData.task_type === 'correction_word'" class="create-task__placeholder">
+      <div
+        v-if="taskData.task_type === TASK_TYPES.CORRECTION_WORD"
+        class="create-task__placeholder"
+      >
         <MultiTask
           @taskCreated="createTask"
           :task_items="taskData.task_items"
-          type="correction_word"
+          :type="TASK_TYPES.CORRECTION_WORD"
         />
       </div>
-      <div v-if="taskData.task_type === 'fill_in'" class="create-task__placeholder">
-        <MultiTask @taskCreated="createTask" :task_items="taskData.task_items" type="fill_in" />
+      <div v-if="taskData.task_type === TASK_TYPES.FILL_IN" class="create-task__placeholder">
+        <MultiTask
+          @taskCreated="createTask"
+          :task_items="taskData.task_items"
+          :type="TASK_TYPES.FILL_IN"
+        />
       </div>
-      <div v-if="taskData.task_type === 'correction'" class="create-task__placeholder">
-        <MultiTask @taskCreated="createTask" :task_items="taskData.task_items" type="correction" />
+      <div v-if="taskData.task_type === TASK_TYPES.CORRECTION" class="create-task__placeholder">
+        <MultiTask
+          @taskCreated="createTask"
+          :task_items="taskData.task_items"
+          :type="TASK_TYPES.CORRECTION"
+        />
       </div>
     </div>
   </div>
@@ -92,7 +103,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { onMounted, reactive } from 'vue'
 
-import { URL } from '@/enums'
+import { TASK_TYPES, URL } from '@/enums'
 
 import MultiTask from '@/components/MultiTask.vue'
 import TaskSelect from '@/components/TaskSelection.vue'
@@ -109,7 +120,7 @@ const taskData = reactive({
   id: null,
   main_category: '',
   sub_category: '',
-  task_type: 'selection',
+  task_type: TASK_TYPES.SELECTION,
   level: 'A1',
   question: '',
   task_items: [],
@@ -190,7 +201,7 @@ onMounted(async () => {
   taskData.id = route.query.id || null
   taskData.main_category = route.query.main_category || ''
   taskData.sub_category = route.query.sub_category || ''
-  taskData.task_type = route.query.task_type || 'selection'
+  taskData.task_type = route.query.task_type || TASK_TYPES.SELECTION
   taskData.level = route.query.level || 'A1'
   taskData.question = route.query.question || ''
   taskData.task_items = []
