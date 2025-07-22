@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router'
 
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 
-import { URL } from '@/enums'
+import { TASK_TYPES, URL } from '@/enums'
 
 import CorrectionWordTask from '@/components/CorrectionWordTask.vue'
 import FillInTask from '@/components/FillInTask.vue'

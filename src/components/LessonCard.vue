@@ -1,17 +1,17 @@
 <template>
   <div class="lesson-card">
     <div class="lesson-card__title">
-      {{ `${props.lessonData.level}: ${props.lessonData.title}` }}
+      {{ `${props.data.level}: ${props.data.title}` }}
     </div>
 
     <div class="lesson-card__info-grid">
       <div class="info-item">
         <span class="label">Kategoria:</span>
-        <span class="value">{{ props.lessonData.main_category }}</span>
+        <span class="value">{{ props.data.main_category }}</span>
       </div>
-      <div class="info-item" v-if="props.lessonData.sub_category">
+      <div class="info-item" v-if="props.data.sub_category">
         <span class="label">Podkategoria:</span>
-        <span class="value">{{ props.lessonData.sub_category }}</span>
+        <span class="value">{{ props.data.sub_category }}</span>
       </div>
     </div>
 
@@ -30,7 +30,7 @@
       </div>
 
       <p class="lesson-card__description">
-        {{ props.lessonData.description }}
+        {{ props.data.description }}
       </p>
     </div>
   </div>
@@ -42,7 +42,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const props = defineProps({
-  lessonData: {
+  data: {
     type: Object,
     required: true,
   },
@@ -63,25 +63,25 @@ const props = defineProps({
 const emit = defineEmits(['delete', 'edit'])
 
 function previewLesson() {
-  const url = `${window.location.origin}/preview?id=${props.lessonData.id}`
+  const url = `${window.location.origin}/preview?id=${props.data.id}`
   window.open(url, '_blank')
 }
 
 const emitDelete = () => {
-  emit('delete', props.lessonData.id)
+  emit('delete', props.data.id)
 }
 
 const editLesson = () => {
   router.push({
     name: 'create-lesson',
     query: {
-      id: props.lessonData.id,
-      main_category: props.lessonData.main_category,
-      sub_category: props.lessonData.sub_category,
-      level: props.lessonData.level,
-      title: props.lessonData.title,
-      description: props.lessonData.description,
-      context: props.lessonData.context,
+      id: props.data.id,
+      main_category: props.data.main_category,
+      sub_category: props.data.sub_category,
+      level: props.data.level,
+      title: props.data.title,
+      description: props.data.description,
+      context: props.data.context,
     },
   })
 }

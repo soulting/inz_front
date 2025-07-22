@@ -28,7 +28,7 @@
 
       <div v-for="taskItem in filteredAndSortedTasks.slice(0, sliceCount)" :key="taskItem.id">
         <TaskCard
-          :taskData="taskItem"
+          :data="taskItem"
           :editButton="editButton"
           :deleteButton="deleteButton"
           @delete="confirmAndDelete"

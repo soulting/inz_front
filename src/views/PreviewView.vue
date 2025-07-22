@@ -1,7 +1,7 @@
 <template>
   <div class="lesson-content" v-if="lessonHtml && !loading && !error">
     <h2 class="lesson-title">{{ lessonTitle }}</h2>
-    <div class="lesson-body" v-html="lessonHtml"></div>
+    <div class="lesson-body tinymce-content" v-html="lessonHtml"></div>
   </div>
 </template>
 
@@ -43,7 +43,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .lesson-content {
   max-width: 1200px;
   min-height: 100vh;

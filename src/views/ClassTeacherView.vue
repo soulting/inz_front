@@ -12,7 +12,10 @@
       </div>
       <!-- Sekcja zawartości -->
       <div class="class-detail__content">
-        <AddSection />
+        <div v-for="section in sections" :key="section.id" class="class-detail__section-container">
+          <Section :id="section.id" :title="section.title" :content="section.content" />
+        </div>
+        <AddSection :classId="id" />
       </div>
     </div>
   </div>
@@ -20,13 +23,26 @@
 
 <script setup>
 // === IMPORTY ===
+import { handleApiError } from '@/composables/errorHandling'
+import { useAuthStore } from '@/stores/auth'
+import { useLoadingStore } from '@/stores/loading'
+import axios from 'axios'
+import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 
-import { defineProps } from 'vue'
+import { onMounted, ref } from 'vue'
+
+import { URL } from '@/enums'
 
 import AddSection from '@/components/AddSection.vue'
+import Section from '@/components/Section.vue'
+
+const sections = ref([])
 
 const router = useRouter()
+const loadingStore = useLoadingStore()
+const authStore = useAuthStore()
+const { jwtToken } = storeToRefs(authStore)
 
 // === PROPSY ===
 const props = defineProps({
@@ -38,6 +54,26 @@ const props = defineProps({
     type: [String, Number],
     required: true,
   },
+})
+
+const sectionType = ref(null)
+
+onMounted(async () => {
+  try {
+    loadingStore.startLoading()
+
+    const response = await axios.get(`${URL.SECTIONS}/get_sections/${props.id}`, {
+      headers: {
+        Authorization: `Bearer ${jwtToken.value}`,
+      },
+    })
+    sections.value = response.data.sections
+    console.log('Sekcje:', sections.value)
+  } catch (error) {
+    handleApiError(error, router)
+  } finally {
+    loadingStore.stopLoading()
+  }
 })
 </script>
 
@@ -101,7 +137,7 @@ const props = defineProps({
   &__content {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    // gap: 16px;
     flex: 1;
     width: 100%;
     height: 100vh;

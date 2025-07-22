@@ -28,7 +28,7 @@
 
       <div v-for="lessonItem in filteredAndSortedLessons.slice(0, sliceCount)" :key="lessonItem.id">
         <LessonCard
-          :lessonData="lessonItem"
+          :data="lessonItem"
           :editButton="editButton"
           :deleteButton="deleteButton"
           :previewButton="previewButton"
