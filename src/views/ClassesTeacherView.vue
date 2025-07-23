@@ -68,32 +68,26 @@
 
 <script setup>
 // === IMPORTY ===
-import { handleApiError } from '@/composables/errorHandling'
-import { useAuthStore } from '@/stores/auth'
-import { useLoadingStore } from '@/stores/loading'
-import axios from 'axios'
+import { useClassStore } from '@/stores/classes'
 import { storeToRefs } from 'pinia'
 import Swal from 'sweetalert2'
 import { useRouter } from 'vue-router'
 
 import { onMounted, ref } from 'vue'
 
-import { URL } from '@/enums'
-
 import ClassGrid from '@/components/ClassGrid.vue'
 import LessonList from '@/components/LessonList.vue'
 import TaskList from '@/components/TaskList.vue'
 
+const classStore = useClassStore()
+
 // === INSTANCJE ===
 const router = useRouter()
-const loadingStore = useLoadingStore()
-const authStore = useAuthStore()
-const { jwtToken } = storeToRefs(authStore)
 
 // === STANY ===
-const classes = ref([])
-const tasks = ref([])
-const lessons = ref([])
+const classes = storeToRefs(classStore).classes
+const tasks = storeToRefs(classStore).tasks
+const lessons = storeToRefs(classStore).lessons
 
 const showCreateForm = ref(false)
 const newClassName = ref('')
@@ -133,111 +127,55 @@ const submitNewClass = async () => {
   }
 
   try {
-    loadingStore.startLoading()
-
-    const response = await axios.post(
-      `${URL.CLASSES}/create_class`,
+    await classStore.createClass(
       {
         name: newClassName.value,
         password: newClassPassword.value,
         image_url: placeholderImage.value,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${jwtToken.value}`,
-        },
-      },
+      router,
     )
 
-    classes.value = response.data
-    cancelCreateClass()
-    placeholderImage.value = ''
+    Swal.fire({
+      icon: 'success',
+      title: 'Sukces',
+      text: 'Klasa została utworzona',
+    })
+
+    showCreateForm.value = false
+    newClassName.value = ''
+    newClassPassword.value = ''
+
+    await classStore.getClasses(router)
   } catch (error) {
-    handleApiError(error, router)
-  } finally {
-    loadingStore.stopLoading()
+    Swal.fire({
+      icon: 'error',
+      title: 'Błąd',
+      text: 'Nie udało się utworzyć klasy.',
+    })
+    console.error(error)
   }
 }
 
 async function deleteClass(deleteId) {
-  try {
-    loadingStore.startLoading()
-
-    const response = await axios.delete(`${URL.CLASSES}/delete_teacher_class/${deleteId}`, {
-      headers: {
-        Authorization: `Bearer ${jwtToken.value}`,
-      },
-    })
-
-    classes.value = response.data
-  } catch (error) {
-    handleApiError(error, router)
-  } finally {
-    loadingStore.stopLoading()
-  }
+  await classStore.deleteClass(deleteId, router)
+  await classStore.getClasses(router)
 }
 
 async function deleteTask(deleteId) {
-  try {
-    loadingStore.startLoading()
-
-    const response = await axios.delete(`${URL.TASKS}/delete_task/${deleteId}`, {
-      headers: {
-        Authorization: `Bearer ${jwtToken.value}`,
-      },
-    })
-
-    tasks.value = response.data
-  } catch (error) {
-    handleApiError(error, router)
-  } finally {
-    loadingStore.stopLoading()
-  }
+  await classStore.deleteTask(deleteId, router)
+  await classStore.getTasks(router)
 }
 
 async function deleteLesson(deleteId) {
-  try {
-    loadingStore.startLoading()
-
-    const response = await axios.delete(`${URL.LESSONS}/delete_lesson/${deleteId}`, {
-      headers: {
-        Authorization: `Bearer ${jwtToken.value}`,
-      },
-    })
-
-    lessons.value = response.data
-  } catch (error) {
-    handleApiError(error, router)
-  } finally {
-    loadingStore.stopLoading()
-  }
+  await classStore.deleteLesson(deleteId, router)
+  await classStore.getLessons(router)
 }
 
 // === POBIERANIE DANYCH PRZY MONCIE ===
 onMounted(async () => {
-  try {
-    loadingStore.startLoading()
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${jwtToken.value}`,
-      },
-    }
-
-    const [classResponse, taskResponse, lessonsResponse] = await axios.all([
-      axios.get(`${URL.CLASSES}/get_teacher_classes`, config),
-      axios.get(`${URL.TASKS}/get_teacher_tasks`, config),
-      axios.get(`${URL.LESSONS}/get_teacher_lessons`, config),
-    ])
-
-    classes.value = classResponse.data
-    tasks.value = taskResponse.data
-    lessons.value = lessonsResponse.data // <--- przypisujemy lekcje
-  } catch (error) {
-    handleApiError(error, router)
-    router.push('/') // <--- przekierowanie do widoku klas nauczyciela
-  } finally {
-    loadingStore.stopLoading()
-  }
+  classStore.getClasses(router)
+  classStore.getTasks(router)
+  classStore.getLessons(router)
 })
 </script>

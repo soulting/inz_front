@@ -19,7 +19,7 @@ import TestSummary from '@/components/TestSummary.vue'
 import { useAuthStore } from '../stores/auth'
 import { useLoadingStore } from '../stores/loading'
 
-const { jwtToken } = storeToRefs(useAuthStore())
+const { token } = storeToRefs(useAuthStore())
 
 const router = useRouter()
 
@@ -62,7 +62,7 @@ async function finishTest() {
 
       {
         headers: {
-          Authorization: `Bearer ${jwtToken.value}`,
+          Authorization: `Bearer ${token.value}`,
         },
       },
     )

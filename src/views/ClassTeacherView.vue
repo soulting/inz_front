@@ -42,7 +42,7 @@ const sections = ref([])
 const router = useRouter()
 const loadingStore = useLoadingStore()
 const authStore = useAuthStore()
-const { jwtToken } = storeToRefs(authStore)
+const { token } = storeToRefs(authStore)
 
 // === PROPSY ===
 const props = defineProps({
@@ -64,7 +64,7 @@ onMounted(async () => {
 
     const response = await axios.get(`${URL.SECTIONS}/get_sections/${props.id}`, {
       headers: {
-        Authorization: `Bearer ${jwtToken.value}`,
+        Authorization: `Bearer ${token.value}`,
       },
     })
     sections.value = response.data.sections

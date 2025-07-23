@@ -54,7 +54,7 @@ const emit = defineEmits(['close'])
 const router = useRouter()
 const loadingStore = useLoadingStore()
 const authStore = useAuthStore()
-const { jwtToken } = storeToRefs(authStore)
+const { token } = storeToRefs(authStore)
 
 const sectionItems = ref([])
 const previewButton = ref(true)
@@ -77,7 +77,7 @@ async function addToSection(id) {
     await axios.post(
       addItemUrl.value,
       { item_id: id, section_id: props.sectionId },
-      { headers: { Authorization: `Bearer ${jwtToken.value}` } },
+      { headers: { Authorization: `Bearer ${token.value}` } },
     )
   } catch (error) {
     handleApiError(error, router)
@@ -94,7 +94,7 @@ onMounted(async () => {
   try {
     loadingStore.startLoading()
     const response = await axios.get(endpoint.value, {
-      headers: { Authorization: `Bearer ${jwtToken.value}` },
+      headers: { Authorization: `Bearer ${token.value}` },
     })
     sectionItems.value = response.data
   } catch (error) {

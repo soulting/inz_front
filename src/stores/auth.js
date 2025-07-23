@@ -1,11 +1,11 @@
-import { defineStore } from 'pinia'
 import login from '@/composables/login'
 import { useLoadingStore } from '@/stores/loading'
+import { defineStore } from 'pinia'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
-    jwtToken: null,
+    token: null,
     isLoggedIn: false,
   }),
   actions: {
@@ -17,7 +17,7 @@ export const useAuthStore = defineStore('auth', {
         if (result.success) {
           this.isLoggedIn = true
           this.user = result.data.user
-          this.jwtToken = result.data.token
+          this.token = result.data.token
           console.log('Login successful:')
           router.push('/')
         }
@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('auth', {
     },
     piniaLogout() {
       this.user = null
-      this.jwtToken = null
+      this.token = null
       this.isLoggedIn = false
     },
   },

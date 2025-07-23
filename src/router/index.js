@@ -138,7 +138,7 @@ router.beforeEach((to, from, next) => {
 
   const requiresAuth = to.meta.requiresAuth
 
-  if (requiresAuth && !authStore.jwtToken) {
+  if (requiresAuth && !authStore.token) {
     return next('/login')
   }
 

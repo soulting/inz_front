@@ -110,7 +110,7 @@ import TaskSelect from '@/components/TaskSelection.vue'
 
 const authStore = useAuthStore()
 
-const { jwtToken } = storeToRefs(authStore)
+const { token } = storeToRefs(authStore)
 
 const loadingStore = useLoadingStore()
 
@@ -176,7 +176,7 @@ async function createTask(task_items) {
       method,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwtToken.value}`,
+        Authorization: `Bearer ${token.value}`,
       },
       body: JSON.stringify(taskData),
     })
@@ -211,7 +211,7 @@ onMounted(async () => {
       loadingStore.startLoading()
       const response = await axios.get(`${URL.TASKS}/get_task_items/${taskData.id}`, {
         headers: {
-          Authorization: `Bearer ${jwtToken.value}`,
+          Authorization: `Bearer ${token.value}`,
         },
       })
       taskData.task_items = response.data.task_items || []

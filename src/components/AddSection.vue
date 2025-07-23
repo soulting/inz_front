@@ -60,7 +60,7 @@ const props = defineProps({
 const router = useRouter()
 const loadingStore = useLoadingStore()
 const authStore = useAuthStore()
-const { jwtToken } = storeToRefs(authStore)
+const { token } = storeToRefs(authStore)
 
 const isAdding = ref(false)
 const sectionTitle = ref('')
@@ -109,7 +109,7 @@ async function createSection() {
       },
       {
         headers: {
-          Authorization: `Bearer ${jwtToken.value}`,
+          Authorization: `Bearer ${token.value}`,
         },
       },
     )

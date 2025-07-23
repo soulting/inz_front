@@ -26,7 +26,7 @@ import ClassGrid from '@/components/ClassGrid.vue'
 
 const loadingStore = useLoadingStore()
 const authStore = useAuthStore()
-const { jwtToken } = storeToRefs(authStore)
+const { token } = storeToRefs(authStore)
 
 const router = useRouter()
 
@@ -52,7 +52,7 @@ const joinClass = async (classID, joinPassword) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${jwtToken.value}`,
+          Authorization: `Bearer ${token.value}`,
         },
       },
     )
@@ -71,7 +71,7 @@ async function leaveClass(deleteId) {
 
     const response = await axios.delete(`${URL.CLASSES}/leave_class/${deleteId}`, {
       headers: {
-        Authorization: `Bearer ${jwtToken.value}`,
+        Authorization: `Bearer ${token.value}`,
       },
     })
 
@@ -89,7 +89,7 @@ onMounted(async () => {
 
     const response = await axios.get(`${URL.CLASSES}/get_student_classes`, {
       headers: {
-        Authorization: `Bearer ${jwtToken.value}`,
+        Authorization: `Bearer ${token.value}`,
       },
     })
 

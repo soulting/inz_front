@@ -118,7 +118,7 @@ import { onMounted, reactive } from 'vue'
 import { URL } from '@/enums'
 
 const authStore = useAuthStore()
-const { jwtToken, user } = storeToRefs(authStore)
+const { token, user } = storeToRefs(authStore)
 const loadingStore = useLoadingStore()
 const router = useRouter()
 const route = useRoute()
@@ -146,7 +146,7 @@ async function loadLesson(id) {
     loadingStore.startLoading()
     const { data } = await axios.get(`${URL.LESSONS}/get_lesson/${id}`, {
       headers: {
-        Authorization: `Bearer ${jwtToken.value}`,
+        Authorization: `Bearer ${token.value}`,
       },
     })
 
@@ -175,11 +175,11 @@ async function submitLesson() {
     loadingStore.startLoading()
     if (lessonData.id) {
       await axios.put(`${URL.LESSONS}/update_lesson/${lessonData.id}`, lessonData, {
-        headers: { Authorization: `Bearer ${jwtToken.value}` },
+        headers: { Authorization: `Bearer ${token.value}` },
       })
     } else {
       await axios.post(`${URL.LESSONS}/create_lesson`, lessonData, {
-        headers: { Authorization: `Bearer ${jwtToken.value}` },
+        headers: { Authorization: `Bearer ${token.value}` },
       })
     }
     router.push('/classes-teacher')
