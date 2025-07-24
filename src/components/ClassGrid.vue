@@ -33,11 +33,14 @@
         />
       </div>
     </div>
-    <div v-if="showMoreButton" class="class-grid__show-more-wrapper">
-      <button class="class-grid__show-more-button" @click="showMore">Pokaż więcej</button>
-    </div>
-    <div v-else class="class-grid__show-more-wrapper">
-      <button class="class-grid__show-more-button" @click="showLess">Pokaż mniej</button>
+
+    <div v-if="filteredAndSortedClasses.length > 7" class="class-grid__show-more-wrapper">
+      <button
+        class="class-grid__show-more-button"
+        @click="showMoreButton ? showMore() : showLess()"
+      >
+        {{ showMoreButton ? 'Pokaż więcej' : 'Pokaż mniej' }}
+      </button>
     </div>
   </div>
 </template>

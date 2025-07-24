@@ -1,13 +1,13 @@
 <template>
   <div class="list">
-    <h1 class="list_title">Moje zadania</h1>
+    <h1 class="list_title">Moje lekcje</h1>
 
     <!-- FILTRY I SORTOWANIE -->
     <div class="list__controls">
       <input
         v-model="searchQuery"
         type="text"
-        placeholder="Szukaj zadania..."
+        placeholder="Szukaj lekcji..."
         class="list__search-input"
       />
       <select v-model="sortBy" class="list__sort-select">

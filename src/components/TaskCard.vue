@@ -72,11 +72,6 @@ const editTask = () => {
     name: 'create-task',
     query: {
       id: props.data.id,
-      main_category: props.data.main_category,
-      sub_category: props.data.sub_category,
-      task_type: props.data.task_type,
-      level: props.data.level,
-      question: props.data.question,
     },
   })
 }

@@ -93,12 +93,8 @@
 </template>
 
 <script setup>
+import useApi from '@/api/useApi'
 import categories from '@/assets/data/categories.json'
-import { handleApiError } from '@/composables/errorHandling'
-import { useAuthStore } from '@/stores/auth'
-import { useLoadingStore } from '@/stores/loading'
-import axios from 'axios'
-import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 
 import { onMounted, reactive } from 'vue'
@@ -107,12 +103,6 @@ import { TASK_TYPES, URL } from '@/enums'
 
 import MultiTask from '@/components/MultiTask.vue'
 import TaskSelect from '@/components/TaskSelection.vue'
-
-const authStore = useAuthStore()
-
-const { token } = storeToRefs(authStore)
-
-const loadingStore = useLoadingStore()
 
 const router = useRouter()
 
@@ -140,86 +130,42 @@ async function createTask(task_items) {
 
   const { main_category, sub_category, level, question, task_type, task_items: sp } = taskData
 
-  if (!main_category) {
-    alert('Proszę wybrać główną kategorię')
-    return
-  }
-  if (!sub_category) {
-    alert('Proszę wybrać pierwszą kategorię')
-    return
-  }
-  if (!level) {
-    alert('Proszę wybrać poziom')
-    return
-  }
-  if (!question.trim()) {
-    alert('Proszę wpisać pytanie')
-    return
-  }
-  if (!task_type) {
-    alert('Proszę wybrać typ zadania')
-    return
-  }
-  if (!sp || sp.length === 0) {
-    alert('Proszę uzupełnić dane specyficzne dla typu zadania')
+  if (
+    !main_category ||
+    !sub_category ||
+    !level ||
+    !question.trim() ||
+    !task_type ||
+    !sp ||
+    sp.length === 0
+  ) {
+    alert('Proszę uzupełnić wszystkie wymagane pola.')
     return
   }
 
   try {
-    loadingStore.startLoading()
-
-    const url = taskData.id ? `${URL.TASKS}/update_task/${taskData.id}` : `${URL.TASKS}/create_task`
-
-    const method = taskData.id ? 'PUT' : 'POST'
-
-    const response = await fetch(url, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token.value}`,
-      },
-      body: JSON.stringify(taskData),
-    })
-
-    if (!response.ok) {
-      throw new Error('Błąd zapisu danych')
+    if (taskData.id) {
+      await useApi().put(`${URL.TASKS}/update_task/${taskData.id}`, taskData)
+    } else {
+      await useApi().post(`${URL.TASKS}/create_task`, taskData)
     }
-
     router.push('/classes-teacher')
   } catch (error) {
-    handleApiError(error, router)
-  } finally {
-    loadingStore.stopLoading()
+    console.error('Błąd podczas tworzenia zadania:', error)
   }
-
-  console.log(`${taskData.id ? 'Zadanie zaktualizowane' : 'Nowe zadanie utworzone'}:`, taskData)
 }
 
 onMounted(async () => {
   window.scrollTo(0, 0)
 
   taskData.id = route.query.id || null
-  taskData.main_category = route.query.main_category || ''
-  taskData.sub_category = route.query.sub_category || ''
-  taskData.task_type = route.query.task_type || TASK_TYPES.SELECTION
-  taskData.level = route.query.level || 'A1'
-  taskData.question = route.query.question || ''
-  taskData.task_items = []
 
   if (taskData.id) {
     try {
-      loadingStore.startLoading()
-      const response = await axios.get(`${URL.TASKS}/get_task_items/${taskData.id}`, {
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-      })
-      taskData.task_items = response.data.task_items || []
-      console.log('Pobrano subpunkty:', taskData.task_items)
+      const response = await useApi().get(`${URL.TASKS}/get_task/${taskData.id}`)
+      Object.assign(taskData, response)
     } catch (error) {
-      handleApiError(error, router)
-    } finally {
-      loadingStore.stopLoading()
+      console.error('Błąd podczas pobierania zadania:', error)
     }
   }
 })

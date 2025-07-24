@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 import { URL } from '@/enums'
 
-export const useClassStore = defineStore('classes', {
+export const useTeacherClassStore = defineStore('classes', {
   state: () => ({
     classes: [],
     tasks: [],
@@ -61,6 +61,22 @@ export const useClassStore = defineStore('classes', {
         this.classes.push(response)
       } catch (error) {
         console.error('Error creating class:', error)
+      }
+    },
+    async createTask(data, router) {
+      try {
+        const response = await useApi().post(`${URL.TASKS}/create_teacher_task`, data, router)
+        this.tasks.push(response)
+      } catch (error) {
+        console.error('Error creating task:', error)
+      }
+    },
+    async createLesson(data, router) {
+      try {
+        const response = await useApi().post(`${URL.LESSONS}/create_teacher_lesson`, data, router)
+        this.lessons.push(response)
+      } catch (error) {
+        console.error('Error creating lesson:', error)
       }
     },
   },

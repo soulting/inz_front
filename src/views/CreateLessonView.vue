@@ -104,22 +104,15 @@
 </template>
 
 <script setup>
+import useApi from '@/api/useApi'
 import categories from '@/assets/data/categories.json'
-import { handleApiError } from '@/composables/errorHandling'
-import { useAuthStore } from '@/stores/auth'
-import { useLoadingStore } from '@/stores/loading'
 import Editor from '@tinymce/tinymce-vue'
-import axios from 'axios'
-import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 
 import { onMounted, reactive } from 'vue'
 
 import { URL } from '@/enums'
 
-const authStore = useAuthStore()
-const { token, user } = storeToRefs(authStore)
-const loadingStore = useLoadingStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -130,7 +123,6 @@ const lessonData = reactive({
   title: '',
   description: '',
   context: '',
-  owner: user.value?.id || null,
   main_category: '',
   sub_category: '',
   level: 'A1',
@@ -141,59 +133,37 @@ function getSubCategories(mainCategory) {
   return topic ? topic.sub_categories : []
 }
 
-async function loadLesson(id) {
-  try {
-    loadingStore.startLoading()
-    const { data } = await axios.get(`${URL.LESSONS}/get_lesson/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token.value}`,
-      },
-    })
-
-    lessonData.id = data.id
-    lessonData.title = data.title
-    lessonData.description = data.description || ''
-    lessonData.context = data.context
-    lessonData.main_category = data.main_category
-    lessonData.sub_category = data.sub_category
-    lessonData.level = data.level
-  } catch (error) {
-    handleApiError(error, router)
-  } finally {
-    loadingStore.stopLoading()
-  }
-}
-
 async function submitLesson() {
-  if (!lessonData.title.trim()) return alert('Proszę podać tytuł lekcji')
-  if (!lessonData.description.trim()) return alert('Proszę podać opis lekcji')
-  if (!lessonData.context.trim()) return alert('Proszę podać kontekst lekcji')
-  if (!lessonData.main_category) return alert('Proszę wybrać główną kategorię')
-  if (!lessonData.level) return alert('Proszę wybrać poziom')
+  const { title, description, context, main_category, level } = lessonData
+
+  if (!title.trim() || !description.trim() || !context.trim() || !main_category || !level) {
+    alert('Proszę uzupełnić wszystkie wymagane pola lekcji')
+    return
+  }
 
   try {
-    loadingStore.startLoading()
     if (lessonData.id) {
-      await axios.put(`${URL.LESSONS}/update_lesson/${lessonData.id}`, lessonData, {
-        headers: { Authorization: `Bearer ${token.value}` },
-      })
+      await useApi().put(`${URL.LESSONS}/update_lesson/${lessonData.id}`, lessonData)
     } else {
-      await axios.post(`${URL.LESSONS}/create_lesson`, lessonData, {
-        headers: { Authorization: `Bearer ${token.value}` },
-      })
+      await useApi().post(`${URL.LESSONS}/create_lesson`, lessonData)
     }
     router.push('/classes-teacher')
   } catch (error) {
-    handleApiError(error, router)
-  } finally {
-    loadingStore.stopLoading()
+    console.error('Błąd podczas tworzenia lekcji:', error)
   }
 }
 
-onMounted(() => {
-  const id = route.query.id
-  if (id) {
-    loadLesson(id)
+onMounted(async () => {
+  window.scrollTo(0, 0)
+  lessonData.id = route.query.id || null
+
+  if (lessonData.id) {
+    try {
+      const response = await useApi().get(`${URL.LESSONS}/get_lesson/${lessonData.id}`)
+      Object.assign(lessonData, response)
+    } catch (error) {
+      console.error('Błąd podczas pobierania lekcji:', error)
+    }
   }
 })
 </script>

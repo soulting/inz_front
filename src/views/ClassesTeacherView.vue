@@ -68,7 +68,7 @@
 
 <script setup>
 // === IMPORTY ===
-import { useClassStore } from '@/stores/classes'
+import { useTeacherClassStore } from '@/stores/teacherClassesStore'
 import { storeToRefs } from 'pinia'
 import Swal from 'sweetalert2'
 import { useRouter } from 'vue-router'
@@ -79,15 +79,15 @@ import ClassGrid from '@/components/ClassGrid.vue'
 import LessonList from '@/components/LessonList.vue'
 import TaskList from '@/components/TaskList.vue'
 
-const classStore = useClassStore()
+const teacherClassStore = useTeacherClassStore()
 
 // === INSTANCJE ===
 const router = useRouter()
 
 // === STANY ===
-const classes = storeToRefs(classStore).classes
-const tasks = storeToRefs(classStore).tasks
-const lessons = storeToRefs(classStore).lessons
+const classes = storeToRefs(teacherClassStore).classes
+const tasks = storeToRefs(teacherClassStore).tasks
+const lessons = storeToRefs(teacherClassStore).lessons
 
 const showCreateForm = ref(false)
 const newClassName = ref('')
@@ -115,8 +115,7 @@ function goToCreateLesson() {
 }
 
 // === ŻĄDANIA DO API ===
-
-const submitNewClass = async () => {
+async function submitNewClass() {
   if (!newClassName.value.trim()) {
     Swal.fire({
       icon: 'error',
@@ -127,7 +126,7 @@ const submitNewClass = async () => {
   }
 
   try {
-    await classStore.createClass(
+    await teacherClassStore.createClass(
       {
         name: newClassName.value,
         password: newClassPassword.value,
@@ -146,7 +145,7 @@ const submitNewClass = async () => {
     newClassName.value = ''
     newClassPassword.value = ''
 
-    await classStore.getClasses(router)
+    teacherClassStore.getClasses(router)
   } catch (error) {
     Swal.fire({
       icon: 'error',
@@ -158,24 +157,24 @@ const submitNewClass = async () => {
 }
 
 async function deleteClass(deleteId) {
-  await classStore.deleteClass(deleteId, router)
-  await classStore.getClasses(router)
+  await teacherClassStore.deleteClass(deleteId, router)
+  teacherClassStore.getClasses(router)
 }
 
 async function deleteTask(deleteId) {
-  await classStore.deleteTask(deleteId, router)
-  await classStore.getTasks(router)
+  await teacherClassStore.deleteTask(deleteId, router)
+  teacherClassStore.getTasks(router)
 }
 
 async function deleteLesson(deleteId) {
-  await classStore.deleteLesson(deleteId, router)
-  await classStore.getLessons(router)
+  await teacherClassStore.deleteLesson(deleteId, router)
+  teacherClassStore.getLessons(router)
 }
 
 // === POBIERANIE DANYCH PRZY MONCIE ===
 onMounted(async () => {
-  classStore.getClasses(router)
-  classStore.getTasks(router)
-  classStore.getLessons(router)
+  teacherClassStore.getClasses(router)
+  teacherClassStore.getTasks(router)
+  teacherClassStore.getLessons(router)
 })
 </script>
