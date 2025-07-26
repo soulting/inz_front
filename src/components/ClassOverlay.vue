@@ -21,14 +21,12 @@
 </template>
 
 <script setup>
-import { handleApiError } from '@/composables/errorHandling'
-import { useAuthStore } from '@/stores/auth'
-import { useLoadingStore } from '@/stores/loading'
-import axios from 'axios'
+import useApi from '@/api/useApi'
+import { useTeacherClassStore } from '@/stores/teacherClassesStore'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 import { URL } from '@/enums'
 
@@ -44,46 +42,40 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  classId: {
+    type: String,
+    required: true,
+  },
 })
 
-console.log(props.sectionItemType)
+const teacherClassStore = useTeacherClassStore()
 
-const cardComponent = computed(() => (props.sectionItemType === 'Tasks' ? TaskCard : LessonCard))
+const cardComponent = props.sectionItemType === 'Tasks' ? TaskCard : LessonCard
 
 const emit = defineEmits(['close'])
 const router = useRouter()
-const loadingStore = useLoadingStore()
-const authStore = useAuthStore()
-const { token } = storeToRefs(authStore)
 
-const sectionItems = ref([])
+const sectionItems =
+  props.sectionItemType === 'Tasks'
+    ? storeToRefs(teacherClassStore).tasks
+    : storeToRefs(teacherClassStore).lessons
+
+console.log(sectionItems.value)
+
 const previewButton = ref(true)
 
-const endpoint = computed(() => {
-  return props.sectionItemType === 'Tasks'
-    ? `${URL.TASKS}/get_teacher_tasks`
-    : `${URL.LESSONS}/get_teacher_lessons`
-})
-
-const addItemUrl = computed(() => {
-  return props.sectionItemType === 'Tasks'
-    ? `${URL.SECTIONS}/add_task_to_section`
-    : `${URL.SECTIONS}/add_lesson_to_section`
-})
-
 async function addToSection(id) {
-  try {
-    loadingStore.startLoading()
-    await axios.post(
-      addItemUrl.value,
-      { item_id: id, section_id: props.sectionId },
-      { headers: { Authorization: `Bearer ${token.value}` } },
-    )
-  } catch (error) {
-    handleApiError(error, router)
-  } finally {
-    loadingStore.stopLoading()
-  }
+  props.sectionItemType === 'Tasks'
+    ? await useApi().post(
+        `${URL.TASKS}/add_task_to_section`,
+        { task_id: id, section_id: props.sectionId, class_id: props.classId },
+        router,
+      )
+    : await useApi().post(
+        `${URL.LESSONS}/add_lesson_to_section`,
+        { lesson_id: id, section_id: props.sectionId, class_id: props.classId },
+        router,
+      )
 }
 
 function closeOverlay() {
@@ -91,17 +83,9 @@ function closeOverlay() {
 }
 
 onMounted(async () => {
-  try {
-    loadingStore.startLoading()
-    const response = await axios.get(endpoint.value, {
-      headers: { Authorization: `Bearer ${token.value}` },
-    })
-    sectionItems.value = response.data
-  } catch (error) {
-    handleApiError(error, router)
-  } finally {
-    loadingStore.stopLoading()
-  }
+  props.sectionItemType === 'Tasks'
+    ? await teacherClassStore.getTasks(router)
+    : await teacherClassStore.getLessons(router)
 })
 </script>
 
