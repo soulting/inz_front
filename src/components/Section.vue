@@ -54,7 +54,8 @@
   <ClassOverlay
     v-if="sectionType"
     :section-item-type="sectionType"
-    :sectionId="id"
+    :section-id="sectionId"
+    :class-id="classId"
     @close="closeOverlay"
   />
 </template>
@@ -67,7 +68,8 @@ import ClassOverlay from '@/components/ClassOverlay.vue'
 const props = defineProps({
   title: String,
   content: String,
-  id: String,
+  sectionId: String,
+  classId: String,
 })
 
 const sectionType = ref(null)

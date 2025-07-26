@@ -13,7 +13,12 @@
       <!-- Sekcja zawartości -->
       <div class="class-detail__content">
         <div v-for="section in sections" :key="section.id" class="class-detail__section-container">
-          <Section :id="section.id" :title="section.title" :content="section.content" />
+          <Section
+            :class-id="id"
+            :section-id="section.id"
+            :title="section.title"
+            :content="section.content"
+          />
         </div>
         <AddSection :classId="id" />
       </div>
@@ -23,26 +28,19 @@
 
 <script setup>
 // === IMPORTY ===
-import { handleApiError } from '@/composables/errorHandling'
-import { useAuthStore } from '@/stores/auth'
-import { useLoadingStore } from '@/stores/loading'
-import axios from 'axios'
-import { storeToRefs } from 'pinia'
+import useApi from '@/api/useApi'
 import { useRouter } from 'vue-router'
 
-import { onMounted, ref } from 'vue'
+import { onMounted, reactive } from 'vue'
 
 import { URL } from '@/enums'
 
 import AddSection from '@/components/AddSection.vue'
 import Section from '@/components/Section.vue'
 
-const sections = ref([])
+const sections = reactive([])
 
 const router = useRouter()
-const loadingStore = useLoadingStore()
-const authStore = useAuthStore()
-const { token } = storeToRefs(authStore)
 
 // === PROPSY ===
 const props = defineProps({
@@ -56,24 +54,11 @@ const props = defineProps({
   },
 })
 
-const sectionType = ref(null)
-
 onMounted(async () => {
-  try {
-    loadingStore.startLoading()
-
-    const response = await axios.get(`${URL.SECTIONS}/get_sections/${props.id}`, {
-      headers: {
-        Authorization: `Bearer ${token.value}`,
-      },
-    })
-    sections.value = response.data.sections
-    console.log('Sekcje:', sections.value)
-  } catch (error) {
-    handleApiError(error, router)
-  } finally {
-    loadingStore.stopLoading()
-  }
+  const response = await useApi().get(`${URL.SECTIONS}/get_sections/${props.id}`, router)
+  Object.assign(sections, response)
+  console.log(response)
+  console.log(sections)
 })
 </script>
 
