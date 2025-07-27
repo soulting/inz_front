@@ -1,3 +1,92 @@
+<template>
+  <TestStartingScreen v-if="testState === 'not_started'" :tasks="tasks" @start="startTest" />
+  <TestSummary v-else-if="testState === 'finished'" :testAnswers="testAnswers" />
+
+  <div v-else-if="testState === 'in_progress'">
+    <div v-if="currentTask" class="task-container">
+      <div class="task-header">
+        <div>
+          <strong>TEST {{ props.level }}</strong>
+        </div>
+        <div>
+          <strong>
+            Czas: {{ Math.floor(timeLeft / 60) }}:{{ (timeLeft % 60).toString().padStart(2, '0') }}
+          </strong>
+        </div>
+        <div>
+          <strong>Zadanie {{ currentIndex + 1 }}/{{ tasks.length }}</strong>
+        </div>
+      </div>
+
+      <div class="task-body">
+        <h2>{{ currentTask.question }}</h2>
+
+        <FillInTask
+          v-if="currentTask.task_type === TASK_TYPES.FILL_IN"
+          :currentTask="currentTask"
+          @submit="handleSubmitAnswers"
+          @noAnswers="noAnswersAlert"
+          ref="componentRef"
+        />
+
+        <SelectionTask
+          v-else-if="currentTask.task_type === TASK_TYPES.SELECTION"
+          :currentTask="currentTask"
+          @submit="handleSubmitAnswers"
+          @noAnswers="noAnswersAlert"
+          ref="componentRef"
+        />
+
+        <CorrectionTask
+          v-else-if="currentTask.task_type === 'correction'"
+          :currentTask="currentTask"
+          @submit="handleSubmitAnswers"
+          @noAnswers="noAnswersAlert"
+          ref="componentRef"
+        />
+
+        <CorrectionWordTask
+          v-else-if="currentTask.task_type === TASK_TYPES.CORRECTION_WORD"
+          :currentTask="currentTask"
+          @submit="handleSubmitAnswers"
+          @noAnswers="noAnswersAlert"
+          ref="componentRef"
+        />
+
+        <div v-else>
+          <em>Nieobsługiwany typ zadania: {{ currentTask.task_type }}</em>
+        </div>
+
+        <div class="difficulty-rating">
+          <p>Jak trudne było to zadanie?</p>
+          <div class="difficulty-buttons">
+            <button
+              v-for="level in 5"
+              :key="level"
+              @click="rateDifficulty(level)"
+              :style="{
+                backgroundColor: taskDifficulty === level ? '#3b4bdc' : '#e0e0e0',
+                color: taskDifficulty === level ? '#ffd700' : 'black',
+              }"
+            >
+              {{
+                ['😄 Bardzo łatwe', '🙂 Łatwe', '😐 Neutralne', '😕 Trudne', '😫 Bardzo trudne'][
+                  level - 1
+                ]
+              }}
+            </button>
+          </div>
+        </div>
+
+        <button v-if="currentIndex < tasks.length - 1" @click="goToNextTask" class="task-btn">
+          Dalej
+        </button>
+        <button v-else @click="finishTestManually" class="task-btn">Zakończ</button>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup>
 import { handleApiError } from '@/composables/errorHandling'
 import axios from 'axios'
@@ -218,95 +307,6 @@ onUnmounted(() => {
   if (timer) clearInterval(timer)
 })
 </script>
-
-<template>
-  <TestStartingScreen v-if="testState === 'not_started'" :tasks="tasks" @start="startTest" />
-  <TestSummary v-else-if="testState === 'finished'" :testAnswers="testAnswers" />
-
-  <div v-else-if="testState === 'in_progress'">
-    <div v-if="currentTask" class="task-container">
-      <div class="task-header">
-        <div>
-          <strong>TEST {{ props.level }}</strong>
-        </div>
-        <div>
-          <strong>
-            Czas: {{ Math.floor(timeLeft / 60) }}:{{ (timeLeft % 60).toString().padStart(2, '0') }}
-          </strong>
-        </div>
-        <div>
-          <strong>Zadanie {{ currentIndex + 1 }}/{{ tasks.length }}</strong>
-        </div>
-      </div>
-
-      <div class="task-body">
-        <h2>{{ currentTask.question }}</h2>
-
-        <FillInTask
-          v-if="currentTask.task_type === TASK_TYPES.FILL_IN"
-          :currentTask="currentTask"
-          @submit="handleSubmitAnswers"
-          @noAnswers="noAnswersAlert"
-          ref="componentRef"
-        />
-
-        <SelectionTask
-          v-else-if="currentTask.task_type === TASK_TYPES.SELECTION"
-          :currentTask="currentTask"
-          @submit="handleSubmitAnswers"
-          @noAnswers="noAnswersAlert"
-          ref="componentRef"
-        />
-
-        <CorrectionTask
-          v-else-if="currentTask.task_type === 'correction'"
-          :currentTask="currentTask"
-          @submit="handleSubmitAnswers"
-          @noAnswers="noAnswersAlert"
-          ref="componentRef"
-        />
-
-        <CorrectionWordTask
-          v-else-if="currentTask.task_type === TASK_TYPES.CORRECTION_WORD"
-          :currentTask="currentTask"
-          @submit="handleSubmitAnswers"
-          @noAnswers="noAnswersAlert"
-          ref="componentRef"
-        />
-
-        <div v-else>
-          <em>Nieobsługiwany typ zadania: {{ currentTask.task_type }}</em>
-        </div>
-
-        <div class="difficulty-rating">
-          <p>Jak trudne było to zadanie?</p>
-          <div class="difficulty-buttons">
-            <button
-              v-for="level in 5"
-              :key="level"
-              @click="rateDifficulty(level)"
-              :style="{
-                backgroundColor: taskDifficulty === level ? '#3b4bdc' : '#e0e0e0',
-                color: taskDifficulty === level ? '#ffd700' : 'black',
-              }"
-            >
-              {{
-                ['😄 Bardzo łatwe', '🙂 Łatwe', '😐 Neutralne', '😕 Trudne', '😫 Bardzo trudne'][
-                  level - 1
-                ]
-              }}
-            </button>
-          </div>
-        </div>
-
-        <button v-if="currentIndex < tasks.length - 1" @click="goToNextTask" class="task-btn">
-          Dalej
-        </button>
-        <button v-else @click="finishTestManually" class="task-btn">Zakończ</button>
-      </div>
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .task-container {

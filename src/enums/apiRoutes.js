@@ -7,4 +7,5 @@ export const URL = Object.freeze({
   AUTH: `${BASE_URL}/auth`,
   PLACEMENT_TEST: `${BASE_URL}/placement_test`,
   SECTIONS: `${BASE_URL}/sections`,
+  ANALITICS: `${BASE_URL}/analytics`,
 })

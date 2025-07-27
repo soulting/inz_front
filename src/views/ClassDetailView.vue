@@ -18,9 +18,11 @@
             :section-id="section.id"
             :title="section.title"
             :content="section.content"
+            :lessons="section.lessons"
+            :tasks="section.tasks"
           />
         </div>
-        <AddSection :classId="id" />
+        <AddSection v-if="authStore.user.role === 'teacher'" :classId="id" />
       </div>
     </div>
   </div>
@@ -28,17 +30,21 @@
 
 <script setup>
 // === IMPORTY ===
-import useApi from '@/api/useApi'
+import { useAuthStore } from '@/stores/auth'
+import { useSectionStore } from '@/stores/classObject'
+import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 
-import { onMounted, reactive } from 'vue'
-
-import { URL } from '@/enums'
+import { onMounted } from 'vue'
 
 import AddSection from '@/components/AddSection.vue'
 import Section from '@/components/Section.vue'
 
-const sections = reactive([])
+const authStore = useAuthStore()
+
+const classObjectStore = useSectionStore()
+
+const sections = storeToRefs(classObjectStore).sections
 
 const router = useRouter()
 
@@ -55,10 +61,7 @@ const props = defineProps({
 })
 
 onMounted(async () => {
-  const response = await useApi().get(`${URL.SECTIONS}/get_sections/${props.id}`, router)
-  Object.assign(sections, response)
-  console.log(response)
-  console.log(sections)
+  classObjectStore.getSections(props.id, router)
 })
 </script>
 

@@ -1,9 +1,10 @@
 import { useAuthStore } from '@/stores/auth'
-import ClassTeacherView from '@/views/ClassTeacherView.vue'
+import ClassTeacherView from '@/views/ClassDetailView.vue'
 import ClassView from '@/views/ClassesStudentView.vue'
 import ClassesTeacher from '@/views/ClassesTeacherView.vue'
 import CreateLessonView from '@/views/CreateLessonView.vue'
 import CreateTaskView from '@/views/CreateTaskView.vue'
+import LessonView from '@/views/LessonView.vue'
 import LoginView from '@/views/LoginView.vue'
 import PreviewView from '@/views/PreviewView.vue'
 import PrivacyPolicyView from '@/views/PrivacyPolicyView.vue'
@@ -125,6 +126,15 @@ const router = createRouter({
       path: '/class-teacher/:id/:name',
       name: 'class-teacher',
       component: ClassTeacherView,
+      props: true,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/lesson/:classId/:sectionId/:lessonId',
+      name: 'lesson',
+      component: LessonView,
       props: true,
       meta: {
         requiresAuth: true,

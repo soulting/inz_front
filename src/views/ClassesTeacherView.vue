@@ -1,7 +1,7 @@
 <template>
   <div class="teacher-classes">
     <!-- KLASY -->
-    <ClassGrid :classes="classes" :deleteButton="true" title="Moje klasy" @delete="deleteClass">
+    <ClassGrid v-bind="myClassesProp" @delete="deleteClass">
       <!-- Karta dodawania klasy -->
       <div class="teacher-classes__add-card" @click="createClass">
         <div class="teacher-classes__plus">+</div>
@@ -73,7 +73,7 @@ import { storeToRefs } from 'pinia'
 import Swal from 'sweetalert2'
 import { useRouter } from 'vue-router'
 
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import ClassGrid from '@/components/ClassGrid.vue'
 import LessonList from '@/components/LessonList.vue'
@@ -93,6 +93,13 @@ const showCreateForm = ref(false)
 const newClassName = ref('')
 const newClassPassword = ref('')
 const placeholderImage = ref('')
+
+const myClassesProp = computed(() => ({
+  title: 'Moje klasy',
+  classes: classes.value,
+  deleteButton: true,
+  cardClickable: true,
+}))
 
 // === FUNKCJE POMOCNICZE ===
 const createClass = () => {
@@ -114,7 +121,6 @@ function goToCreateLesson() {
   router.push({ name: 'create-lesson' })
 }
 
-// === ŻĄDANIA DO API ===
 async function submitNewClass() {
   if (!newClassName.value.trim()) {
     Swal.fire({
