@@ -44,14 +44,14 @@
             <div class="item-card__actions" v-if="authStore.user.role === 'teacher'">
               <button
                 class="item-card__action-button"
-                @click="previewLesson(lesson.id)"
+                @click.stop="previewLesson(lesson.id)"
                 title="Podgląd lekcji"
               >
                 <img src="@/assets/icons/search.png" alt="preview icon" />
               </button>
               <button
                 class="item-card__action-button item-card__remove-button"
-                @click="removeFromSection(lesson.id, 'Lessons')"
+                @click.stop="removeFromSection(lesson.id, 'Lessons')"
                 title="Usuń lekcję"
               >
                 <img src="@/assets/icons/delete.png" alt="usuń ikonka" />
@@ -70,7 +70,7 @@
             <div class="item-card__actions" v-if="authStore.user.role === 'teacher'">
               <button
                 class="item-card__action-button item-card__remove-button"
-                @click="removeFromSection(task.id, 'Tasks')"
+                @click.stop="removeFromSection(task.id, 'Tasks')"
                 title="Usuń zadanie"
               >
                 <img src="@/assets/icons/delete.png" alt="usuń ikonka" />

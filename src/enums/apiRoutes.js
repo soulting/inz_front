@@ -1,11 +1,11 @@
 const BASE_URL = 'http://localhost:5000'
 
 export const URL = Object.freeze({
-  CLASSES: `${BASE_URL}/classes`,
-  TASKS: `${BASE_URL}/tasks`,
-  LESSONS: `${BASE_URL}/lessons`,
+  ANALYTICS: `${BASE_URL}/analytics`,
   AUTH: `${BASE_URL}/auth`,
+  CLASSES: `${BASE_URL}/classes`,
+  LESSONS: `${BASE_URL}/lessons`,
   PLACEMENT_TEST: `${BASE_URL}/placement_test`,
   SECTIONS: `${BASE_URL}/sections`,
-  ANALITICS: `${BASE_URL}/analytics`,
+  TASKS: `${BASE_URL}/tasks`,
 })

@@ -26,23 +26,25 @@
       </div>
     </div>
 
-    <button @click="logStats"></button>
+    <div class="lesson__end-button-wrapper">
+      <button class="lesson__end-button" @click="endLesson">Zakończ lekcję</button>
+    </div>
   </div>
 </template>
 
 <script setup>
 import useApi from '@/api/useApi'
-import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 import { onMounted, onUnmounted, ref } from 'vue'
 
 import { URL } from '@/enums'
 
-const route = useRoute()
+const router = useRouter()
 
 const props = defineProps({
   classId: String,
-  subjectId: String,
+  sectionId: String,
   lessonId: String,
 })
 
@@ -54,6 +56,7 @@ const userActivity = ref({
   keyPresses: 0,
   clicks: 0,
   difficulty: 3,
+  scrollDepth: 0,
 })
 
 const lesson = ref({
@@ -91,6 +94,18 @@ function startTimer() {
   }, 1000)
 }
 
+function updateScrollDepth() {
+  const scrollTop = window.scrollY
+  const windowHeight = window.innerHeight
+  const fullHeight = document.documentElement.scrollHeight
+
+  const currentDepth = Math.round(((scrollTop + windowHeight) / fullHeight) * 100)
+
+  if (currentDepth > userActivity.value.scrollDepth) {
+    userActivity.value.scrollDepth = currentDepth
+  }
+}
+
 function stopTimer() {
   clearInterval(interval)
 }
@@ -105,28 +120,33 @@ function stopCollectingMetrics() {
   stopTimer()
 }
 
+function handleScrollWrapper() {
+  handleScroll()
+  updateScrollDepth()
+}
+
 function trackUserActivity() {
   window.addEventListener('mousemove', handleMouseMove)
-  window.addEventListener('scroll', handleScroll)
+  window.addEventListener('scroll', handleScrollWrapper)
   window.addEventListener('keydown', handleKey)
   window.addEventListener('click', handleClick)
 }
 
 function stopTrackingUserActivity() {
   window.removeEventListener('mousemove', handleMouseMove)
-  window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('scroll', handleScrollWrapper)
   window.removeEventListener('keydown', handleKey)
   window.removeEventListener('click', handleClick)
 }
 
-function logStats() {
-  console.log('Aktywność użytkownika:', userActivity.value)
+function endLesson() {
+  router.back()
 }
 
 async function sendData() {
-  await useApi().post(`${URL.ANALITICS}/save_lesson_metrics`, {
+  await useApi().post(`${URL.ANALYTICS}/save_lesson_analytics`, {
     classId: props.classId,
-    subjectId: props.subjectId,
+    sectionId: props.sectionId,
     lessonId: props.lessonId,
     ...userActivity.value,
     ...lesson.value,
@@ -134,6 +154,7 @@ async function sendData() {
 }
 
 onMounted(async () => {
+  window.scrollTo(0, 0)
   const response = await useApi().get(`${URL.LESSONS}/get_lesson/${props.lessonId}`)
   lesson.value = response
 
@@ -155,7 +176,7 @@ onUnmounted(() => {
   sendData()
 })
 
-window.addEventListener('beforeunload', sendData)
+// window.addEventListener('beforeunload', sendData)
 </script>
 
 <style scoped lang="scss">
@@ -239,6 +260,26 @@ window.addEventListener('beforeunload', sendData)
       background-color: #3b4bdc;
       color: #ffd700;
     }
+  }
+}
+
+.lesson__end-button-wrapper {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.lesson__end-button {
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  background-color: #3b4bdc;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #2e3bb4;
   }
 }
 </style>

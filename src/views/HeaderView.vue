@@ -9,7 +9,7 @@
       <RouterLink class="header__link" to="/test">Test</RouterLink>
 
       <button v-if="isLoggedIn" class="header__profile" @click="toggleDropdown">
-        <img class="header__avatar" src="@/assets/profile_pic.jpg" alt="profile picture" />
+        <img class="header__avatar" src="@/assets/profile_pic.png" alt="profile picture" />
         <span>Moje Konto</span>
         <img
           v-if="!isDropdownOpen"
