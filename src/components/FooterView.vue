@@ -1,43 +1,48 @@
 <template>
   <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section contact-info">
-        <h3>Kontakt</h3>
-        <p>
-          Email:
-          <a :href="`mailto:czasnaniemiecki@gmail.com`">czasnaniemiecki@gmail.com</a>
-        </p>
-        <p>
-          Telefon:
-          <a :href="`tel:48506940830`">+48 506 940 830</a>
-        </p>
+    <div class="footer__container">
+      <div class="footer__content">
+        <!-- Contact Section -->
+        <div class="footer__section">
+          <h3 class="footer__title">Kontakt</h3>
+          <div class="footer__contact">
+            <a href="mailto:czasnaniemiecki@gmail.com" class="footer__link">
+              czasnaniemiecki@gmail.com
+            </a>
+            <a href="tel:+48506940830" class="footer__link"> +48 506 940 830 </a>
+            <a
+              href="https://www.google.com/maps/place/Micha%C5%82a+Drzyma%C5%82y+5C,+87-100+Toru%C5%84/@52.992938,18.5949033,17z/data=!3m1!4b1!4m6!3m5!1s0x47033514f54612c9:0x8c0e74916cea3230!8m2!3d52.9929348!4d18.5974782!16s%2Fg%2F11c5dtx7wr?entry=ttu&g_ep=EgoyMDI1MDUyOC4wIKXMDSoASAFQAw%3D%3D"
+              target="_blank"
+              class="footer__link"
+            >
+              Michała Drzymały 5C, 87-100 Toruń
+            </a>
+          </div>
+        </div>
 
-        <p>
-          Adres:
-          <a
-            :href="`https://www.google.com/maps/place/Micha%C5%82a+Drzyma%C5%82y+5C,+87-100+Toru%C5%84/@52.992938,18.5949033,17z/data=!3m1!4b1!4m6!3m5!1s0x47033514f54612c9:0x8c0e74916cea3230!8m2!3d52.9929348!4d18.5974782!16s%2Fg%2F11c5dtx7wr?entry=ttu&g_ep=EgoyMDI1MDUyOC4wIKXMDSoASAFQAw%3D%3D`"
-            target="_blank"
-            >Michała Drzymały 5C, 87-100 Toruń</a
-          >
-        </p>
+        <!-- Navigation Section -->
+        <div class="footer__section">
+          <h3 class="footer__title">Nawigacja</h3>
+          <div class="footer__links">
+            <a @click="goTo('/')" class="footer__link">Strona główna</a>
+            <a @click="goTo('/themenmix')" class="footer__link">Themenmix</a>
+            <a @click="goTo('/test')" class="footer__link">Test</a>
+            <a @click="goTo('/klassen')" class="footer__link">Klasy</a>
+          </div>
+        </div>
+
+        <!-- Legal Section -->
+        <div class="footer__section">
+          <h3 class="footer__title">Informacje prawne</h3>
+          <div class="footer__links">
+            <a @click="goTo('/privacy-policy')" class="footer__link">Polityka prywatności</a>
+          </div>
+        </div>
       </div>
 
-      <div class="footer-section navigation">
-        <h3>Nawigacja</h3>
-        <div @click="goTo('/')">Strona główna</div>
-        <div @click="goTo('/themenmix')">Themenmix</div>
-        <div @click="goTo('/test')">Test</div>
-        <div @click="goTo('/klassen')">Klasy</div>
+      <div class="footer__bottom">
+        <p>© 2025 Andrzej Insadowski. Wszelkie prawa zastrzeżone.</p>
       </div>
-
-      <div class="footer-section legal">
-        <h3>Informacje prawne</h3>
-        <div @click="goTo('/privacy-policy')">Polityka prywatności</div>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <p>© 2025 Andrzej Insadowski. Wszelkie prawa zastrzeżone.</p>
     </div>
   </footer>
 </template>
@@ -47,114 +52,87 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const goTo = (informationSite) => {
-  router.push(informationSite)
+const goTo = (route) => {
+  router.push(route)
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .footer {
-  background-color: #1a1a1a;
-  color: #f4f4f4;
-  padding: 20px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
+  background: #1f2937;
+  color: #f9fafb;
+  font-family: system-ui, sans-serif;
 
-.footer-content {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: flex-start;
-  width: 100%;
-  text-align: left;
-  gap: 10px;
-}
-
-.footer-section {
-  display: flex;
-  flex-direction: column;
-  margin: 0 15px;
-  gap: 5px;
-  justify-content: start;
-}
-
-.footer-section h3 {
-  font-size: 1.4em;
-  margin-bottom: 15px;
-  color: #e0e0e0;
-}
-
-.footer-section p {
-  margin: 0;
-  line-height: 1.6;
-}
-
-.info-link {
-  text-decoration: none;
-  color: #f4f4f4;
-  transition: color 0.2s ease;
-}
-
-.info-link:hover {
-  cursor: pointer;
-  color: #007bff;
-}
-
-.navigation {
-  display: none;
-}
-
-.legal div,
-.navigation div {
-  cursor: pointer;
-  transition: color 0.2s;
-  color: #f4f4f4;
-}
-
-.legal div:hover,
-.navigation div:hover {
-  cursor: pointer;
-  color: #007bff;
-}
-
-.footer-bottom {
-  margin-top: 30px;
-  text-align: center;
-  font-size: 0.9em;
-  color: #a0a0a0;
-  border-top: 1px solid #333;
-  padding-top: 15px;
-}
-a {
-  text-decoration: none;
-  color: #f4f4f4;
-}
-
-a:hover {
-  cursor: pointer;
-  color: #007bff;
-}
-
-@media (min-width: 500px) {
-  .footer-section {
-    margin: 0 50px;
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
   }
-}
 
-@media (min-width: 825px) {
-  .footer-content {
-    justify-content: center;
-    gap: 20px;
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 3rem 0 2rem;
   }
-}
 
-@media (min-width: 1050px) {
-  .navigation {
+  &__section {
     display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #fbbf24;
+    margin-bottom: 1rem;
+    margin-top: 0;
+  }
+
+  &__contact,
+  &__links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__link {
+    color: #d1d5db;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      color: #fbbf24;
+    }
+  }
+
+  &__bottom {
+    border-top: 1px solid #374151;
+    padding: 1.5rem 0;
+    text-align: center;
+
+    p {
+      color: #9ca3af;
+      font-size: 0.875rem;
+      margin: 0;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .footer {
+    &__container {
+      padding: 0 1rem;
+    }
+
+    &__content {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2rem 0 1.5rem;
+    }
   }
 }
 </style>
