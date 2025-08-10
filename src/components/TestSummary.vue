@@ -3,12 +3,6 @@
     <div class="test-summary__container">
       <!-- Header z gratulacjami -->
       <div class="test-summary__header">
-        <div class="test-summary__success-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M9 12l2 2 4-4" />
-            <circle cx="12" cy="12" r="10" />
-          </svg>
-        </div>
         <h1 class="test-summary__title">Test zakończony!</h1>
         <p class="test-summary__subtitle">Gratulacje! Oto Twoje wyniki:</p>
       </div>
@@ -17,10 +11,10 @@
       <div class="test-summary__main-stats">
         <div class="test-summary__score-card">
           <div class="test-summary__progress-container">
-            <CircularProgressBar :progress="percentageCorrect" />
+            <CircularProgressBar :progress="simplePercentage" />
           </div>
           <div class="test-summary__score-details">
-            <div class="test-summary__percentage">{{ percentageCorrect }}%</div>
+            <div class="test-summary__percentage">{{ simplePercentage }}%</div>
             <div class="test-summary__percentage-label">Poprawność</div>
             <div class="test-summary__points">
               {{ testAnswers.totalPoints }}/{{ maxPoints }} punktów
@@ -32,13 +26,6 @@
       <!-- Szczegółowe statystyki -->
       <div class="test-summary__stats-grid">
         <div class="test-summary__stat-card">
-          <div class="test-summary__stat-icon test-summary__stat-icon--level">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path
-                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-              />
-            </svg>
-          </div>
           <div class="test-summary__stat-content">
             <div class="test-summary__stat-value">{{ testAnswers.level }}</div>
             <div class="test-summary__stat-label">Poziom</div>
@@ -46,13 +33,6 @@
         </div>
 
         <div class="test-summary__stat-card">
-          <div class="test-summary__stat-icon test-summary__stat-icon--errors">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="15" y1="9" x2="9" y2="15" />
-              <line x1="9" y1="9" x2="15" y2="15" />
-            </svg>
-          </div>
           <div class="test-summary__stat-content">
             <div class="test-summary__stat-value">{{ testAnswers.totalErrors }}</div>
             <div class="test-summary__stat-label">Błędów</div>
@@ -60,35 +40,49 @@
         </div>
 
         <div class="test-summary__stat-card">
-          <div class="test-summary__stat-icon test-summary__stat-icon--time">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12,6 12,12 16,14" />
-            </svg>
-          </div>
           <div class="test-summary__stat-content">
-            <div class="test-summary__stat-value">
-              {{ Math.floor(testAnswers.totalTime / 60) }}:{{
-                (testAnswers.totalTime % 60).toString().padStart(2, '0')
-              }}
-            </div>
-            <div class="test-summary__stat-label">Czas</div>
+            <div class="test-summary__stat-value">{{ averageTimePerTask }}s</div>
+            <div class="test-summary__stat-label">Średni czas/zadanie</div>
           </div>
         </div>
 
         <div class="test-summary__stat-card">
-          <div class="test-summary__stat-icon test-summary__stat-icon--tasks">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-              <polyline points="14,2 14,8 20,8" />
-              <line x1="16" y1="13" x2="8" y2="13" />
-              <line x1="16" y1="17" x2="8" y2="17" />
-              <polyline points="10,9 9,9 8,9" />
-            </svg>
-          </div>
           <div class="test-summary__stat-content">
-            <div class="test-summary__stat-value">{{ testAnswers.answers.length }}</div>
-            <div class="test-summary__stat-label">Zadań</div>
+            <div class="test-summary__stat-value">{{ testAnswers.totalUncertainty }}</div>
+            <div class="test-summary__stat-label">Niepewnych</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Najlepsze i najgorsze kategorie -->
+      <div v-if="bestCategories.length || worstCategories.length" class="test-summary__categories">
+        <!-- Najlepsze umiejętności -->
+        <div v-if="bestCategories.length" class="test-summary__category-section">
+          <h3 class="test-summary__category-title">Twoje najmocniejsze strony</h3>
+          <div class="test-summary__category-list">
+            <div
+              v-for="(category, index) in bestCategories"
+              :key="`best-${index}`"
+              class="test-summary__category-item test-summary__category-item--best"
+            >
+              <div class="test-summary__category-name">{{ category.name }}</div>
+              <div class="test-summary__category-score">{{ category.percentage }}%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Najgorsze umiejętności -->
+        <div v-if="worstCategories.length" class="test-summary__category-section">
+          <h3 class="test-summary__category-title">Obszary do poprawy</h3>
+          <div class="test-summary__category-list">
+            <div
+              v-for="(category, index) in worstCategories"
+              :key="`worst-${index}`"
+              class="test-summary__category-item test-summary__category-item--improve"
+            >
+              <div class="test-summary__category-name">{{ category.name }}</div>
+              <div class="test-summary__category-score">{{ category.percentage }}%</div>
+            </div>
           </div>
         </div>
       </div>
@@ -96,32 +90,25 @@
       <!-- Podsumowanie -->
       <div class="test-summary__conclusion">
         <div class="test-summary__conclusion-text">
-          <template v-if="percentageCorrect >= 80">
-            🎉 Świetny wynik! Twoja wiedza z języka niemieckiego jest na wysokim poziomie.
+          <template v-if="simplePercentage >= 80">
+            Świetny wynik! Twoja wiedza z języka niemieckiego jest na wysokim poziomie.
           </template>
-          <template v-else-if="percentageCorrect >= 60">
-            👏 Dobra robota! Masz solidne podstawy, które warto rozwijać dalej.
+          <template v-else-if="simplePercentage >= 60">
+            Dobra robota! Masz solidne podstawy, które warto rozwijać dalej.
           </template>
           <template v-else>
-            💪 Nie martw się! Każdy początek jest trudny. Czas na naukę i przygodę z językiem
+            Nie martw się! Każdy początek jest trudny. Czas na naukę i przygodę z językiem
             niemieckim!
           </template>
         </div>
       </div>
 
       <!-- Przycisk zakończenia -->
-      <RouterLink to="/" class="test-summary__finish-btn">
-        <span>Powrót do strony głównej</span>
-        <svg
-          class="test-summary__finish-icon"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-        >
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9,22 9,12 15,12 15,22" />
-        </svg>
-      </RouterLink>
+      <div class="test-summary__finish-container">
+        <RouterLink to="/" class="test-summary__finish-btn">
+          <span>Powrót do strony głównej</span>
+        </RouterLink>
+      </div>
     </div>
   </div>
 </template>
@@ -133,16 +120,66 @@ import CircularProgressBar from './CircularProgressBar.vue'
 
 const props = defineProps({
   testAnswers: Object,
+  analysisResults: Object, // 🆕 NOWY PROP
 })
 
-// Maksymalna liczba punktów = liczba wszystkich odpowiedzi (bo każda jest punktowana binarnie)
+// Proste obliczenia bez skomplikowanych analiz
 const maxPoints = computed(() =>
   props.testAnswers.answers.reduce((sum, answer) => sum + answer.scoredAnswers.length, 0),
 )
 
-const percentageCorrect = computed(() => {
+// Prosty procent poprawności: punkty / max punkty
+const simplePercentage = computed(() => {
   if (maxPoints.value === 0) return 0
   return Math.round((props.testAnswers.totalPoints / maxPoints.value) * 100)
+})
+
+// Średni czas na zadanie
+const averageTimePerTask = computed(() => {
+  if (props.testAnswers.answers.length === 0) return 0
+  return Math.round(props.testAnswers.totalTime / props.testAnswers.answers.length)
+})
+
+// Analiza kategorii bezpośrednio z testAnswers
+const categoryAnalysis = computed(() => {
+  const categories = {}
+
+  // Zbierz statystyki po sub_category
+  props.testAnswers.answers.forEach((answer) => {
+    const key = answer.sub_category || 'Nieznana kategoria'
+
+    if (!categories[key]) {
+      categories[key] = {
+        name: key,
+        totalPoints: 0,
+        totalPossible: 0,
+      }
+    }
+
+    categories[key].totalPoints += answer.taskPoints
+    categories[key].totalPossible += answer.scoredAnswers.length
+  })
+
+  // Oblicz procenty i posortuj
+  const categoryList = Object.values(categories)
+    .map((cat) => ({
+      ...cat,
+      percentage: Math.round((cat.totalPoints / cat.totalPossible) * 100),
+    }))
+    .sort((a, b) => b.percentage - a.percentage)
+
+  return categoryList
+})
+
+// Najlepsze kategorie (top 3)
+const bestCategories = computed(() => {
+  return categoryAnalysis.value.slice(0, 3)
+})
+
+// Najgorsze kategorie (bottom 3, tylko jeśli jest więcej niż 3)
+const worstCategories = computed(() => {
+  if (categoryAnalysis.value.length <= 3) return []
+  return categoryAnalysis.value.slice(-3).reverse() // reverse żeby najgorsze było pierwsze
 })
 </script>
 
@@ -157,7 +194,7 @@ const percentageCorrect = computed(() => {
   justify-content: center;
 
   &__container {
-    max-width: 900px;
+    max-width: 1000px;
     width: 100%;
     background: white;
     border-radius: 20px;
@@ -183,12 +220,7 @@ const percentageCorrect = computed(() => {
     align-items: center;
     justify-content: center;
     backdrop-filter: blur(10px);
-
-    svg {
-      width: 40px;
-      height: 40px;
-      stroke-width: 3;
-    }
+    font-size: 3rem;
   }
 
   &__title {
@@ -258,6 +290,7 @@ const percentageCorrect = computed(() => {
   &__stat-card {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 1rem;
     padding: 1.5rem;
     background: #f8f9fa;
@@ -280,10 +313,8 @@ const percentageCorrect = computed(() => {
     justify-content: center;
     flex-shrink: 0;
 
-    svg {
-      width: 24px;
-      height: 24px;
-      stroke-width: 2;
+    i {
+      font-size: 1.5rem;
     }
 
     &--level {
@@ -310,6 +341,7 @@ const percentageCorrect = computed(() => {
   &__stat-content {
     display: flex;
     flex-direction: column;
+    text-align: center;
   }
 
   &__stat-value {
@@ -326,6 +358,65 @@ const percentageCorrect = computed(() => {
     margin-top: 0.25rem;
   }
 
+  // Style dla kategorii
+  &__categories {
+    padding: 2rem;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  &__category-section {
+    margin-bottom: 2rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__category-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 1rem;
+  }
+
+  &__category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__category-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    border: 2px solid;
+
+    &--best {
+      background: #f0fdf4;
+      border-color: #22c55e;
+    }
+
+    &--improve {
+      background: #fef3c7;
+      border-color: #f59e0b;
+    }
+  }
+
+  &__category-name {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 0.95rem;
+  }
+
+  &__category-score {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #1e293b;
+  }
+
   &__conclusion {
     padding: 2rem;
     background: #f0f9ff;
@@ -340,11 +431,16 @@ const percentageCorrect = computed(() => {
     line-height: 1.6;
   }
 
+  &__finish-container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+  }
+
   &__finish-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    margin: 2rem auto 3rem;
     padding: 1rem 2rem;
     font-size: 1.125rem;
     font-weight: 600;
@@ -354,9 +450,6 @@ const percentageCorrect = computed(() => {
     border-radius: 12px;
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
-    justify-content: center;
-    width: fit-content;
-    display: flex;
 
     &:hover {
       background: #4338ca;
@@ -375,7 +468,7 @@ const percentageCorrect = computed(() => {
     transition: transform 0.2s ease;
   }
 
-  &__finish-btn:hover &__finish-icon {
+  &__finish-btn:hover i {
     transform: translateX(2px);
   }
 }
@@ -384,6 +477,10 @@ const percentageCorrect = computed(() => {
 @media (max-width: 768px) {
   .test-summary {
     padding: 1rem;
+
+    &__container {
+      max-width: 100%;
+    }
 
     &__header {
       padding: 2rem 1rem 1.5rem;
@@ -409,8 +506,41 @@ const percentageCorrect = computed(() => {
       gap: 1rem;
     }
 
-    &__stat-card {
+    &__analysis {
+      padding: 1.5rem;
+    }
+
+    &__skills-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    &__skill-card {
       padding: 1.25rem;
+    }
+
+    &__categories {
+      padding: 1.5rem;
+    }
+
+    &__category-item {
+      padding: 0.875rem 1rem;
+      flex-direction: column;
+      gap: 0.5rem;
+      text-align: center;
+
+      &--best,
+      &--improve {
+        border-width: 1px;
+      }
+    }
+
+    &__category-name {
+      font-size: 0.9rem;
+    }
+
+    &__category-score {
+      font-size: 1.25rem;
     }
 
     &__conclusion {
@@ -421,8 +551,11 @@ const percentageCorrect = computed(() => {
       font-size: 1rem;
     }
 
+    &__finish-container {
+      padding: 1.5rem;
+    }
+
     &__finish-btn {
-      margin: 1.5rem auto 2rem;
       padding: 0.875rem 1.5rem;
       font-size: 1rem;
     }
@@ -457,6 +590,14 @@ const percentageCorrect = computed(() => {
 
     &__stat-value {
       font-size: 1.25rem;
+    }
+
+    &__analysis {
+      padding: 1rem;
+    }
+
+    &__skill-card {
+      padding: 1rem;
     }
   }
 }

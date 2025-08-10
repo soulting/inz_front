@@ -1,6 +1,10 @@
 <template>
   <TestStartingScreen v-if="testState === 'not_started'" :tasks="tasks" @start="startTest" />
-  <TestSummary v-else-if="testState === 'finished'" :testAnswers="testAnswers" />
+  <TestSummary
+    v-else-if="testState === 'finished'"
+    :testAnswers="testAnswers"
+    :analysisResults="analysisResults"
+  />
 
   <div v-else-if="testState === 'in_progress'" class="test-container">
     <div v-if="currentTask" class="test-wrapper">
@@ -200,6 +204,9 @@ const testAnswers = ref({
   totalTime: 0,
 })
 
+// 🆕 NOWA ZMIENNA NA WYNIKI ANALIZY
+const analysisResults = ref(null)
+
 const taskDifficulty = ref(null)
 const componentRef = ref(null)
 const testState = ref('not_started')
@@ -227,6 +234,9 @@ const estimatedTime = computed(() => {
 async function finishTest() {
   try {
     loadingStore.startLoading()
+
+    console.log('Submitting test data:', testAnswers.value)
+
     const response = await axios.post(
       `${URL.PLACEMENT_TEST}/submit_test`,
       {
@@ -238,9 +248,62 @@ async function finishTest() {
         },
       },
     )
+
     console.log('Test submitted successfully:', response.data)
+
+    // 🆕 ZAPISZ WYNIKI ANALIZY
+    if (response.data.analysis) {
+      analysisResults.value = response.data.analysis
+      console.log('Analysis results received:', analysisResults.value)
+    } else {
+      console.warn('No analysis data received from server')
+      // Fallback - podstawowa analiza po stronie klienta
+      analysisResults.value = {
+        overall_stats: {
+          total_tasks: testAnswers.value.answers.length,
+          total_points: testAnswers.value.totalPoints,
+          total_errors: testAnswers.value.totalErrors,
+          total_uncertainty: testAnswers.value.totalUncertainty,
+          total_time: testAnswers.value.totalTime,
+          overall_score_percentage: Math.round(
+            (testAnswers.value.totalPoints /
+              (testAnswers.value.totalPoints +
+                testAnswers.value.totalErrors +
+                testAnswers.value.totalUncertainty)) *
+              100,
+          ),
+        },
+        best_subcategories: [],
+        worst_subcategories: [],
+        main_categories_summary: [],
+        recommendations: ['Analiza wyników zostanie dostarczona wkrótce.'],
+      }
+    }
   } catch (error) {
+    console.error('Error submitting test:', error)
     handleApiError(error, router)
+
+    // W przypadku błędu, nie blokuj przejścia do wyników
+    analysisResults.value = {
+      overall_stats: {
+        total_tasks: testAnswers.value.answers.length,
+        total_points: testAnswers.value.totalPoints,
+        total_errors: testAnswers.value.totalErrors,
+        total_uncertainty: testAnswers.value.totalUncertainty,
+        total_time: testAnswers.value.totalTime,
+        overall_score_percentage: Math.round(
+          (testAnswers.value.totalPoints /
+            (testAnswers.value.totalPoints +
+              testAnswers.value.totalErrors +
+              testAnswers.value.totalUncertainty)) *
+            100,
+        ),
+      },
+      best_subcategories: [],
+      worst_subcategories: [],
+      main_categories_summary: [],
+      recommendations: ['Wystąpił błąd podczas analizy wyników. Spróbuj ponownie później.'],
+    }
   } finally {
     loadingStore.stopLoading()
   }
