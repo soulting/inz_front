@@ -64,7 +64,7 @@
           />
 
           <CorrectionTask
-            v-else-if="currentTask.task_type === 'correction'"
+            v-else-if="currentTask.task_type === TASK_TYPES.CORRECTION"
             :currentTask="currentTask"
             @submit="handleSubmitAnswers"
             @noAnswers="noAnswersAlert"

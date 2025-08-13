@@ -2,7 +2,7 @@
   <div class="class-performance">
     <div class="class-performance__header">
       <h1 class="class-performance__title">
-        {{ performanceData?.class_info?.class_name || 'Analiza wyników klasy' }}
+        {{ 'Analiza wyników klasy' }}
       </h1>
     </div>
 
@@ -32,70 +32,79 @@
 
       <!-- Subcategories list with collapsible functionality -->
       <div class="class-performance__categories">
-        <div class="class-performance__categories-header" @click="isExpanded = !isExpanded">
+        <div class="class-performance__categories-header">
           <h2 class="class-performance__categories-title">Kategorie:</h2>
-          <span
-            class="class-performance__toggle-icon"
-            :class="{ 'class-performance__toggle-icon--expanded': isExpanded }"
-          >
-            ▼
-          </span>
+          <button class="class-performance__toggle-button" @click="toggleContent">
+            <img
+              v-if="contentExpended"
+              class="class-performance__arrow"
+              src="@/assets/up-arrow.png"
+              alt=""
+            />
+            <img v-else class="class-performance__arrow" src="@/assets/down-arrow.png" alt="" />
+          </button>
         </div>
-
-        <div v-if="isExpanded" class="class-performance__categories-content">
-          <div v-if="subcategories.length === 0" class="class-performance__no-data">
-            Brak danych do analizy
-          </div>
-
-          <div v-else class="class-performance__categories-grid">
-            <div
-              v-for="category in subcategories"
-              :key="`${category.main_category}-${category.sub_category}`"
-              class="class-performance__category-card"
-              :class="getCategoryCardClass(category.score_percentage)"
-            >
-              <!-- Category info -->
-              <div class="class-performance__category-header">
-                <div class="class-performance__category-main">
-                  {{ category.main_category }}
+        <div
+          class="class-performance__categories-content"
+          :class="{ 'class-performance__categories-content--open': contentExpended }"
+        >
+          <div class="class-performance__categories-expandable">
+            <div v-if="subcategories.length === 0" class="class-performance__no-data">
+              Brak danych do analizy
+            </div>
+            <div v-else class="class-performance__categories-grid">
+              <div
+                v-for="category in subcategories"
+                :key="`${category.main_category}-${category.sub_category}`"
+                class="class-performance__category-card"
+                :class="getCategoryCardClass(category.score_percentage)"
+              >
+                <!-- Category info -->
+                <div class="class-performance__category-header">
+                  <div class="class-performance__category-main">
+                    {{ category.main_category }}
+                  </div>
+                  <div class="class-performance__category-sub">
+                    {{ category.sub_category }}
+                  </div>
                 </div>
-                <div class="class-performance__category-sub">
-                  {{ category.sub_category }}
-                </div>
-              </div>
+                <!-- Stats -->
+                <div class="class-performance__category-stats">
+                  <div class="class-performance__stat">
+                    <span class="class-performance__stat-label">Poprawność:</span>
+                    <span
+                      class="class-performance__stat-value class-performance__stat-value--score"
+                    >
+                      {{ category.score_percentage }}%
+                    </span>
+                  </div>
 
-              <!-- Stats -->
-              <div class="class-performance__category-stats">
-                <div class="class-performance__stat">
-                  <span class="class-performance__stat-label">Poprawność:</span>
-                  <span class="class-performance__stat-value class-performance__stat-value--score">
-                    {{ category.score_percentage }}%
-                  </span>
-                </div>
+                  <div class="class-performance__stat">
+                    <span class="class-performance__stat-label">Błędy:</span>
+                    <span
+                      class="class-performance__stat-value class-performance__stat-value--error"
+                    >
+                      {{ category.error_rate }}%
+                    </span>
+                  </div>
 
-                <div class="class-performance__stat">
-                  <span class="class-performance__stat-label">Błędy:</span>
-                  <span class="class-performance__stat-value class-performance__stat-value--error">
-                    {{ category.error_rate }}%
-                  </span>
-                </div>
+                  <div class="class-performance__stat">
+                    <span class="class-performance__stat-label">Niepewność:</span>
+                    <span
+                      class="class-performance__stat-value class-performance__stat-value--uncertainty"
+                    >
+                      {{ category.uncertainty_rate }}%
+                    </span>
+                  </div>
 
-                <div class="class-performance__stat">
-                  <span class="class-performance__stat-label">Niepewność:</span>
-                  <span
-                    class="class-performance__stat-value class-performance__stat-value--uncertainty"
-                  >
-                    {{ category.uncertainty_rate }}%
-                  </span>
-                </div>
-
-                <div class="class-performance__stat">
-                  <span class="class-performance__stat-label">Trudność:</span>
-                  <span
-                    class="class-performance__stat-value class-performance__stat-value--difficulty"
-                  >
-                    {{ category.difficulty }}/5
-                  </span>
+                  <div class="class-performance__stat">
+                    <span class="class-performance__stat-label">Trudność:</span>
+                    <span
+                      class="class-performance__stat-value class-performance__stat-value--difficulty"
+                    >
+                      {{ category.difficulty }}/5
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -113,13 +122,17 @@ const props = defineProps({
   performanceData: Object,
 })
 
-const isExpanded = ref(true) // Domyślnie rozwinięte
+const contentExpended = ref(false) // Domyślnie zwinięte
 const subcategories = computed(() => props.performanceData?.subcategories || [])
 
 function getCategoryCardClass(scorePercentage) {
   if (scorePercentage < 50) return 'class-performance__category-card--critical'
   if (scorePercentage < 70) return 'class-performance__category-card--warning'
   return 'class-performance__category-card--good'
+}
+
+function toggleContent() {
+  contentExpended.value = !contentExpended.value
 }
 </script>
 
@@ -221,26 +234,26 @@ function getCategoryCardClass(scorePercentage) {
     margin: 0 auto 0 0;
   }
 
-  &__toggle-icon {
+  &__toggle-button {
     width: 42px;
     height: 42px;
     border: 0.5px solid #333;
     border-radius: 50%;
     background: transparent;
-    color: #64748b;
-    font-size: 13px;
-    transition: background 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s;
 
     &:hover {
       background: #f0f0f0;
     }
+  }
 
-    &--expanded {
-      transform: rotate(180deg);
-    }
+  &__arrow {
+    width: 16px;
+    height: 16px;
   }
 
   &__categories-content {
@@ -259,6 +272,7 @@ function getCategoryCardClass(scorePercentage) {
   }
 
   &__categories-grid {
+    margin: 20px 0;
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -424,10 +438,14 @@ function getCategoryCardClass(scorePercentage) {
       padding: 16px;
     }
 
-    &__toggle-icon {
+    &__toggle-button {
       width: 36px;
       height: 36px;
-      font-size: 11px;
+    }
+
+    &__arrow {
+      width: 14px;
+      height: 14px;
     }
   }
 }

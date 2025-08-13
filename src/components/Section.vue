@@ -63,7 +63,13 @@
         <!-- Zadania -->
         <div v-if="tasks.length" class="section-detail__tasks-container">
           <h2 class="section-detail__tasks-title">Zadania</h2>
-          <div class="item-card" v-for="task in tasks" :key="task.id" role="listitem">
+          <div
+            class="item-card"
+            v-for="task in tasks"
+            :key="task.id"
+            role="listitem"
+            @click="goToTask(task.id)"
+          >
             <img class="item-card__image" src="@/assets/icons/assignment.png" alt="task icon" />
             <h3 class="item-card__title">{{ task.question }}</h3>
 
@@ -189,10 +195,22 @@ function handleAddTask() {
 }
 
 function goToLesson(id) {
-  router.push({
-    name: 'lesson',
-    params: { classId: props.classId, sectionId: props.sectionId, lessonId: id },
-  })
+  if (authStore.user.role === 'student') {
+    router.push({
+      name: 'lesson',
+      params: { classId: props.classId, sectionId: props.sectionId, lessonId: id },
+    })
+  }
+}
+
+function goToTask(id) {
+  if (authStore.user.role === 'student') {
+    console.log('Przejdź do zadania', id)
+    router.push({
+      name: 'single-task',
+      params: { classId: props.classId, sectionId: props.sectionId, taskId: id },
+    })
+  }
 }
 
 function handleAddFile() {

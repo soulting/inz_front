@@ -11,6 +11,7 @@ import PrivacyPolicyView from '@/views/PrivacyPolicyView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import SettingsView from '@/views/SettingsView.vue'
 import SignupView from '@/views/SignupView.vue'
+import SingleTask from '@/views/SingleTask.vue'
 import TestView from '@/views/TestView.vue'
 import TestsView from '@/views/TestsView.vue'
 import ThemesView from '@/views/ThemesView.vue'
@@ -135,6 +136,15 @@ const router = createRouter({
       path: '/lesson/:classId/:sectionId/:lessonId',
       name: 'lesson',
       component: LessonView,
+      props: true,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/task/:classId/:sectionId/:taskId',
+      name: 'single-task',
+      component: SingleTask,
       props: true,
       meta: {
         requiresAuth: true,
