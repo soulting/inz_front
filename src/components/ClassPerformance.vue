@@ -34,9 +34,9 @@
       <div class="class-performance__categories">
         <div class="class-performance__categories-header">
           <h2 class="class-performance__categories-title">Kategorie:</h2>
-          <button class="class-performance__toggle-button" @click="toggleContent">
+          <button class="class-performance__toggle-button" @click="toggleExpended">
             <img
-              v-if="contentExpended"
+              v-if="isExpended"
               class="class-performance__arrow"
               src="@/assets/up-arrow.png"
               alt=""
@@ -46,7 +46,7 @@
         </div>
         <div
           class="class-performance__categories-content"
-          :class="{ 'class-performance__categories-content--open': contentExpended }"
+          :class="{ 'class-performance__categories-content--open': isExpended }"
         >
           <div class="class-performance__categories-expandable">
             <div v-if="subcategories.length === 0" class="class-performance__no-data">
@@ -122,7 +122,7 @@ const props = defineProps({
   performanceData: Object,
 })
 
-const contentExpended = ref(false) // Domyślnie zwinięte
+const isExpended = ref(false) // Domyślnie zwinięte
 const subcategories = computed(() => props.performanceData?.subcategories || [])
 
 function getCategoryCardClass(scorePercentage) {
@@ -131,8 +131,8 @@ function getCategoryCardClass(scorePercentage) {
   return 'class-performance__category-card--good'
 }
 
-function toggleContent() {
-  contentExpended.value = !contentExpended.value
+function toggleExpended() {
+  isExpended.value = !isExpended.value
 }
 </script>
 
