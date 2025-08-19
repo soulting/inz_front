@@ -237,7 +237,7 @@ function toggleExpended() {
   &__toggle-button {
     width: 42px;
     height: 42px;
-    border: 0.5px solid #333;
+    border: none;
     border-radius: 50%;
     background: transparent;
     display: flex;
@@ -252,8 +252,8 @@ function toggleExpended() {
   }
 
   &__arrow {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
   }
 
   &__categories-content {

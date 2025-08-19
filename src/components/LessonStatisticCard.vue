@@ -133,7 +133,7 @@ function toggleExpanded() {
   &__toggle-button {
     width: 42px;
     height: 42px;
-    border: 0.5px solid #333;
+    border: none;
     border-radius: 50%;
     background: transparent;
     cursor: pointer;
@@ -148,8 +148,8 @@ function toggleExpanded() {
   }
 
   &__arrow {
-    height: 13px;
-    width: 13px;
+    height: 20px;
+    width: 20px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     object-position: center;

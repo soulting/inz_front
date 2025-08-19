@@ -78,7 +78,7 @@
     </div>
 
     <!-- Rozwijana sekcja szczegółów -->
-    <div v-if="isExpanded" class="task-analytics-card__details">
+    <div v-show="isExpanded" class="task-analytics-card__details">
       <!-- Tabela wyników uczniów -->
       <div
         v-if="task.student_results && task.student_results.length > 0"
@@ -132,6 +132,7 @@
           </tbody>
         </table>
       </div>
+      <TaskItemsList :task="task" :class-id="props.classId" />
     </div>
   </div>
 </template>
@@ -140,10 +141,15 @@
 import { computed, ref } from 'vue'
 
 import PieChart from './PieChart.vue'
+import TaskItemsList from './TaskItemsList.vue'
 
 const props = defineProps({
   task: {
     type: Object,
+    required: true,
+  },
+  classId: {
+    type: String,
     required: true,
   },
 })
@@ -280,9 +286,9 @@ const getScoreClass = (student) => {
   overflow: hidden;
 
   &__toggle-button {
-    width: 42px;
-    height: 42px;
-    border: 0.5px solid #333;
+    width: 52px;
+    height: 52px;
+    border: none;
     border-radius: 50%;
     background: transparent;
     cursor: pointer;
@@ -297,8 +303,8 @@ const getScoreClass = (student) => {
   }
 
   &__arrow {
-    height: 13px;
-    width: 13px;
+    height: 20px;
+    width: 20px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     object-position: center;

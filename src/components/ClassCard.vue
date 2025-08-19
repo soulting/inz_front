@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { showSwal } from '@/composables/swal'
+import { showSwal } from '@/composables/useSwal'
 import { useRouter } from 'vue-router'
 
 import { ref } from 'vue'

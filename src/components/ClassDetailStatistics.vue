@@ -10,57 +10,42 @@
 
     <!-- Lesson Statistics Section -->
     <div class="lesson-statistics-section">
-      <div class="section-header" @click="toggleSection('lessons')">
-        <h3 class="lesson-statistics__title">Statystyki lekcji</h3>
-        <span class="chevron" :class="{ open: openSections.lessons }">⌄</span>
+      <h3 class="lesson-statistics__title">Statystyki lekcji</h3>
+
+      <div v-if="lessonStatistics?.lessons?.length" class="lessons-container">
+        <div
+          v-for="lesson in lessonStatistics.lessons"
+          :key="lesson.lesson_id"
+          class="lesson-container"
+        >
+          <LessonStatisticCard :lesson="lesson" />
+        </div>
       </div>
 
-      <transition name="fade-slide">
-        <div v-show="openSections.lessons">
-          <div v-if="lessonStatistics?.lessons?.length" class="lessons-container">
-            <div
-              v-for="lesson in lessonStatistics.lessons"
-              :key="lesson.lesson_id"
-              class="lesson-container"
-            >
-              <LessonStatisticCard :lesson="lesson" />
-            </div>
-          </div>
-
-          <div
-            v-else-if="
-              lessonStatistics &&
-              (!lessonStatistics.lessons || lessonStatistics.lessons.length === 0)
-            "
-            class="lesson-statistics__empty"
-          >
-            <p>Ta klasa nie ma jeszcze żadnych wykonanych lekcji.</p>
-          </div>
-        </div>
-      </transition>
+      <div
+        v-else-if="
+          lessonStatistics && (!lessonStatistics.lessons || lessonStatistics.lessons.length === 0)
+        "
+        class="lesson-statistics__empty"
+      >
+        <p>Ta klasa nie ma jeszcze żadnych wykonanych lekcji.</p>
+      </div>
     </div>
 
     <!-- Task Analytics Section -->
     <div class="task-analytics-section">
-      <div class="section-header" @click="toggleSection('tasks')">
-        <h3 class="lesson-tasks__title">Analiza zadań</h3>
-        <span class="chevron" :class="{ open: openSections.tasks }">⌄</span>
+      <h3 class="lesson-tasks__title">Analiza zadań</h3>
+      <div v-if="taskAnalytics?.tasks?.length" class="tasks-container">
+        <TaskAnalyticsCard
+          v-for="task in taskAnalytics.tasks"
+          :key="task.task_id"
+          :task="task"
+          :class-id="props.classId"
+        />
       </div>
-
-      <transition name="fade-slide">
-        <div v-show="openSections.tasks">
-          <div v-if="taskAnalytics?.tasks?.length" class="tasks-container">
-            <TaskAnalyticsCard
-              v-for="task in taskAnalytics.tasks"
-              :key="task.task_id"
-              :task="task"
-            />
-          </div>
-          <div v-else class="lesson-tasks__empty">
-            <p>Ta klasa nie ma jeszcze wykonanych zadań do analizy.</p>
-          </div>
-        </div>
-      </transition>
+      <div v-else class="lesson-tasks__empty">
+        <p>Ta klasa nie ma jeszcze wykonanych zadań do analizy.</p>
+      </div>
     </div>
   </div>
 </template>
@@ -77,10 +62,6 @@ import LessonStatisticCard from './LessonStatisticCard.vue'
 import TaskAnalyticsCard from './TaskAnalyticsCard.vue'
 
 const props = defineProps({
-  className: {
-    type: String,
-    required: true,
-  },
   classId: {
     type: String,
     required: true,
@@ -90,15 +71,6 @@ const props = defineProps({
 const lessonStatistics = ref(null)
 const performanceData = ref(null)
 const taskAnalytics = ref(null)
-
-const openSections = ref({
-  lessons: true, // domyślnie otwarte
-  tasks: true,
-})
-
-function toggleSection(section) {
-  openSections.value[section] = !openSections.value[section]
-}
 
 onMounted(async () => {
   // Pobieranie statystyk lekcji
@@ -197,27 +169,6 @@ onMounted(async () => {
   @extend .section-title;
 }
 
-/* 🔹 Header z toggle */
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-
-  &:hover {
-    color: #2563eb;
-  }
-}
-
-.chevron {
-  transition: transform 0.3s ease;
-  font-size: 1.2rem;
-
-  &.open {
-    transform: rotate(180deg);
-  }
-}
-
 /* 🔹 Empty states */
 .empty-state {
   background: #f8fafc;
@@ -236,25 +187,6 @@ onMounted(async () => {
 .lesson-statistics__empty,
 .lesson-tasks__empty {
   @extend .empty-state;
-}
-
-/* 🔹 Animacja rozwijania */
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: all 0.3s ease;
-}
-
-.fade-slide-enter-from,
-.fade-slide-leave-to {
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-}
-
-.fade-slide-enter-to,
-.fade-slide-leave-from {
-  opacity: 1;
-  max-height: 2000px;
 }
 
 /* 🔹 Responsive */

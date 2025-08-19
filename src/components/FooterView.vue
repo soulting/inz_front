@@ -27,7 +27,7 @@
             <a @click="goTo('/')" class="footer__link">Strona główna</a>
             <a @click="goTo('/themenmix')" class="footer__link">Themenmix</a>
             <a @click="goTo('/test')" class="footer__link">Test</a>
-            <a @click="goTo('/klassen')" class="footer__link">Klasy</a>
+            <a @click="goTo('/classes')" class="footer__link">Klasy</a>
           </div>
         </div>
 
