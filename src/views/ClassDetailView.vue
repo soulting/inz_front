@@ -6,43 +6,37 @@
         <h1 class="class-detail__title">{{ props.name }}</h1>
         <!-- Przyciski na przyszłość -->
         <div class="class-detail__buttons">
-          <button class="class-detail__button class-detail__button--active">Lekcje</button>
-          <button class="class-detail__button">Statystyki</button>
+          <button
+            class="class-detail__button"
+            :class="tabs.activeTab === 'lessons' ? 'class-detail__button--active' : ''"
+            @click="toggleTabs"
+          >
+            Lekcje
+          </button>
+          <button
+            class="class-detail__button"
+            :class="tabs.activeTab === 'statistics' ? 'class-detail__button--active' : ''"
+            @click="toggleTabs"
+          >
+            Statystyki
+          </button>
         </div>
       </div>
       <!-- Sekcja zawartości -->
       <div class="class-detail__content">
-        <div v-for="section in sections" :key="section.id" class="class-detail__section-container">
-          <Section
-            :class-id="id"
-            :section-id="section.id"
-            :title="section.title"
-            :content="section.content"
-          />
-        </div>
-        <AddSection :classId="id" />
+        <ClassDetailSections v-if="tabs.activeTab === 'lessons'" :id="props.id" />
+        <ClassDetailStatistics v-else :classId="props.id" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-// === IMPORTY ===
-import useApi from '@/api/useApi'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 
-import { onMounted, reactive } from 'vue'
+import ClassDetailSections from '@/components/ClassDetailSections.vue'
+import ClassDetailStatistics from '@/components/ClassDetailStatistics.vue'
 
-import { URL } from '@/enums'
-
-import AddSection from '@/components/AddSection.vue'
-import Section from '@/components/Section.vue'
-
-const sections = reactive([])
-
-const router = useRouter()
-
-// === PROPSY ===
 const props = defineProps({
   name: {
     type: String,
@@ -54,12 +48,13 @@ const props = defineProps({
   },
 })
 
-onMounted(async () => {
-  const response = await useApi().get(`${URL.SECTIONS}/get_sections/${props.id}`, router)
-  Object.assign(sections, response)
-  console.log(response)
-  console.log(sections)
+const tabs = ref({
+  activeTab: 'lessons',
 })
+
+function toggleTabs() {
+  tabs.value.activeTab = tabs.value.activeTab === 'lessons' ? 'statistics' : 'lessons'
+}
 </script>
 
 <style scoped lang="scss">

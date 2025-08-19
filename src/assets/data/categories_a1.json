@@ -1,0 +1,46 @@
+{
+  "categories_list": [
+    {
+      "main_category": "Rzeczowniki",
+      "sub_categories": [
+        "Rodzaj (męski, żeński, nijaki)",
+        "Liczba mnoga",
+        "Przypadki (Nominativ, Genitiv, Dativ, Akkusativ)",
+        "Rodzajniki (określony, nieokreślony, zerowy)"
+      ]
+    },
+    {
+      "main_category": "Czasowniki",
+      "sub_categories": [
+        "Odmiana (regularne)",
+        "Czasowniki modalne",
+        "Czasowniki zwrotne",
+        "Czasowniki złożone (rozdzielnie i nierozdzielnie złożone)",
+        "Bezokoliczniki (z/bez „zu”)"
+      ]
+    },
+    {
+      "main_category": "Przymiotniki",
+      "sub_categories": ["Odmiana (z różnymi rodzajnikami)", "Stopniowanie (wyższy, najwyższy)"]
+    },
+    {
+      "main_category": "Liczebniki",
+      "sub_categories": [
+        "Główne, porządkowe, ułamkowe",
+        "Czas (zegary, daty)",
+        "„Wie viel” vs. „Wie viele”"
+      ]
+    },
+    {
+      "main_category": "Czasy",
+      "sub_categories": ["Perfekt (słabe, mocne, nieregularne/modalne)"]
+    },
+    {
+      "main_category": "Budowa zdań i konstrukcje",
+      "sub_categories": [
+        "Szyk wyrazów (zdania pojedyncze, współrzędne, poboczne)",
+        "Zdania pytające (tak/nie, pytające, z przyimkami, zależne)"
+      ]
+    }
+  ]
+}

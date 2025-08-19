@@ -28,10 +28,24 @@ export default function useApi() {
     }
   }
 
-  const post = async (url, data, router) => {
+  const post = async (url, data, router, options = {}) => {
     try {
       loadingStore.startLoading()
-      const response = await api.post(url, data)
+
+      const config = {
+        headers: {
+          ...api.defaults.headers,
+          ...options.headers,
+        },
+      }
+
+      Object.keys(config.headers).forEach((key) => {
+        if (config.headers[key] === undefined) {
+          delete config.headers[key]
+        }
+      })
+
+      const response = await api.post(url, data, config)
       return response.data
     } catch (error) {
       handleApiError(error, router)

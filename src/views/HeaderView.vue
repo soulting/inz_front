@@ -1,15 +1,15 @@
 <template>
   <header class="header">
-    <RouterLink class="header__logo-link" to="/">
+    <RouterLink class="header__logo-link" to="/" @click="closeDropdown">
       <img class="header__logo-image" src="@/assets/logo.png" alt="site logo" />
     </RouterLink>
     <nav class="header__nav">
-      <RouterLink class="header__link" to="/themenmix">Themenmix</RouterLink>
-      <RouterLink class="header__link" to="/classes">Klasy</RouterLink>
-      <RouterLink class="header__link" to="/test">Test</RouterLink>
+      <RouterLink class="header__link" to="/themenmix" @click="closeDropdown">Themenmix</RouterLink>
+      <RouterLink class="header__link" to="/classes" @click="closeDropdown">Klasy</RouterLink>
+      <RouterLink class="header__link" to="/test" @click="closeDropdown">Test</RouterLink>
 
       <button v-if="isLoggedIn" class="header__profile" @click="toggleDropdown">
-        <img class="header__avatar" src="@/assets/profile_pic.jpg" alt="profile picture" />
+        <img class="header__avatar" :src="avatarSrc" alt="profile picture" />
         <span>Moje Konto</span>
         <img
           v-if="!isDropdownOpen"
@@ -27,7 +27,7 @@
       </div>
     </nav>
     <div v-if="isDropdownOpen" class="header__dropdown">
-      <RouterLink class="header__dropdown-item" to="/profile">
+      <RouterLink class="header__dropdown-item" to="/profile" @click="closeDropdown">
         <img class="header__dropdown-icon" src="../assets/icons/user.png" alt="dropdown image" />
         Profil</RouterLink
       >
@@ -36,6 +36,7 @@
           class="header__dropdown-icon"
           src="../assets/icons/settings.png"
           alt="dropdown image"
+          @click="closeDropdown"
         />
         Ustawienia
       </RouterLink>
@@ -52,15 +53,24 @@
 </template>
 
 <script setup>
+import defaultAvatar from '@/assets/profile_pic.png'
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
 import { RouterLink } from 'vue-router'
 
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const isDropdownOpen = ref(false)
 const authStore = useAuthStore()
-const { isLoggedIn } = storeToRefs(authStore)
+const { isLoggedIn, user } = storeToRefs(authStore)
+
+const avatarSrc = computed(() => {
+  return user.value.profile_image || defaultAvatar
+})
+
+function closeDropdown() {
+  isDropdownOpen.value = false
+}
 
 const logout = () => {
   authStore.piniaLogout()

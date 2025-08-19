@@ -26,8 +26,7 @@
       <div v-for="classItem in filteredAndSortedClasses.slice(0, sliceCount)" :key="classItem.id">
         <ClassCard
           :classData="classItem"
-          :joinButton="joinButton"
-          :deleteButton="deleteButton"
+          v-bind="classCardProps"
           @delete="confirmAndDelete"
           @join="emitJoin"
         />
@@ -53,8 +52,19 @@ import { computed, ref } from 'vue'
 import ClassCard from '@/components/ClassCard.vue'
 
 const props = defineProps({
-  classes: Array,
-  title: String,
+  classes: {
+    type: Array,
+    required: true,
+    default: () => [],
+  },
+  title: {
+    type: String,
+    default: 'Klasy',
+  },
+  cardClickable: {
+    type: Boolean,
+    default: false,
+  },
   joinButton: {
     type: Boolean,
     default: false,
@@ -64,6 +74,12 @@ const props = defineProps({
     default: false,
   },
 })
+
+const classCardProps = computed(() => ({
+  joinButton: props.joinButton,
+  deleteButton: props.deleteButton,
+  cardClickable: props.cardClickable,
+}))
 const emit = defineEmits(['delete', 'join'])
 
 const searchQuery = ref('')

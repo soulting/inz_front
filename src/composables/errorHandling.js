@@ -1,5 +1,5 @@
-import Swal from 'sweetalert2'
 import { useAuthStore } from '@/stores/auth'
+import Swal from 'sweetalert2'
 
 export function handleApiError(error, router) {
   const authStore = useAuthStore()
@@ -37,6 +37,13 @@ export function handleApiError(error, router) {
           icon: 'error',
           title: 'Nie znaleziono',
           text: data?.error || 'Zasób nie istnieje.',
+        })
+        break
+      case 422:
+        Swal.fire({
+          icon: 'error',
+          title: 'Błąd walidacji',
+          text: data?.error || 'Niepoprawne hasło.',
         })
         break
       default:

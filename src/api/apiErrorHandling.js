@@ -17,8 +17,11 @@ export function handleApiError(error, router) {
         showError('Błąd', message)
         break
       case 401:
-        showError('Sesja wygasła', 'Zaloguj się ponownie.')
-        Swal.fire().then(() => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Sesja wygasła',
+          text: 'Zaloguj się ponownie.',
+        }).then(() => {
           authStore.piniaLogout()
           router.push('/login')
         })

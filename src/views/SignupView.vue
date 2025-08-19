@@ -67,8 +67,8 @@ const signup = async () => {
   if (password.value !== confirmPassword.value) {
     Swal.fire({
       ...alert,
-      title: 'Fehler',
-      text: 'Die Passwörter stimmen nicht überein.',
+      title: 'Błąd',
+      text: 'Hasła nie są zgodne.',
     })
     return
   }
@@ -76,8 +76,8 @@ const signup = async () => {
   if (!role.value) {
     Swal.fire({
       ...alert,
-      title: 'Fehler',
-      text: 'Bitte wähle eine Rolle aus.',
+      title: 'Błąd',
+      text: 'Proszę wybrać rolę.',
     })
     return
   }
@@ -95,8 +95,8 @@ const signup = async () => {
     Swal.fire({
       ...alert,
       icon: 'success',
-      title: 'Erfolg',
-      text: 'Registrierung erfolgreich!',
+      title: 'Sukces',
+      text: 'Rejestracja zakończona pomyślnie!',
     })
 
     router.push('/login')

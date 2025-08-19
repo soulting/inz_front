@@ -1,5 +1,5 @@
 <template>
-  <div class="class-card" @click="goToClass">
+  <div class="class-card" @click="cardClickable ? goToClass() : null">
     <div class="class-card__background" :style="{ backgroundImage: `url(${classData.image_url})` }">
       <div class="class-card__actions">
         <button
@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { showSwal } from '@/composables/swal'
+import { showSwal } from '@/composables/useSwal'
 import { useRouter } from 'vue-router'
 
 import { ref } from 'vue'
@@ -59,6 +59,7 @@ const props = defineProps({
   classData: { type: Object, required: true },
   joinButton: { type: Boolean, default: false },
   deleteButton: { type: Boolean, default: false },
+  cardClickable: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['delete', 'join'])

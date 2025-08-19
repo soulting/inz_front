@@ -1,7 +1,9 @@
 <template>
-  <div class="lesson-content" v-if="lessonHtml && !loading && !error">
-    <h2 class="lesson-title">{{ lessonTitle }}</h2>
-    <div class="lesson-body tinymce-content" v-html="lessonHtml"></div>
+  <div class="lesson-wrapper">
+    <div class="lesson-content" v-if="lessonHtml && !loading && !error">
+      <h2 class="lesson-title">{{ lessonTitle }}</h2>
+      <div class="lesson-body tinymce-content" v-html="lessonHtml"></div>
+    </div>
   </div>
 </template>
 
@@ -24,7 +26,6 @@ async function loadLesson(id) {
   try {
     loadingStore.startLoading()
     const { data } = await axios.get(`${URL.LESSONS}/get_lesson/${id}`)
-    console.log(data)
     lessonHtml.value = data.context
     lessonTitle.value = data.title
   } catch (err) {
@@ -44,8 +45,17 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.lesson-wrapper {
+  min-height: 100vh;
+  background-color: #f9f9f9; /* bardzo jasny, lekko ciemniejszy biały */
+  padding: 30px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 .lesson-content {
-  max-width: 1200px;
+  max-width: 1300px;
   min-height: 100vh;
   margin: 0 auto;
   background: #ffffff;

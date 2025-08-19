@@ -81,11 +81,11 @@
     height: 25px;
     object-fit: contain;
   }
+
   &__join-form {
     position: absolute;
     inset: 0;
     z-index: 10;
-
     background: {
       position: center;
       size: cover;
@@ -103,63 +103,66 @@
       content: '';
       position: absolute;
       inset: 0;
-      background-color: rgba(255, 255, 255, 0.4); // biały, półprzezroczysty
+      background-color: rgba(255, 255, 255, 0.4);
       z-index: 1;
     }
+  }
 
-    &__join-title {
-      font-size: 1.5rem;
-      color: vars.$yellowBtnText;
-      text-align: center;
-      position: relative;
-      z-index: 2;
+  &__join-title {
+    font-size: 1.5rem;
+    color: vars.$yellowBtnText;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  &__input {
+    position: relative;
+    z-index: 2;
+    width: 80%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    background-color: #fff;
+    box-shadow: 0 0 0 2px #ccc;
+  }
+
+  &__form-buttons {
+    display: flex;
+    gap: 12px;
+    position: relative;
+    z-index: 2;
+  }
+
+  &__button--confirm {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+    background-color: vars.$primaryPurple;
+    color: #fff;
+
+    &:hover {
+      background-color: vars.$primaryPurpleHover;
     }
+  }
 
-    &__input {
-      position: relative;
-      z-index: 2;
-      width: 80%;
-      padding: 10px 12px;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: none;
-      outline: none;
-      background-color: #fff;
-      box-shadow: 0 0 0 2px #ccc;
-    }
+  &__button--cancel {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+    background-color: #f44336;
+    color: #fff;
 
-    &__form-buttons {
-      display: flex;
-      gap: 12px;
-      position: relative;
-      z-index: 2;
-
-      &__button {
-        padding: 8px 14px;
-        font-size: 0.9rem;
-        border-radius: 6px;
-        cursor: pointer;
-        border: none;
-        font-weight: bold;
-
-        &--confirm {
-          background-color: vars.$primaryPurple;
-          color: #fff;
-
-          &:hover {
-            background-color: vars.$primaryPurpleHover;
-          }
-        }
-
-        &--cancel {
-          background-color: #f44336;
-          color: #fff;
-
-          &:hover {
-            background-color: #e53935;
-          }
-        }
-      }
+    &:hover {
+      background-color: #e53935;
     }
   }
 }

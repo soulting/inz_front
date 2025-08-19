@@ -8,7 +8,8 @@ export const useLoadingStore = defineStore('loading', {
     startLoading() {
       this.isLoading++
     },
-    stopLoading() {
+    async stopLoading() {
+      await new Promise((resolve) => setTimeout(resolve, 300))
       this.isLoading--
     },
   },
