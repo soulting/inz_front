@@ -36,7 +36,6 @@
       <PieChart
         :value="lesson.engagement_score"
         title="Zaangażowanie"
-        label="uczniów"
         :threshold="50"
         lowColor="#dc2626"
         :colors="['#4f46e5', '#e2e8f0']"
@@ -99,78 +98,3 @@ function toggleExpanded() {
   isExpanded.value = !isExpanded.value
 }
 </script>
-
-<style scoped lang="scss">
-.lesson-card {
-  display: flex;
-  flex-direction: column;
-  margin: 12px 0;
-  padding: 20px;
-  border-radius: 16px;
-  background: white;
-  border: 0.5px solid rgba(0, 0, 0, 0.4);
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.2s ease;
-
-  &:hover {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  }
-
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-  }
-
-  &__title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #333;
-    margin: 0;
-  }
-
-  &__toggle-button {
-    width: 42px;
-    height: 42px;
-    border: none;
-    border-radius: 50%;
-    background: transparent;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:hover {
-      background: #f0f0f0;
-    }
-  }
-
-  &__arrow {
-    height: 20px;
-    width: 20px;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  &__charts {
-    display: flex;
-    justify-content: flex-start;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-  }
-}
-
-// Responsive design
-@media (max-width: 768px) {
-  .lesson-card {
-    &__charts {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-}
-</style>

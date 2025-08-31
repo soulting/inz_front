@@ -143,9 +143,9 @@ async function submitLesson() {
 
   try {
     if (lessonData.id) {
-      await useApi().put(`${URL.LESSONS}/update_lesson/${lessonData.id}`, lessonData)
+      await useApi().put(`${URL.LESSONS}/lesson/${lessonData.id}`, lessonData)
     } else {
-      await useApi().post(`${URL.LESSONS}/create_lesson`, lessonData)
+      await useApi().post(`${URL.LESSONS}/lesson`, lessonData)
     }
     router.push('/classes-teacher')
   } catch (error) {
@@ -159,7 +159,7 @@ onMounted(async () => {
 
   if (lessonData.id) {
     try {
-      const response = await useApi().get(`${URL.LESSONS}/get_lesson/${lessonData.id}`)
+      const response = await useApi().get(`${URL.LESSONS}/lesson/${lessonData.id}`)
       Object.assign(lessonData, response)
     } catch (error) {
       console.error('Błąd podczas pobierania lekcji:', error)
@@ -167,85 +167,3 @@ onMounted(async () => {
   }
 })
 </script>
-
-<style scoped lang="scss">
-.create-lesson--wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f0f2f5;
-
-  .create-lesson {
-    width: 100%;
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 16px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-    color: #333;
-
-    &__title {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    &__form {
-      display: flex;
-      flex-direction: column;
-    }
-
-    &__group {
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-
-      &--row {
-        flex-direction: row;
-        gap: 16px;
-        flex-wrap: wrap;
-      }
-    }
-
-    &__select-group {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-width: 150px;
-    }
-
-    &__label {
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-
-    &__input,
-    &__textarea,
-    &__select {
-      padding: 8px 12px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      resize: vertical;
-    }
-
-    &__button {
-      padding: 10px 16px;
-      font-size: 18px;
-      background-color: #3b4bdc;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 100%;
-      font-weight: 700;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: #2f3fc2;
-      }
-    }
-  }
-}
-</style>

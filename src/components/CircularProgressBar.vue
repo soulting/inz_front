@@ -48,34 +48,3 @@ const circleStyle = computed(() => ({
   stroke: props.color,
 }))
 </script>
-
-<style scoped>
-.progress-container {
-  position: relative;
-  display: inline-block;
-}
-
-.progress-ring__background {
-  fill: none;
-  stroke: #eee;
-  stroke-width: 12;
-}
-
-.progress-ring__circle {
-  fill: none;
-  stroke-width: 12;
-  stroke-linecap: round;
-  transform: rotate(-90deg);
-  transform-origin: center;
-  transition: stroke-dashoffset 0.35s ease;
-}
-
-.progress-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2.2rem;
-  font-weight: bold;
-}
-</style>

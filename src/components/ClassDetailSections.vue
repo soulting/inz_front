@@ -41,5 +41,3 @@ onMounted(async () => {
   classObjectStore.getSections(props.id, router)
 })
 </script>
-
-<style scoped></style>

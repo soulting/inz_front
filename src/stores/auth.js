@@ -1,7 +1,5 @@
 import useApi from '@/api/useApi'
-import login from '@/composables/login'
 import { showErrorToast, showSuccessToast } from '@/composables/useSwal'
-import { useLoadingStore } from '@/stores/loading'
 import { defineStore } from 'pinia'
 
 import { URL } from '@/enums'
@@ -13,23 +11,17 @@ export const useAuthStore = defineStore('auth', {
     isLoggedIn: false,
   }),
   actions: {
-    async piniaLogin(email, password, router) {
-      const loadingStore = useLoadingStore()
-      try {
-        loadingStore.startLoading()
-        const result = await login(email, password)
-        if (result.success) {
-          this.isLoggedIn = true
-          this.user = result.data.user
-          this.token = result.data.token
-          console.log('Login successful:')
-          router.push('/')
-        }
-      } catch (error) {
-        console.error('Login failed:', error)
-        throw new Error(`Login failed: ${error.message || 'Unknown error'}`)
-      } finally {
-        loadingStore.stopLoading()
+    async loginUser(email, password, router) {
+      const response = await useApi().post(`${URL.AUTH}/login`, { email, password }, router)
+      if (response.success) {
+        this.isLoggedIn = true
+        this.user = response.user
+        this.token = response.token
+        console.log('Login successful:')
+        router.push('/')
+        showSuccessToast(response.message)
+      } else {
+        showErrorToast(response.error)
       }
     },
 

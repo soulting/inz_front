@@ -155,7 +155,7 @@ async function sendData() {
 
 onMounted(async () => {
   window.scrollTo(0, 0)
-  const response = await useApi().get(`${URL.LESSONS}/get_lesson/${props.lessonId}`)
+  const response = await useApi().get(`${URL.LESSONS}/lesson/${props.lessonId}`)
   lesson.value = response
 
   if (document.visibilityState === 'visible') {
@@ -178,108 +178,3 @@ onUnmounted(() => {
 
 // window.addEventListener('beforeunload', sendData)
 </script>
-
-<style scoped lang="scss">
-.lesson {
-  min-height: 100vh;
-  background-color: #f9f9f9;
-  padding: 30px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  &__content {
-    width: 100%;
-    max-width: 1300px;
-    background: #ffffff;
-    border-radius: 8px;
-    padding: 24px;
-    color: black;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-  }
-
-  &__title {
-    font-size: 28px;
-    margin-bottom: 20px;
-  }
-
-  &__body {
-    font-size: 16px;
-    line-height: 1.6;
-  }
-
-  &__loading,
-  &__error {
-    text-align: center;
-    font-size: 18px;
-    margin-top: 40px;
-    color: #555;
-  }
-
-  &__error {
-    color: red;
-  }
-
-  &__difficulty {
-    margin: 5rem 0 2rem;
-    text-align: center;
-    width: 100%;
-  }
-
-  &__difficulty-label {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    font-weight: 500;
-    color: #333;
-  }
-
-  &__difficulty-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-
-  &__difficulty-button {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border: none;
-    border-radius: 20px;
-    background-color: #e0e0e0;
-    cursor: pointer;
-    transition:
-      background-color 0.3s,
-      color 0.3s;
-
-    &:hover {
-      background-color: #3b4bdc;
-      color: #ffd700;
-    }
-
-    &--active {
-      background-color: #3b4bdc;
-      color: #ffd700;
-    }
-  }
-}
-
-.lesson__end-button-wrapper {
-  margin-top: 3rem;
-  text-align: center;
-}
-
-.lesson__end-button {
-  padding: 0.8rem 2rem;
-  font-size: 1.1rem;
-  background-color: #3b4bdc;
-  color: #fff;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #2e3bb4;
-  }
-}
-</style>

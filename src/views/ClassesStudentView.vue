@@ -51,7 +51,7 @@ async function leaveClass(deleteId) {
 }
 
 async function fetchClasses() {
-  classes.value = await useApi().get(`${URL.CLASSES}/get_student_classes`, router)
+  classes.value = await useApi().get(`${URL.CLASSES}/student_classes`, router)
 }
 
 onMounted(async () => {

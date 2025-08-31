@@ -1,0 +1,60 @@
+.pie-chart {
+  width: v-bind('currentSize.width');
+  height: v-bind('currentSize.height');
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+
+  &__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #374151;
+    margin: 0 0 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+  }
+
+  &__wrapper {
+    position: relative;
+    width: v-bind('currentSize.chart');
+    height: v-bind('currentSize.chart');
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  &__value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #374151;
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    color: #64748b;
+    font-weight: 500;
+    margin-top: 0.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .pie-chart {
+    width: 100%;
+    max-width: 350px;
+  }
+}
