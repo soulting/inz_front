@@ -29,7 +29,9 @@
           </label>
         </div>
 
-        <button type="submit">Zarejestruj</button>
+        <button type="submit" :disabled="isLoading">
+          {{ isLoading ? 'Rejestrowanie...' : 'Zarejestruj' }}
+        </button>
       </form>
 
       <p class="login-link">Masz już konto? <router-link to="/login">Zaloguj się</router-link></p>
@@ -38,24 +40,17 @@
 </template>
 
 <script setup>
+import { showErrorPopup, showErrorToast, showSuccessPopup } from '@/composables/useSwal'
 import axios from 'axios'
-import Swal from 'sweetalert2'
 import { useRouter } from 'vue-router'
 
 import { ref } from 'vue'
 
 import { URL } from '@/enums'
 
-const alert = {
-  icon: 'error',
-  confirmButtonText: 'OK',
-  background: '#00000',
-  confirmButtonColor: '#3b4bdc',
-  color: '#000000',
-}
+// Dostosuj ścieżkę do lokalizacji twoich funkcji
 
 const router = useRouter()
-
 const name = ref('')
 const email = ref('')
 const password = ref('')
@@ -64,21 +59,15 @@ const role = ref('')
 const isLoading = ref(false)
 
 const signup = async () => {
+  // Walidacja hasła
   if (password.value !== confirmPassword.value) {
-    Swal.fire({
-      ...alert,
-      title: 'Błąd',
-      text: 'Hasła nie są zgodne.',
-    })
+    showErrorPopup('Hasła nie są zgodne.', 'Błąd walidacji')
     return
   }
 
+  // Walidacja roli
   if (!role.value) {
-    Swal.fire({
-      ...alert,
-      title: 'Błąd',
-      text: 'Proszę wybrać rolę.',
-    })
+    showErrorPopup('Proszę wybrać rolę.', 'Brak roli')
     return
   }
 
@@ -92,117 +81,46 @@ const signup = async () => {
       role: role.value,
     })
 
-    Swal.fire({
-      ...alert,
-      icon: 'success',
-      title: 'Sukces',
-      text: 'Rejestracja zakończona pomyślnie!',
-    })
+    // Sukces - pokaz popup z przyciskiem
+    await showSuccessPopup(
+      'Rejestracja zakończona pomyślnie! Aktywój konto, aby się zalogować.',
+      'Witaj w systemie!',
+    )
 
     router.push('/login')
   } catch (error) {
-    if (error.status === 409) {
-      if (error.response.data.error === 'email taken') {
-        alert('E-Mail-Adresse ist bereits registriert.')
-      } else if (error.response.data.error === 'username taken') {
-        alert('Benutzername ist bereits vergeben.')
+    console.error('Błąd rejestracji:', error)
+
+    if (error.response?.status === 409) {
+      const errorType = error.response.data.error
+
+      if (errorType === 'email taken') {
+        showErrorPopup(
+          'Ten adres e-mail jest już zarejestrowany. Spróbuj się zalogować lub użyj innego adresu.',
+          'E-mail już istnieje',
+        )
+      } else if (errorType === 'username taken') {
+        showErrorPopup('Ta nazwa użytkownika jest już zajęta. Wybierz inną nazwę.', 'Nazwa zajęta')
+      } else {
+        showErrorPopup('Użytkownik o podanych danych już istnieje.', 'Konflikt danych')
       }
+    } else if (error.response?.status === 400) {
+      // Błędy walidacji po stronie serwera
+      showErrorToast('Sprawdź poprawność wprowadzonych danych.', 'Błędne dane')
+    } else if (error.code === 'NETWORK_ERROR' || !error.response) {
+      showErrorPopup(
+        'Brak połączenia z serwerem. Sprawdź połączenie internetowe i spróbuj ponownie.',
+        'Błąd połączenia',
+      )
     } else {
-      alert('Fehler bei der Registrierung. Bitte versuche es später erneut.')
+      // Ogólny błąd
+      showErrorPopup(
+        'Wystąpił nieoczekiwany błąd podczas rejestracji. Spróbuj ponownie za chwilę.',
+        'Błąd serwera',
+      )
     }
   } finally {
     isLoading.value = false
   }
 }
 </script>
-
-<style scoped>
-.container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f7f7f7;
-  color: #343434;
-}
-
-.signup-box {
-  width: 100%;
-  max-width: 360px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-}
-
-.signup-header {
-  background-color: #3b4bdc;
-  padding: 16px;
-  border-radius: 10px 10px 0 0;
-  margin: -24px -24px 24px -24px;
-  text-align: center;
-}
-
-.signup-header h2 {
-  color: white;
-  margin: 0;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-label {
-  margin-bottom: 6px;
-  font-weight: 500;
-}
-
-input[type='text'],
-input[type='email'],
-input[type='password'] {
-  padding: 10px;
-  margin-bottom: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.role-options {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 16px;
-}
-
-.role-options label {
-  font-size: 14px;
-}
-
-button {
-  background-color: #fdd835;
-  color: #000;
-  font-weight: bold;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #fbc02d;
-}
-
-.login-link {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 14px;
-}
-
-.login-link a {
-  color: #3b4bdc;
-  text-decoration: none;
-  font-weight: bold;
-}
-</style>

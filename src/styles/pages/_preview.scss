@@ -1,0 +1,40 @@
+.lesson-wrapper {
+  min-height: 100vh;
+  background-color: #f9f9f9; /* bardzo jasny, lekko ciemniejszy biały */
+  padding: 30px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.lesson-content {
+  max-width: 1300px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  color: black;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.lesson-title {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.lesson-body {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.lesson-loading,
+.lesson-error {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 40px;
+  color: #555;
+}
+.lesson-error {
+  color: red;
+}

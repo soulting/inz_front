@@ -145,9 +145,9 @@ async function createTask(task_items) {
 
   try {
     if (taskData.id) {
-      await useApi().put(`${URL.TASKS}/update_task/${taskData.id}`, taskData)
+      await useApi().put(`${URL.TASKS}/task/${taskData.id}`, taskData)
     } else {
-      await useApi().post(`${URL.TASKS}/create_task`, taskData)
+      await useApi().post(`${URL.TASKS}/task`, taskData)
     }
     router.push('/classes-teacher')
   } catch (error) {
@@ -162,7 +162,7 @@ onMounted(async () => {
 
   if (taskData.id) {
     try {
-      const response = await useApi().get(`${URL.TASKS}/get_task/${taskData.id}`)
+      const response = await useApi().get(`${URL.TASKS}/task/${taskData.id}`)
       Object.assign(taskData, response)
     } catch (error) {
       console.error('Błąd podczas pobierania zadania:', error)
@@ -170,93 +170,3 @@ onMounted(async () => {
   }
 })
 </script>
-
-<style scoped lang="scss">
-.create-task {
-  background-color: #f5f5f5;
-  padding: 24px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 24px;
-
-  &__title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 24px;
-  }
-
-  &__form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 24px;
-    max-width: 1000px;
-    width: 85%;
-
-    &-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    &-group {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      min-width: 200px;
-
-      &--task-type {
-        max-width: 300px;
-      }
-
-      label {
-        font-weight: 500;
-        margin-bottom: 6px;
-        color: #333;
-      }
-
-      select,
-      textarea {
-        padding: 10px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        resize: none;
-      }
-    }
-  }
-
-  &__placeholder {
-    background-color: #f9f9f9;
-    border: 1px dashed #ccc;
-    border-radius: 8px;
-    font-style: italic;
-    color: #666;
-  }
-
-  &__submit-button {
-    margin-top: 16px;
-    align-self: flex-start;
-    padding: 12px 22px;
-    font-size: 16px;
-    background-color: #3b4bdc;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.4);
-
-    &:hover {
-      background-color: #2f3fc2;
-    }
-  }
-}
-</style>
