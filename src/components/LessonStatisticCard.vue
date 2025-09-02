@@ -1,7 +1,5 @@
-<!-- LessonCard.vue -->
 <template>
   <div class="lesson-card">
-    <!-- Nagłówek lekcji -->
     <div class="lesson-card__header">
       <h2 class="lesson-card__title">{{ lesson.lesson_name }}</h2>
       <button
@@ -14,9 +12,7 @@
       </button>
     </div>
 
-    <!-- Wykresy - zawsze widoczne -->
     <div class="lesson-card__charts">
-      <!-- Wykres czasu - używa ComparisonChart -->
       <ComparisonChart
         :actual="lesson.time_on_page"
         :expected="lesson.expected_time"
@@ -32,7 +28,6 @@
         }"
       />
 
-      <!-- Wykres zaangażowania - używa PieChart -->
       <PieChart
         :value="lesson.engagement_score"
         title="Zaangażowanie"
@@ -41,7 +36,6 @@
         :colors="['#4f46e5', '#e2e8f0']"
       />
 
-      <!-- Wykres trudności - używa BarChart -->
       <BarChart
         :data="lesson.difficulty"
         :labels="['1', '2', '3', '4', '5']"
@@ -55,13 +49,16 @@
       />
     </div>
 
-    <!-- Rozwijana tabela szczegółów -->
     <ExpandableDetails :lesson="lesson" :is-expanded="isExpanded" />
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import useApi from '@/api/useApi'
+
+import { computed, onMounted, ref } from 'vue'
+
+import { URL } from '@/enums'
 
 import BarChart from './BarChart.vue'
 import ComparisonChart from './ComparisonChart.vue'
@@ -75,7 +72,6 @@ const props = defineProps({
   },
 })
 
-// Computed property do obliczania najczęstszego poziomu trudności
 const getMostCommonDifficulty = computed(() => {
   const levels = ['1', '2', '3', '4', '5']
   let maxCount = 0
@@ -92,9 +88,13 @@ const getMostCommonDifficulty = computed(() => {
   return mostCommon
 })
 
-const isExpanded = ref(false) // Domyślnie zwinięte
+const isExpanded = ref(false)
 
 function toggleExpanded() {
   isExpanded.value = !isExpanded.value
 }
+
+onMounted(async () => {
+  await useApi().get(`${URL.ANALYTICS}/get_lesson_engagement_score/${props.lesson.lesson_id}`)
+})
 </script>

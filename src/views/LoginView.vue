@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="auth-container">
     <div class="login-box">
       <div class="login-header">
         <h2>Logowanie</h2>
@@ -12,7 +12,7 @@
         <input type="password" id="password" v-model="password" required />
 
         <div class="forgot-password">
-          <a href="#">Zapomniałeś hasła?</a>
+          <router-link to="/reset-password">Zapomniałeś hasło?</router-link>
         </div>
 
         <button type="submit">Zaloguj</button>

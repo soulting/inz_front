@@ -116,7 +116,6 @@ async function createSection() {
 
     console.log('Sekcja utworzona', response.data)
 
-    // Reset i wyjście z trybu dodawania
     cancelAdding()
   } catch (error) {
     handleApiError(error, router)

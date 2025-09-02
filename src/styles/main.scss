@@ -31,7 +31,7 @@
 @use 'components/test-starting-screen';
 @use 'layouts/header';
 @use 'pages/footer';
-// @use 'pages/home-view';
+
 @use 'pages/privacy-policy';
 @use 'pages/student-classes';
 @use 'pages/teacher-classes';
@@ -49,3 +49,4 @@
 @use 'pages/signup';
 @use 'components/single-task';
 @use 'pages/test';
+@use 'components/anwser-result-item';

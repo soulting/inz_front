@@ -31,7 +31,6 @@
 
   &__loading,
   &__no-data {
-    /* Moved styles to individual selectors above */
   }
 
   &__loading {
@@ -200,12 +199,12 @@
   }
 
   &__category-main {
-    font-size: 0.75rem; // Powrót do oryginalnego rozmiaru
+    font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: #64748b;
-    margin-bottom: 0.25rem; // Powrót do oryginalnego marginesu
+    margin-bottom: 0.25rem;
   }
 
   &__category-sub {
@@ -270,7 +269,6 @@
   }
 }
 
-// Responsive design
 @media (max-width: 768px) {
   .class-performance {
     padding: 16px;

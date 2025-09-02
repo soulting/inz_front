@@ -65,18 +65,55 @@
           </label>
         </div>
       </div>
+      <div v-if="answerFor(task_item.id)" class="task-content-result">
+        <div class="answer-box neutral">
+          <strong>Poprawna odpowiedź:</strong>
+          <p>{{ answerFor(task_item.id).correct_answer }}</p>
+        </div>
+
+        <div
+          class="answer-box"
+          :class="{
+            correct: answerFor(task_item.id).point === 1,
+            wrong: answerFor(task_item.id).point === 0,
+          }"
+        >
+          <strong>Twoja odpowiedź:</strong>
+          <p
+            v-html="
+              diffWords(answerFor(task_item.id).correct_answer, answerFor(task_item.id).my_answer)
+            "
+          ></p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import diffWords from '@/composables/diffChecker'
 
-const props = defineProps(['currentTask'])
+import { onBeforeMount, ref, watch } from 'vue'
+
+const props = defineProps({
+  currentTask: {
+    type: Object,
+    required: true,
+  },
+  anwsers: {
+    type: Array,
+    default: () => [],
+  },
+})
+
 const emit = defineEmits(['submit', 'noAnswers'])
 
 const userInputs = ref([])
 const currentAnswers = ref([])
+
+function answerFor(id) {
+  return props.anwsers.find((el) => el.item_id === id)
+}
 
 function submitAnswers() {
   if (userInputs.value.some((input) => input === '')) {
@@ -100,6 +137,10 @@ watch(
   },
   { immediate: true },
 )
+
+onBeforeMount(() => {
+  console.log('dupa')
+})
 
 defineExpose({
   submitAnswers,

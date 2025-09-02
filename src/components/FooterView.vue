@@ -2,7 +2,6 @@
   <footer class="footer">
     <div class="footer__container">
       <div class="footer__content">
-        <!-- Contact Section -->
         <div class="footer__section">
           <h3 class="footer__title">Kontakt</h3>
           <div class="footer__contact">
@@ -20,7 +19,6 @@
           </div>
         </div>
 
-        <!-- Navigation Section -->
         <div class="footer__section">
           <h3 class="footer__title">Nawigacja</h3>
           <div class="footer__links">
@@ -31,7 +29,6 @@
           </div>
         </div>
 
-        <!-- Legal Section -->
         <div class="footer__section">
           <h3 class="footer__title">Informacje prawne</h3>
           <div class="footer__links">

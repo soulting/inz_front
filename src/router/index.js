@@ -9,13 +9,17 @@ import LoginView from '@/views/LoginView.vue'
 import PreviewView from '@/views/PreviewView.vue'
 import PrivacyPolicyView from '@/views/PrivacyPolicyView.vue'
 import ProfileView from '@/views/ProfileView.vue'
+import ResetPassword from '@/views/ResetPassword.vue'
 import SettingsView from '@/views/SettingsView.vue'
 import SignupView from '@/views/SignupView.vue'
 import SingleTask from '@/views/SingleTask.vue'
+import SingleTaskResult from '@/views/SingleTaskResult.vue'
 import TestView from '@/views/TestView.vue'
 import TestsView from '@/views/TestsView.vue'
 import ThemesView from '@/views/ThemesView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+
+import ThemenItem from '@/components/ThemenItem.vue'
 
 import HomeView from '../views/HomeView.vue'
 
@@ -70,7 +74,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/profil',
+      path: '/profile',
       name: 'profile',
       component: ProfileView,
       meta: {
@@ -145,6 +149,29 @@ const router = createRouter({
       path: '/task/:classId/:sectionId/:taskId',
       name: 'single-task',
       component: SingleTask,
+      props: true,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/reset-password',
+      name: 'reset-password',
+      component: ResetPassword,
+    },
+    {
+      path: '/single-task/:resultId/:taskId',
+      name: 'single-task-result',
+      component: SingleTaskResult,
+      props: true,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/themen-item/:id',
+      name: 'themen-item',
+      component: ThemenItem,
       props: true,
       meta: {
         requiresAuth: true,

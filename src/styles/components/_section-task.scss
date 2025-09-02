@@ -14,14 +14,15 @@
 
 .task-content {
   display: flex;
-  flex-direction: column;
   gap: 1.25rem;
+  flex-direction: column;
 }
 
 .task-header {
   display: flex;
   align-items: baseline;
   gap: 0.5rem;
+  margin-bottom: 0;
 }
 
 .task-number {
@@ -55,6 +56,7 @@
   color: #6b7280;
   font-size: 0.9rem;
   margin-left: 0.5rem;
+  margin-bottom: 0;
 }
 
 .options-container {
@@ -104,7 +106,6 @@
   font-style: italic;
 }
 
-/* Responsive design */
 @media (max-width: 640px) {
   .task-header {
     flex-direction: column;

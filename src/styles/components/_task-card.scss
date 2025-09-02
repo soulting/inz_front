@@ -20,8 +20,6 @@
     transform: scale(1.02);
   }
 
-  // background-image: url('https://xxofdfokqesjgcuvqsax.supabase.co/storage/v1/object/public/inzyniekrka-images/placeholder1.webp');
-
   background: {
     position: center;
     size: cover;
@@ -32,7 +30,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background-color: rgba(255, 255, 255, 0.25); // biały, półprzezroczysty
+    background-color: rgba(255, 255, 255, 0.25);
     z-index: 1;
   }
 
@@ -93,7 +91,7 @@
 
   &__info-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); // 4 kolumny
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
     font-size: 0.9rem;
     z-index: 2;

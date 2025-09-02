@@ -1,4 +1,3 @@
-<!-- BarChart.vue - Uniwersalny komponent wykresu słupkowego -->
 <template>
   <div class="bar-chart-container" :class="`bar-chart-container--${size}`">
     <div v-if="title || showHeaderValue" class="bar-chart-container__header">
@@ -24,7 +23,6 @@ import { computed } from 'vue'
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend)
 
 const props = defineProps({
-  // Dane wykresu
   data: {
     type: [Array, Object],
     required: true,
@@ -34,7 +32,6 @@ const props = defineProps({
     default: () => [],
   },
 
-  // Teksty
   title: {
     type: String,
     default: '',
@@ -48,7 +45,6 @@ const props = defineProps({
     default: '',
   },
 
-  // Wartość w nagłówku
   showHeaderValue: {
     type: Boolean,
     default: false,
@@ -59,11 +55,10 @@ const props = defineProps({
   },
   headerValueMode: {
     type: String,
-    default: 'max', // 'max', 'sum', 'average', 'custom'
+    default: 'max',
     validator: (v) => ['max', 'sum', 'average', 'custom'].includes(v),
   },
 
-  // Wygląd
   colors: {
     type: [String, Array],
     default: '#4f46e5',
@@ -74,7 +69,6 @@ const props = defineProps({
     validator: (v) => ['small', 'medium', 'large'].includes(v),
   },
 
-  // Opcje wykresu
   showTooltip: {
     type: Boolean,
     default: true,
@@ -96,12 +90,10 @@ const props = defineProps({
   },
 })
 
-// Przetwarzanie danych
 const processedData = computed(() => {
   if (Array.isArray(props.data)) {
     return props.data
   } else if (typeof props.data === 'object') {
-    // Jeśli data to obiekt, konwertuj na tablicę
     return Object.values(props.data)
   }
   return []
@@ -116,7 +108,6 @@ const processedLabels = computed(() => {
   return processedData.value.map((_, i) => `${i + 1}`)
 })
 
-// Obliczanie wartości nagłówka
 const computedHeaderValue = computed(() => {
   if (props.headerValue !== null) return props.headerValue
 
@@ -134,7 +125,6 @@ const computedHeaderValue = computed(() => {
   }
 })
 
-// Konfiguracja wykresu
 const chartData = computed(() => ({
   labels: processedLabels.value,
   datasets: [
@@ -214,7 +204,6 @@ const chartOptions = computed(() => ({
   },
 }))
 
-// Rozmiary
 const sizeClasses = {
   small: { width: '240px', height: '220px', chart: '140px' },
   medium: { width: '320px', height: '300px', chart: '180px' },

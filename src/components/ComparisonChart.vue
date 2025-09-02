@@ -1,4 +1,3 @@
-<!-- ComparisonChart.vue - Uniwersalny komponent do porównań -->
 <template>
   <div class="comparison-chart" :class="`comparison-chart--${size}`">
     <div v-if="title || showHeaderValue" class="comparison-chart__header">
@@ -9,7 +8,6 @@
     </div>
 
     <div class="comparison-chart__content">
-      <!-- Tryb: Progress Bar -->
       <template v-if="displayMode === 'progress'">
         <div class="comparison-display">
           <div class="comparison-display__values">
@@ -42,11 +40,9 @@
         </div>
       </template>
 
-      <!-- Tryb: Radial (koncentryczne pierścienie) -->
       <template v-else-if="displayMode === 'radial'">
         <div class="radial-display">
           <svg :width="radialSize" :height="radialSize" class="radial-display__svg">
-            <!-- Tło zewnętrznego pierścienia -->
             <circle
               :cx="radialCenter"
               :cy="radialCenter"
@@ -55,7 +51,7 @@
               :stroke-width="strokeWidth"
               stroke="#e2e8f0"
             />
-            <!-- Wypełnienie zewnętrznego pierścienia (actual) -->
+
             <circle
               :cx="radialCenter"
               :cy="radialCenter"
@@ -68,7 +64,7 @@
               transform-origin="center"
               :transform="`rotate(-90 ${radialCenter} ${radialCenter})`"
             />
-            <!-- Tło wewnętrznego pierścienia -->
+
             <circle
               :cx="radialCenter"
               :cy="radialCenter"
@@ -77,7 +73,7 @@
               :stroke-width="strokeWidth"
               stroke="#e2e8f0"
             />
-            <!-- Wypełnienie wewnętrznego pierścienia (expected - zawsze 100%) -->
+
             <circle
               :cx="radialCenter"
               :cy="radialCenter"
@@ -102,7 +98,6 @@
         </div>
       </template>
 
-      <!-- Tryb: Side by side bars -->
       <template v-else-if="displayMode === 'bars'">
         <div class="bars-display">
           <div class="bars-display__item">
@@ -131,7 +126,6 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  // Wartości
   actual: {
     type: Number,
     required: true,
@@ -141,17 +135,15 @@ const props = defineProps({
     required: true,
   },
 
-  // Formatowanie
   unit: {
     type: String,
-    default: '', // 'time', 'number', 'currency', custom
+    default: '',
   },
   formatter: {
     type: Function,
     default: null,
   },
 
-  // Etykiety
   title: {
     type: String,
     default: '',
@@ -169,10 +161,9 @@ const props = defineProps({
     default: '100%',
   },
 
-  // Wygląd
   displayMode: {
     type: String,
-    default: 'progress', // 'progress', 'radial', 'bars'
+    default: 'progress',
     validator: (v) => ['progress', 'radial', 'bars'].includes(v),
   },
   size: {
@@ -189,7 +180,6 @@ const props = defineProps({
     default: true,
   },
 
-  // Kolory progów
   thresholds: {
     type: Object,
     default: () => ({
@@ -200,12 +190,10 @@ const props = defineProps({
   },
 })
 
-// Obliczenia
 const percentage = computed(() => (props.actual / props.expected) * 100)
 
 const displayPercentage = computed(() => `${Math.round(percentage.value)}%`)
 
-// Formatowanie wartości
 const formatValue = (value) => {
   if (props.formatter) {
     return props.formatter(value)
@@ -234,7 +222,6 @@ const formatTime = (seconds) => {
 const formattedActual = computed(() => formatValue(props.actual))
 const formattedExpected = computed(() => formatValue(props.expected))
 
-// Kolory na podstawie progów
 const getColorByPercentage = () => {
   const pct = percentage.value
   if (pct <= props.thresholds.good.max) return props.thresholds.good.color
@@ -262,7 +249,6 @@ const progressBarClass = computed(() => {
   return 'progress-bar__fill--danger'
 })
 
-// Radial display calculations
 const radialSizes = {
   small: 120,
   medium: 160,

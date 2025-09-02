@@ -2,7 +2,6 @@
   <div class="list">
     <h1 class="list_title">Moje lekcje</h1>
 
-    <!-- FILTRY I SORTOWANIE -->
     <div class="list__controls">
       <input
         v-model="searchQuery"
@@ -18,7 +17,6 @@
       </select>
     </div>
 
-    <!-- GRID ZADAŃ -->
     <div class="list__grid">
       <slot></slot>
 
@@ -38,7 +36,6 @@
       </div>
     </div>
 
-    <!-- PRZYCISKI POKAŻ WIĘCEJ/MNIEJ -->
     <div v-if="filteredAndSortedLessons.length > 5" class="list__show-more-wrapper">
       <button class="list__show-more-button" @click="showMoreButton ? showMore() : showLess()">
         {{ showMoreButton ? 'Pokaż więcej' : 'Pokaż mniej' }}
@@ -48,14 +45,12 @@
 </template>
 
 <script setup>
-// === IMPORTY ===
 import Swal from 'sweetalert2'
 
 import { computed, ref } from 'vue'
 
 import LessonCard from '@/components/LessonCard.vue'
 
-// === PROPS & EMITY ===
 const props = defineProps({
   lessons: { type: Array, required: true },
   editButton: { type: Boolean, default: false },
@@ -64,7 +59,6 @@ const props = defineProps({
 })
 const emit = defineEmits(['delete', 'join'])
 
-// === STANY LOKALNE ===
 const searchQuery = ref('')
 const sortBy = ref('date_desc')
 const sliceCount = ref(5)
@@ -72,7 +66,6 @@ const showMoreButton = ref(true)
 
 const levelOrder = ['A1', 'A2', 'B1']
 
-// === FUNKCJE ===
 function showMore() {
   sliceCount.value = props.lessons.length
   showMoreButton.value = false
@@ -100,18 +93,15 @@ function emitEdit(lessonId) {
   emit('edit', lessonId)
 }
 
-// === COMPUTED: FILTROWANIE + SORTOWANIE ===
 const filteredAndSortedLessons = computed(() => {
   let result = [...props.lessons]
 
-  // Filtrowanie
   if (searchQuery.value.trim()) {
     result = result.filter((lesson) =>
       lesson.question.toLowerCase().includes(searchQuery.value.toLowerCase()),
     )
   }
 
-  // Sortowanie
   switch (sortBy.value) {
     case 'date_desc':
       result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))

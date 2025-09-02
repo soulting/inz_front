@@ -1,6 +1,5 @@
 <template>
   <div class="task-analytics-card">
-    <!-- Nagłówek -->
     <div class="task-analytics-card__header">
       <h3 class="task-analytics-card__title">Zadanie: {{ task.question }}</h3>
 
@@ -20,11 +19,9 @@
       </button>
     </div>
 
-    <!-- Lista podpunktów: domyślnie ukryta -->
     <ul v-show="isExpanded" class="items-list" role="list" aria-label="Lista podpunktów zadania">
       <li v-for="item in items" :key="item.item_id" class="item-card" role="listitem">
         <div class="item-main">
-          <!-- pytanie -->
           <div class="field field--question">
             <div class="field__label">Pytanie</div>
             <div class="field__value monospace">
@@ -34,13 +31,11 @@
             </div>
           </div>
 
-          <!-- poprawna odpowiedź -->
           <div class="field field--answer">
             <div class="field__label">Poprawna odpowiedź</div>
             <div class="field__value answer">{{ item.correct_answer || '—' }}</div>
           </div>
 
-          <!-- pigułki procentowe (jedna linia) -->
           <div class="item-badges" aria-hidden="false">
             <span class="badge badge--success"
               >{{ formatPercent(item.correct, item) }}% • punkty</span
@@ -77,13 +72,11 @@ function toggleExpanded() {
   isExpanded.value = !isExpanded.value
 }
 
-// Zamiana %%[inp]%% i %%[sel]%% na ___
 function formatTemplate(template) {
   if (template === null || template === undefined) return ''
   return String(template).replace(/%%\[(inp|sel)\]%%/g, '___')
 }
 
-// Liczenie procentów (bez dzielenia przez zero)
 function formatPercent(value, item) {
   const correct = Number(item.correct) || 0
   const incorrect = Number(item.incorrect) || 0

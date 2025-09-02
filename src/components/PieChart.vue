@@ -1,4 +1,3 @@
-<!-- PieChart.vue - Uniwersalny komponent wykresu kołowego -->
 <template>
   <div class="pie-chart">
     <h3 v-if="title" class="pie-chart__title">{{ title }}</h3>

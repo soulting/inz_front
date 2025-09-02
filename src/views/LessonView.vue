@@ -175,6 +175,4 @@ onUnmounted(() => {
   stopCollectingMetrics()
   sendData()
 })
-
-// window.addEventListener('beforeunload', sendData)
 </script>

@@ -56,7 +56,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async changeProfilePicture(file, router) {
+    async changeProfilePicture(file) {
       const formData = new FormData()
       formData.append('profile_picture', file)
 
@@ -92,7 +92,6 @@ export const useAuthStore = defineStore('auth', {
     async updatePreferences(preferences, router) {
       const response = await useApi().put(`${URL.SETTINGS}/update_preferences`, preferences, router)
       if (response.success) {
-        // Aktualizuj bezpośrednio w user, nie jako zagnieżdżony obiekt
         this.user.notifications = preferences.notifications
         this.user.cookies = preferences.cookies
         showSuccessToast(response.message)

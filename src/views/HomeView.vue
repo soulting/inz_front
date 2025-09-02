@@ -1,6 +1,5 @@
 <template>
   <div class="home-page">
-    <!-- Hero Section -->
     <section class="hero">
       <div class="hero__background">
         <div class="hero__gradient"></div>
@@ -52,7 +51,6 @@
       </div>
     </section>
 
-    <!-- Intro Section -->
     <section class="intro-section" ref="featuresSection">
       <div class="intro-section__container">
         <h2 class="intro-section__title">Dlaczego wybieramy personalizację?</h2>
@@ -64,7 +62,6 @@
       </div>
     </section>
 
-    <!-- Features Grid -->
     <section class="features-grid">
       <div class="features-grid__container">
         <div class="feature-card">
@@ -90,7 +87,7 @@
               Dołącz do klasy i ucz się pod okiem doświadczonych mentorów. Dzięki notatkom i
               ćwiczeniom praktycznym masz dostęp do najlepszych narzędzi edukacyjnych.
             </p>
-            <button v-if="isLoggedIn" class="feature-card__btn" @click="goTo('./klasy')">
+            <button v-if="isLoggedIn" class="feature-card__btn" @click="goTo('./classes')">
               <span>Przeglądaj klasy</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M5 12h14M12 5l7 7-7 7" />
@@ -121,7 +118,7 @@
               Uzyskaj zaawansowane narzędzia analityczne do śledzenia Twojego postępu. Szczegółowe
               raporty pomogą Ci skutecznie rozwijać umiejętności językowe.
             </p>
-            <button v-if="isLoggedIn" class="feature-card__btn" @click="goTo('./profil')">
+            <button v-if="isLoggedIn" class="feature-card__btn" @click="goTo('./profile')">
               <span>Zobacz profil</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M5 12h14M12 5l7 7-7 7" />
@@ -165,7 +162,6 @@
       </div>
     </section>
 
-    <!-- Final CTA Section -->
     <section class="cta-section">
       <div class="cta-section__container">
         <div class="cta-section__content">
@@ -614,7 +610,6 @@ function scrollToFeatures() {
   }
 }
 
-// Responsive design
 @media (max-width: 768px) {
   .hero {
     &__stats {

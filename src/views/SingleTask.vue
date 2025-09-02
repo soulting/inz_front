@@ -1,7 +1,6 @@
 <template>
   <div class="single-task-container">
     <div v-if="task" class="single-task-wrapper">
-      <!-- Header z informacjami o zadaniu -->
       <div class="single-task-header">
         <div class="single-task-header__timer">
           <span class="single-task-header__time">
@@ -10,8 +9,8 @@
         </div>
       </div>
 
-      <!-- Główna zawartość zadania -->
       <div class="single-task-content">
+        DUPA
         <div class="single-task-question">
           <h2 class="single-task-question__title">{{ task.question }}</h2>
         </div>
@@ -54,7 +53,6 @@
           </div>
         </div>
 
-        <!-- Ocena trudności -->
         <div class="single-difficulty-section">
           <h3 class="single-difficulty-section__title">Jak trudne było to zadanie?</h3>
           <div class="single-difficulty-rating">
@@ -87,7 +85,6 @@
           </div>
         </div>
 
-        <!-- Przycisk zakończenia -->
         <div class="single-task-actions">
           <button
             @click="submitTask"
@@ -106,8 +103,6 @@
 <script setup>
 import useApi from '@/api/useApi'
 import { handleApiError } from '@/composables/errorHandling'
-import axios from 'axios'
-import { storeToRefs } from 'pinia'
 import Swal from 'sweetalert2'
 import { useRouter } from 'vue-router'
 
@@ -120,9 +115,6 @@ import CorrectionWordTask from '@/components/CorrectionWordTask.vue'
 import FillInTask from '@/components/FillInTask.vue'
 import SelectionTask from '@/components/SelectionTask.vue'
 
-import { useAuthStore } from '../stores/auth'
-
-const { token } = storeToRefs(useAuthStore())
 const router = useRouter()
 
 const alert = {
@@ -139,6 +131,10 @@ const props = defineProps({
     required: true,
   },
   classId: {
+    type: [String, Number],
+    required: true,
+  },
+  sectionId: {
     type: [String, Number],
     required: true,
   },
@@ -231,6 +227,7 @@ function handleSubmitAnswers(answers) {
   const taskResult = {
     taskId: task.value.id,
     classId: props.classId,
+    sectionId: props.sectionId,
     scoredAnswers,
     taskPoints,
     taskError,
@@ -257,7 +254,6 @@ async function submitTaskToServer(taskResult) {
 
     console.log('Task submitted successfully:', response.data)
 
-    // Pokazanie komunikatu o sukcesie
     await Swal.fire({
       icon: 'success',
       title: 'Zadanie wysłane!',
@@ -268,7 +264,6 @@ async function submitTaskToServer(taskResult) {
       color: '#1f2937',
     })
 
-    // Powrót do poprzedniego widoku
     router.back()
   } catch (error) {
     console.error('Error submitting task:', error)

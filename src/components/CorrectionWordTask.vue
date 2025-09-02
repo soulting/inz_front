@@ -15,16 +15,52 @@
           placeholder="Przekształcone słowo..."
         />
       </div>
+      <div v-if="answerFor(task_item.id)" class="task-content-result">
+        <div class="answer-box neutral">
+          <strong>Poprawna odpowiedź:</strong>
+          <p>{{ answerFor(task_item.id).correct_answer }}</p>
+        </div>
+
+        <div
+          class="answer-box"
+          :class="{
+            correct: answerFor(task_item.id).point === 1,
+            wrong: answerFor(task_item.id).point === 0,
+          }"
+        >
+          <strong>Twoja odpowiedź:</strong>
+          <p
+            v-html="
+              diffWords(answerFor(task_item.id).correct_answer, answerFor(task_item.id).my_answer)
+            "
+          ></p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import diffWords from '@/composables/diffChecker'
+
 import { ref, watch } from 'vue'
 
-const props = defineProps(['currentTask'])
+const props = defineProps({
+  currentTask: {
+    type: Object,
+    required: true,
+  },
+  anwsers: {
+    type: Array,
+    default: () => [],
+  },
+})
 const userInputs = ref([])
 const emit = defineEmits(['submit', 'noAnswers'])
+
+function answerFor(id) {
+  return props.anwsers.find((el) => el.item_id === id)
+}
 
 function submitAnswers() {
   if (userInputs.value.some((input) => input === '')) {

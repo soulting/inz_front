@@ -1,6 +1,5 @@
 <template>
   <div class="tests-page">
-    <!-- Hero Section -->
     <section class="tests-page__hero">
       <div class="tests-page__hero-content">
         <h1 class="tests-page__hero-title">Test Poziomujący</h1>
@@ -10,11 +9,9 @@
       </div>
     </section>
 
-    <!-- Tests Section -->
     <section class="tests-page__tests">
       <div class="container">
         <div class="tests-page__tests-grid">
-          <!-- Test A1 -->
           <div class="tests-page__test-card tests-page__test-card--green">
             <div class="tests-page__test-image">
               <img
@@ -47,7 +44,6 @@
             </div>
           </div>
 
-          <!-- Test A2 -->
           <div class="tests-page__test-card tests-page__test-card--blue">
             <div class="tests-page__test-image">
               <img
@@ -80,7 +76,6 @@
             </div>
           </div>
 
-          <!-- Test B1 -->
           <div class="tests-page__test-card tests-page__test-card--purple">
             <div class="tests-page__test-image">
               <img
@@ -133,7 +128,6 @@ function goTo(level) {
 </script>
 
 <style lang="scss" scoped>
-// Zmienne SCSS
 $primary-color: #4f46e5;
 $secondary-color: #f59e0b;
 $text-dark: #111827;
@@ -141,7 +135,6 @@ $text-light: #ffffff;
 $text-gray: #6b7280;
 $bg-light: #f8fafc;
 
-// Kolory dla kart
 $green: #10b981;
 $green-light: #d1fae5;
 $blue: #3b82f6;
@@ -157,7 +150,6 @@ $shadow-lg:
   0 4px 6px -2px rgba(0, 0, 0, 0.05);
 $border-radius: 16px;
 
-// Reset i podstawowe style
 .tests-page {
   color: $text-dark;
   margin: 0;
@@ -165,7 +157,6 @@ $border-radius: 16px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
 
-  // Hero Section
   &__hero {
     padding: 5rem 0;
     text-align: center;
@@ -222,7 +213,6 @@ $border-radius: 16px;
     margin: 0 auto;
   }
 
-  // Section Title
   &__section-title {
     text-align: center;
     font-size: 2.5rem;
@@ -231,7 +221,6 @@ $border-radius: 16px;
     margin-bottom: 3rem;
   }
 
-  // Tests Section
   &__tests {
     padding: 5rem 0;
     background: white;
@@ -374,7 +363,6 @@ $border-radius: 16px;
     border-radius: 20px;
   }
 
-  // CTA Section
   &__cta {
     padding: 5rem 0;
     background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);
@@ -416,14 +404,12 @@ $border-radius: 16px;
   }
 }
 
-// Container
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
 }
 
-// Tests Page Button Component (BEM)
 .tests-page__btn {
   display: inline-flex;
   align-items: center;
@@ -503,7 +489,6 @@ $border-radius: 16px;
   }
 }
 
-// Media Queries
 @media (max-width: 768px) {
   .tests-page {
     &__hero {

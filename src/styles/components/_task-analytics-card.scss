@@ -230,7 +230,6 @@
 
       .difficulty-badge {
         padding: 2px 6px;
-        background: #f3f4f6;
         border-radius: 4px;
         font-size: 0.8rem;
       }
@@ -299,7 +298,6 @@
   }
 }
 
-// Responsive design
 @media (max-width: 768px) {
   .task-analytics-card {
     &__meta {

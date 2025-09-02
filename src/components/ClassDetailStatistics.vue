@@ -1,6 +1,5 @@
 <template>
   <div class="lesson-stats">
-    <!-- Class Performance Section -->
     <div v-if="performanceData">
       <ClassPerformance :performance-data="performanceData" />
     </div>
@@ -8,7 +7,6 @@
       Ta klasa nie ma jeszcze żadnych zapisanych uczniów.
     </div>
 
-    <!-- Lesson Statistics Section -->
     <div class="lesson-statistics-section">
       <h3 class="lesson-statistics__title">Statystyki lekcji</h3>
 
@@ -32,7 +30,6 @@
       </div>
     </div>
 
-    <!-- Task Analytics Section -->
     <div class="task-analytics-section">
       <h3 class="lesson-tasks__title">Analiza zadań</h3>
       <div v-if="taskAnalytics?.tasks?.length" class="tasks-container">
@@ -73,17 +70,14 @@ const performanceData = ref(null)
 const taskAnalytics = ref(null)
 
 onMounted(async () => {
-  // Pobieranie statystyk lekcji
   lessonStatistics.value = await useApi().get(
     `${URL.ANALYTICS}/get_class_analytics/${props.classId}`,
   )
 
-  // Pobieranie danych o wydajności klasy
   performanceData.value = await useApi().get(
     `${URL.ANALYTICS}/get_class_performance_analysis/${props.classId}/A1`,
   )
 
-  // Pobieranie analityki zadań
   taskAnalytics.value = await useApi().get(`${URL.ANALYTICS}/get_task_analytics/${props.classId}`)
 })
 </script>

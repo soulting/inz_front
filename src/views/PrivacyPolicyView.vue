@@ -107,8 +107,6 @@ export default {
       lastUpdated: '15 sierpnia 2025',
     }
   },
-  methods: {
-    // Usunięto metodę manageCookies - nie jest już używana
-  },
+  methods: {},
 }
 </script>

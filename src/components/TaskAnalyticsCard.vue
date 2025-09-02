@@ -1,6 +1,5 @@
 <template>
   <div class="task-analytics-card">
-    <!-- Nagłówek zadania -->
     <div class="task-analytics-card__header">
       <div class="task-analytics-card__header-info">
         <h3 class="task-analytics-card__title">{{ task.question }}</h3>
@@ -38,7 +37,6 @@
       </button>
     </div>
 
-    <!-- Wykresy główne - zawsze widoczne -->
     <div class="task-analytics-card__charts">
       <PieChart
         :value="successRate"
@@ -60,7 +58,6 @@
       />
     </div>
 
-    <!-- Dodatkowe metryki w kompaktowej formie -->
     <div class="task-analytics-card__quick-stats">
       <div class="quick-stat">
         <span class="stat-label">Ukończyło:</span>
@@ -77,9 +74,7 @@
       </div>
     </div>
 
-    <!-- Rozwijana sekcja szczegółów -->
     <div v-show="isExpanded" class="task-analytics-card__details">
-      <!-- Tabela wyników uczniów -->
       <div
         v-if="task.student_results && task.student_results.length > 0"
         class="task-analytics-card__results"
@@ -156,30 +151,24 @@ const props = defineProps({
   },
 })
 
-// Wewnętrzny stan rozwijania
 const isExpanded = ref(false)
 
 function toggleExpanded() {
   isExpanded.value = !isExpanded.value
 }
 
-// Rzeczywista liczba uczniów którzy ukończyli zadanie
 const actualStudentsCount = computed(() => {
   return props.task.student_results ? props.task.student_results.length : 0
 })
 
-// Maksymalna liczba punktów dla całego zadania (suma: poprawne + błędy + niepewność)
 const maxPoints = computed(() => {
   return props.task.task_points + props.task.task_error + props.task.task_uncertainty
 })
 
-// Funkcja pomocnicza do obliczenia punktów ucznia
 const getStudentScore = (student) => {
-  // Punkty ucznia to jego task_points (poprawne odpowiedzi)
   return student.task_points
 }
 
-// Funkcja do obliczenia procentu sukcesu ucznia
 const getStudentSuccessRate = (student) => {
   return Math.round(
     (student.task_points / (student.task_points + student.task_error + student.task_uncertainty)) *
@@ -187,13 +176,11 @@ const getStudentSuccessRate = (student) => {
   )
 }
 
-// Ogólny wskaźnik sukcesu (% poprawnych odpowiedzi)
 const successRate = computed(() => {
   if (!maxPoints.value) return 0
   return Math.round((props.task.task_points / maxPoints.value) * 100)
 })
 
-// Średni wskaźnik sukcesu per uczeń
 const avgStudentSuccessRate = computed(() => {
   if (!props.task.student_results || props.task.student_results.length === 0) {
     return successRate.value
@@ -205,25 +192,21 @@ const avgStudentSuccessRate = computed(() => {
   return Math.round(sum / props.task.student_results.length)
 })
 
-// Procent błędów z całości
 const errorPercentage = computed(() => {
   if (!maxPoints.value) return 0
   return Math.round((props.task.task_error / maxPoints.value) * 100)
 })
 
-// Procent niepewności z całości
 const uncertaintyPercentage = computed(() => {
   if (!maxPoints.value) return 0
   return Math.round((props.task.task_uncertainty / maxPoints.value) * 100)
 })
 
-// Średni czas na ucznia
 const averageTimePerStudent = computed(() => {
   if (!actualStudentsCount.value) return 0
   return Math.round(props.task.time_spent / actualStudentsCount.value)
 })
 
-// Średnia subiektywna trudność od uczniów
 const averageStudentDifficulty = computed(() => {
   if (!props.task.student_results || props.task.student_results.length === 0) {
     return props.task.difficulty
@@ -232,7 +215,6 @@ const averageStudentDifficulty = computed(() => {
   return (sum / props.task.student_results.length).toFixed(1)
 })
 
-// Posortowani uczniowie (od najlepszego)
 const sortedStudentResults = computed(() => {
   if (!props.task.student_results) return []
   return [...props.task.student_results].sort((a, b) => {
@@ -240,7 +222,6 @@ const sortedStudentResults = computed(() => {
   })
 })
 
-// Funkcje pomocnicze
 const formatTime = (seconds) => {
   if (!seconds || seconds < 60) {
     return `${seconds || 0}s`

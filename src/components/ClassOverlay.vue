@@ -85,11 +85,6 @@ const cardComponent = props.sectionItemType === 'Tasks' ? TaskCard : LessonCard
 const emit = defineEmits(['close'])
 const router = useRouter()
 
-// const sectionItems =
-//   props.sectionItemType === 'Tasks'
-//     ? storeToRefs(teacherClassStore).tasks
-//     : storeToRefs(teacherClassStore).lessons
-
 const previewButton = ref(true)
 
 async function addToSection(id) {

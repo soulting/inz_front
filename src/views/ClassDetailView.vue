@@ -1,10 +1,9 @@
 <template>
   <div class="class-detail">
     <div class="class-detail__container">
-      <!-- Nagłówek z nazwą klasy -->
       <div class="class-detail__header">
         <h1 class="class-detail__title">{{ props.name }}</h1>
-        <!-- Przyciski na przyszłość -->
+
         <div class="class-detail__buttons">
           <button
             class="class-detail__button"
@@ -22,7 +21,7 @@
           </button>
         </div>
       </div>
-      <!-- Sekcja zawartości -->
+
       <div class="class-detail__content">
         <ClassDetailSections v-if="tabs.activeTab === 'lessons'" :id="props.id" />
         <ClassDetailStatistics v-else :classId="props.id" />

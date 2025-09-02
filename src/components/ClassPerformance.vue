@@ -6,9 +6,7 @@
       </h1>
     </div>
 
-    <!-- Results -->
     <div v-if="performanceData" class="class-performance__content">
-      <!-- Info panel -->
       <div class="class-performance__info">
         <div class="class-performance__info-item">
           <span class="class-performance__info-label">Uczniowie:</span>
@@ -30,7 +28,6 @@
         </div>
       </div>
 
-      <!-- Subcategories list with collapsible functionality -->
       <div class="class-performance__categories">
         <div class="class-performance__categories-header">
           <h2 class="class-performance__categories-title">Kategorie:</h2>
@@ -59,7 +56,6 @@
                 class="class-performance__category-card"
                 :class="getCategoryCardClass(category.score_percentage)"
               >
-                <!-- Category info -->
                 <div class="class-performance__category-header">
                   <div class="class-performance__category-main">
                     {{ category.main_category }}
@@ -68,7 +64,7 @@
                     {{ category.sub_category }}
                   </div>
                 </div>
-                <!-- Stats -->
+
                 <div class="class-performance__category-stats">
                   <div class="class-performance__stat">
                     <span class="class-performance__stat-label">Poprawność:</span>
@@ -122,7 +118,7 @@ const props = defineProps({
   performanceData: Object,
 })
 
-const isExpended = ref(false) // Domyślnie zwinięte
+const isExpended = ref(false)
 const subcategories = computed(() => props.performanceData?.subcategories || [])
 
 function getCategoryCardClass(scorePercentage) {

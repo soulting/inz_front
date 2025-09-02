@@ -4,7 +4,6 @@
       <h1 class="create-lesson__title">Utwórz nową lekcję</h1>
 
       <form @submit.prevent="submitLesson" class="create-lesson__form">
-        <!-- Tytuł -->
         <div class="create-lesson__group">
           <label for="title" class="create-lesson__label">Tytuł lekcji</label>
           <input
@@ -16,7 +15,6 @@
           />
         </div>
 
-        <!-- Opis -->
         <div class="create-lesson__group">
           <label for="description" class="create-lesson__label">Opis</label>
           <textarea
@@ -28,7 +26,6 @@
           ></textarea>
         </div>
 
-        <!-- Kategoria + Podkategoria + Poziom -->
         <div class="create-lesson__group create-lesson__group--row">
           <div class="create-lesson__select-group">
             <label for="mainCategory" class="create-lesson__label">Główna kategoria</label>
@@ -76,7 +73,6 @@
           </div>
         </div>
 
-        <!-- Kontekst z TinyMCE -->
         <div class="create-lesson__group">
           <label class="create-lesson__label">Kontekst</label>
           <Editor
@@ -96,7 +92,6 @@
           />
         </div>
 
-        <!-- Submit -->
         <button type="submit" class="create-lesson__button">Utwórz lekcję</button>
       </form>
     </div>

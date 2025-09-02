@@ -1,7 +1,6 @@
 ExerciseCard.vue
 <template>
   <div class="exercise-card">
-    <!-- Nagłówek zadania -->
     <div class="exercise-card__header">
       <div class="exercise-card__header-left">
         <h2 class="exercise-card__title">{{ task.question }}</h2>
@@ -33,9 +32,7 @@ ExerciseCard.vue
       </button>
     </div>
 
-    <!-- Wykresy - zawsze widoczne -->
     <div class="exercise-card__charts">
-      <!-- Wykres punktów -->
       <div class="points-chart">
         <div class="points-chart__header">
           <h3 class="points-chart__title">Punkty</h3>
@@ -54,7 +51,6 @@ ExerciseCard.vue
         </div>
       </div>
 
-      <!-- Wykres błędów -->
       <PieChart
         :value="100 - task.task_error * 20"
         title="Poprawność"
@@ -65,7 +61,6 @@ ExerciseCard.vue
         :colors="[errorColor, '#e2e8f0']"
       />
 
-      <!-- Wykres pewności -->
       <PieChart
         :value="100 - task.task_uncertainty"
         title="Pewność"
@@ -76,7 +71,6 @@ ExerciseCard.vue
         :colors="['#4f46e5', '#e2e8f0']"
       />
 
-      <!-- Wykres czasu -->
       <div class="time-chart">
         <div class="time-chart__header">
           <h3 class="time-chart__title">Czas rozwiązania</h3>
@@ -95,7 +89,6 @@ ExerciseCard.vue
       </div>
     </div>
 
-    <!-- Rozwijana sekcja szczegółów -->
     <div v-if="isExpanded" class="exercise-card__details">
       <div class="exercise-card__details-grid">
         <div class="exercise-card__detail-item">
@@ -144,7 +137,6 @@ const props = defineProps({
 
 defineEmits(['toggle-expanded'])
 
-// Formatowanie czasu
 const formatTime = (milliseconds) => {
   const seconds = Math.floor(milliseconds / 1000)
   if (seconds < 60) return `${seconds}s`
@@ -154,7 +146,6 @@ const formatTime = (milliseconds) => {
   return `${minutes}min ${remainingSeconds}s`
 }
 
-// Etykiety i klasy dla punktów
 const pointsLabel = computed(() => {
   if (props.task.task_points === 0) return 'Brak punktów'
   if (props.task.task_points === 1) return '1 punkt'
@@ -162,7 +153,6 @@ const pointsLabel = computed(() => {
   return `${props.task.task_points} punktów`
 })
 
-// Etykiety i kolory dla błędów
 const errorLabel = computed(() => {
   if (props.task.task_error === 0) return 'Bezbłędnie'
   if (props.task.task_error === 1) return '1 błąd'
@@ -177,10 +167,9 @@ const errorColor = computed(() => {
   return '#dc2626'
 })
 
-// Obliczenia dla czasu
 const getTimeWidth = () => {
   const seconds = props.task.time_spent / 1000
-  // Zakładamy średni czas na zadanie to 60 sekund
+
   const percentage = (seconds / 60) * 100
   return Math.min(percentage, 100)
 }
@@ -201,7 +190,6 @@ const timeLabel = computed(() => {
   return 'Bardzo wolno'
 })
 
-// Status zadania
 const statusText = computed(() => {
   if (props.task.task_error === 0 && props.task.task_uncertainty === 0) return 'Perfekcyjnie'
   if (props.task.task_error === 0) return 'Poprawnie'
@@ -217,7 +205,6 @@ const statusClass = computed(() => {
   return 'status-badge--danger'
 })
 
-// Pomocnicze funkcje
 const getTaskTypeLabel = (type) => {
   const labels = {
     selection: 'Wybór',

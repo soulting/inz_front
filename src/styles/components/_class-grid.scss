@@ -52,13 +52,11 @@
   }
 
   &__no-classes {
-    // grid-column: auto;
-    // grid-row: auto;
     text-align: center;
     font-size: 20px;
     color: #666;
-    justify-self: center; /* poziomo */
-    align-self: center; /* pionowo */
+    justify-self: center;
+    align-self: center;
     margin-top: 40px;
     margin-bottom: 40px;
   }
@@ -73,7 +71,7 @@
   &__show-more-button {
     padding: 10px 24px;
     font-size: 16px;
-    background-color: #3b4bdc; /* intensywny niebieski */
+    background-color: #3b4bdc;
     color: white;
     border: none;
     border-radius: 8px;

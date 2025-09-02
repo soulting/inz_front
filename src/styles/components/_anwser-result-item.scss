@@ -1,0 +1,38 @@
+.task-content-result {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #fafafa;
+  border: 1px solid #e0e0e0;
+}
+
+.answer-box {
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.answer-box.neutral {
+  background-color: #f5f5f5;
+  border-color: #dcdcdc;
+}
+
+.answer-box.correct {
+  background-color: #e8ffe8;
+  border-color: #8ce58c;
+}
+
+.answer-box.wrong {
+  background-color: #ffecec;
+  border-color: #ffb8b8;
+}
+
+.diff-error,
+span[style*='color:red'] {
+  color: #c00 !important;
+
+  border-radius: 2px;
+  padding: 0;
+}

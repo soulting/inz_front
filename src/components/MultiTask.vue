@@ -16,7 +16,7 @@
             rows="2"
           />
         </div>
-        <!-- Dodatkowe pole podpowiedzi -->
+
         <div>
           <label class="correction-task__label" :for="'hint-' + index">Podpowiedź </label>
           <input
@@ -112,7 +112,7 @@
 
     <div class="correction-task__buttons-row">
       <button class="correction-task__submit-button" @click="submitTask">Zakończ</button>
-      <button class="correction-task__add-button" @click="addTask">+ Dodaj kolejne zdanie</button>
+      <button class="correction-task__add-button" @click="addTask">+ Dodaj kolejny podpunkt</button>
     </div>
   </div>
 </template>

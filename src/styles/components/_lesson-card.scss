@@ -41,7 +41,6 @@
   opacity: 1;
 }
 
-/* PRZYCISKI W PRAWYM GÓRNYM ROGU */
 .lesson-card__overlay-actions {
   position: absolute;
   top: 12px;
@@ -59,7 +58,7 @@
 .lesson-card__overlay-actions img {
   width: 28px;
   height: 28px;
-  filter: brightness(0) invert(1); /* białe na ciemnym tle */
+  filter: brightness(0) invert(1);
 }
 
 .lesson-card__description {

@@ -6,7 +6,6 @@
     </div>
 
     <div class="settings-content">
-      <!-- Sekcja Zdjęcia profilowego -->
       <div class="settings-section">
         <h2>Zdjęcie profilowe</h2>
         <div class="avatar-section">
@@ -30,7 +29,6 @@
         </div>
       </div>
 
-      <!-- Sekcja Nazwy użytkownika -->
       <div class="settings-section">
         <h2>Nazwa użytkownika</h2>
         <div class="form-group">
@@ -47,7 +45,6 @@
         </button>
       </div>
 
-      <!-- Sekcja Hasła -->
       <div class="settings-section">
         <h2>Zmiana hasła</h2>
         <div class="form-group">
@@ -85,7 +82,6 @@
         </button>
       </div>
 
-      <!-- Sekcja Zgód -->
       <div class="settings-section">
         <h2>Preferencje prywatności</h2>
         <div class="toggle-group">
@@ -125,11 +121,9 @@ import { storeToRefs } from 'pinia'
 
 import { computed, onMounted, ref } from 'vue'
 
-// Store
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
 
-// Reactive data
 const userData = ref({
   username: user.value?.name || '',
 })
@@ -147,7 +141,6 @@ const preferences = ref({
 
 const avatarInput = ref(null)
 
-// Computed
 const isPasswordFormValid = computed(() => {
   return (
     passwordData.value.currentPassword &&
@@ -158,19 +151,15 @@ const isPasswordFormValid = computed(() => {
   )
 })
 
-// Methods
-
 const handleAvatarUpload = async (event) => {
   const file = event.target.files[0]
   if (!file) return
 
-  // Sprawdź rozmiar pliku (max 5MB)
   if (file.size > 5 * 1024 * 1024) {
     showErrorToast('Plik jest za duży. Maksymalny rozmiar to 5MB')
     return
   }
 
-  // Sprawdź typ pliku
   if (!file.type.startsWith('image/')) {
     showErrorToast('Wybierz plik graficzny')
     return

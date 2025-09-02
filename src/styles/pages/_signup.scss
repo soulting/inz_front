@@ -5,84 +5,84 @@
   justify-content: center;
   background-color: #f7f7f7;
   color: #343434;
-}
 
-.signup-box {
-  width: 100%;
-  max-width: 360px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-}
+  .signup-box {
+    width: 100%;
+    max-width: 360px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+  }
 
-.signup-header {
-  background-color: #3b4bdc;
-  padding: 16px;
-  border-radius: 10px 10px 0 0;
-  margin: -24px -24px 24px -24px;
-  text-align: center;
-}
+  .signup-header {
+    background-color: #3b4bdc;
+    padding: 16px;
+    border-radius: 10px 10px 0 0;
+    margin: -24px -24px 24px -24px;
+    text-align: center;
+  }
 
-.signup-header h2 {
-  color: white;
-  margin: 0;
-}
+  .signup-header h2 {
+    color: white;
+    margin: 0;
+  }
 
-form {
-  display: flex;
-  flex-direction: column;
-}
+  form {
+    display: flex;
+    flex-direction: column;
+  }
 
-label {
-  margin-bottom: 6px;
-  font-weight: 500;
-}
+  label {
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
 
-input[type='text'],
-input[type='email'],
-input[type='password'] {
-  padding: 10px;
-  margin-bottom: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-}
+  input[type='text'],
+  input[type='email'],
+  input[type='password'] {
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+  }
 
-.role-options {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 16px;
-}
+  .role-options {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 16px;
+  }
 
-.role-options label {
-  font-size: 14px;
-}
+  .role-options label {
+    font-size: 14px;
+  }
 
-button {
-  background-color: #fdd835;
-  color: #000;
-  font-weight: bold;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
+  button {
+    background-color: #fdd835;
+    color: #000;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
 
-button:hover {
-  background-color: #fbc02d;
-}
+  button:hover {
+    background-color: #fbc02d;
+  }
 
-.login-link {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 14px;
-}
+  .login-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+  }
 
-.login-link a {
-  color: #3b4bdc;
-  text-decoration: none;
-  font-weight: bold;
+  .login-link a {
+    color: #3b4bdc;
+    text-decoration: none;
+    font-weight: bold;
+  }
 }

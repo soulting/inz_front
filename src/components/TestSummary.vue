@@ -1,13 +1,11 @@
 <template>
   <div class="test-summary">
     <div class="test-summary__container">
-      <!-- Header z gratulacjami -->
       <div class="test-summary__header">
         <h1 class="test-summary__title">Test zakończony!</h1>
         <p class="test-summary__subtitle">Gratulacje! Oto Twoje wyniki:</p>
       </div>
 
-      <!-- Główne statystyki -->
       <div class="test-summary__main-stats">
         <div class="test-summary__score-card">
           <div class="test-summary__progress-container">
@@ -23,7 +21,6 @@
         </div>
       </div>
 
-      <!-- Szczegółowe statystyki -->
       <div class="test-summary__stats-grid">
         <div class="test-summary__stat-card">
           <div class="test-summary__stat-content">
@@ -54,9 +51,7 @@
         </div>
       </div>
 
-      <!-- Najlepsze i najgorsze kategorie -->
       <div v-if="bestCategories.length || worstCategories.length" class="test-summary__categories">
-        <!-- Najlepsze umiejętności -->
         <div v-if="bestCategories.length" class="test-summary__category-section">
           <h3 class="test-summary__category-title">Twoje najmocniejsze strony</h3>
           <div class="test-summary__category-list">
@@ -71,7 +66,6 @@
           </div>
         </div>
 
-        <!-- Najgorsze umiejętności -->
         <div v-if="worstCategories.length" class="test-summary__category-section">
           <h3 class="test-summary__category-title">Obszary do poprawy</h3>
           <div class="test-summary__category-list">
@@ -87,7 +81,6 @@
         </div>
       </div>
 
-      <!-- Podsumowanie -->
       <div class="test-summary__conclusion">
         <div class="test-summary__conclusion-text">
           <template v-if="simplePercentage >= 80">
@@ -103,7 +96,6 @@
         </div>
       </div>
 
-      <!-- Przycisk zakończenia -->
       <div class="test-summary__finish-container">
         <RouterLink to="/" class="test-summary__finish-btn">
           <span>Powrót do strony głównej</span>
@@ -119,66 +111,43 @@ import { computed } from 'vue'
 import CircularProgressBar from './CircularProgressBar.vue'
 
 const props = defineProps({
-  testAnswers: Object,
-  analysisResults: Object, // 🆕 NOWY PROP
+  analysisResults: {
+    type: Object,
+    required: true,
+  },
 })
 
-// Proste obliczenia bez skomplikowanych analiz
-const maxPoints = computed(() =>
-  props.testAnswers.answers.reduce((sum, answer) => sum + answer.scoredAnswers.length, 0),
+const overall = computed(() => props.analysisResults.analysis.overall_stats)
+const subcategories = computed(() => props.analysisResults.analysis.subcategories_list || [])
+
+const simplePercentage = computed(() => overall.value.percentage)
+const averageTimePerTask = computed(() => overall.value.avg_time_per_task)
+const testAnswers = computed(() => ({
+  level: props.analysisResults.level,
+  totalErrors: overall.value.total_errors,
+  totalPoints: overall.value.total_points,
+  totalUncertainty: overall.value.total_uncertainty,
+}))
+
+const bestCategories = computed(() =>
+  subcategories.value
+    .slice()
+    .sort((a, b) => b.weighted_score - a.weighted_score)
+    .slice(0, 3)
+    .map((s) => ({
+      name: s.full_name,
+      percentage: s.percentage,
+    })),
 )
 
-// Prosty procent poprawności: punkty / max punkty
-const simplePercentage = computed(() => {
-  if (maxPoints.value === 0) return 0
-  return Math.round((props.testAnswers.totalPoints / maxPoints.value) * 100)
-})
-
-// Średni czas na zadanie
-const averageTimePerTask = computed(() => {
-  if (props.testAnswers.answers.length === 0) return 0
-  return Math.round(props.testAnswers.totalTime / props.testAnswers.answers.length)
-})
-
-// Analiza kategorii bezpośrednio z testAnswers
-const categoryAnalysis = computed(() => {
-  const categories = {}
-
-  // Zbierz statystyki po sub_category
-  props.testAnswers.answers.forEach((answer) => {
-    const key = answer.sub_category || 'Nieznana kategoria'
-
-    if (!categories[key]) {
-      categories[key] = {
-        name: key,
-        totalPoints: 0,
-        totalPossible: 0,
-      }
-    }
-
-    categories[key].totalPoints += answer.taskPoints
-    categories[key].totalPossible += answer.scoredAnswers.length
-  })
-
-  // Oblicz procenty i posortuj
-  const categoryList = Object.values(categories)
-    .map((cat) => ({
-      ...cat,
-      percentage: Math.round((cat.totalPoints / cat.totalPossible) * 100),
-    }))
-    .sort((a, b) => b.percentage - a.percentage)
-
-  return categoryList
-})
-
-// Najlepsze kategorie (top 3)
-const bestCategories = computed(() => {
-  return categoryAnalysis.value.slice(0, 3)
-})
-
-// Najgorsze kategorie (bottom 3, tylko jeśli jest więcej niż 3)
-const worstCategories = computed(() => {
-  if (categoryAnalysis.value.length <= 3) return []
-  return categoryAnalysis.value.slice(-3).reverse() // reverse żeby najgorsze było pierwsze
-})
+const worstCategories = computed(() =>
+  subcategories.value
+    .slice()
+    .sort((a, b) => a.weighted_score - b.weighted_score)
+    .slice(0, 3)
+    .map((s) => ({
+      name: s.full_name,
+      percentage: s.percentage,
+    })),
+)
 </script>

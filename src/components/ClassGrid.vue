@@ -15,14 +15,12 @@
       </select>
     </div>
 
-    <!-- Grid kafelków -->
     <div class="class-grid__grid">
       <slot></slot>
       <div v-if="!filteredAndSortedClasses.length" class="class-grid__no-classes">
         Brak klas do wyświetlenia
       </div>
 
-      <!-- Kafelki klas -->
       <div v-for="classItem in filteredAndSortedClasses.slice(0, sliceCount)" :key="classItem.id">
         <ClassCard
           :classData="classItem"

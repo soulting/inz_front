@@ -8,7 +8,6 @@
 
   <div v-else-if="testState === 'in_progress'" class="test-container">
     <div v-if="currentTask" class="test-wrapper">
-      <!-- Header z informacjami o teście -->
       <div class="test-header">
         <div class="test-header__info">
           <span class="test-header__level">TEST {{ props.level }}</span>
@@ -32,7 +31,6 @@
         </div>
       </div>
 
-      <!-- Progress bar -->
       <div class="test-progress">
         <div
           class="test-progress__bar"
@@ -40,7 +38,6 @@
         ></div>
       </div>
 
-      <!-- Główna zawartość zadania -->
       <div class="test-content">
         <div class="task-question">
           <h2 class="task-question__title">{{ currentTask.question }}</h2>
@@ -84,7 +81,6 @@
           </div>
         </div>
 
-        <!-- Ocena trudności -->
         <div class="difficulty-section">
           <h3 class="difficulty-section__title">Jak trudne było to zadanie?</h3>
           <div class="difficulty-rating">
@@ -117,7 +113,6 @@
           </div>
         </div>
 
-        <!-- Przyciski nawigacji -->
         <div class="test-actions">
           <button
             v-if="currentIndex < tasks.length - 1"
@@ -156,9 +151,7 @@
 </template>
 
 <script setup>
-import { handleApiError } from '@/composables/errorHandling'
-import axios from 'axios'
-import { storeToRefs } from 'pinia'
+import useApi from '@/api/useApi'
 import Swal from 'sweetalert2'
 import { useRouter } from 'vue-router'
 
@@ -173,11 +166,6 @@ import SelectionTask from '@/components/SelectionTask.vue'
 import TestStartingScreen from '@/components/TestStartingScreen.vue'
 import TestSummary from '@/components/TestSummary.vue'
 
-import { useAuthStore } from '../stores/auth'
-import { useLoadingStore } from '../stores/loading'
-
-const { token } = storeToRefs(useAuthStore())
-
 const router = useRouter()
 
 const alert = {
@@ -189,12 +177,11 @@ const alert = {
 }
 
 const props = defineProps(['level'])
-const loadingStore = useLoadingStore()
 
 const tasks = ref([])
 const currentIndex = ref(0)
 const seconds = ref(0)
-const timeLeft = ref(0) // będzie obliczany dynamicznie
+const timeLeft = ref(0)
 const testAnswers = ref({
   level: props.level,
   answers: [],
@@ -204,7 +191,6 @@ const testAnswers = ref({
   totalTime: 0,
 })
 
-// 🆕 NOWA ZMIENNA NA WYNIKI ANALIZY
 const analysisResults = ref(null)
 
 const taskDifficulty = ref(null)
@@ -219,94 +205,25 @@ const difficultyLevels = [
   { emoji: '😫', text: 'Bardzo trudne' },
 ]
 
-// Obliczanie czasu testu na podstawie liczby zadań
 const estimatedTime = computed(() => {
   if (!tasks.value.length) return 0
   const totalSubtasks = tasks.value.reduce(
     (acc, task) => acc + (task.subtasks?.length || task.task_items?.length || 1),
     0,
   )
-  const baseTime = Math.ceil(totalSubtasks * 1.5) // 1.5 minuty na pytanie
-  const bufferTime = 5 // 5 minut buforu
-  return Math.min(baseTime + bufferTime, 60) // maksymalnie 60 minut
+  const baseTime = Math.ceil(totalSubtasks * 1.5)
+  const bufferTime = 5
+  return Math.min(baseTime + bufferTime, 60)
 })
 
 async function finishTest() {
-  try {
-    loadingStore.startLoading()
-
-    console.log('Submitting test data:', testAnswers.value)
-
-    const response = await axios.post(
-      `${URL.PLACEMENT_TEST}/submit_test`,
-      {
-        answers: testAnswers.value,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-      },
-    )
-
-    console.log('Test submitted successfully:', response.data)
-
-    // 🆕 ZAPISZ WYNIKI ANALIZY
-    if (response.data.analysis) {
-      analysisResults.value = response.data.analysis
-      console.log('Analysis results received:', analysisResults.value)
-    } else {
-      console.warn('No analysis data received from server')
-      // Fallback - podstawowa analiza po stronie klienta
-      analysisResults.value = {
-        overall_stats: {
-          total_tasks: testAnswers.value.answers.length,
-          total_points: testAnswers.value.totalPoints,
-          total_errors: testAnswers.value.totalErrors,
-          total_uncertainty: testAnswers.value.totalUncertainty,
-          total_time: testAnswers.value.totalTime,
-          overall_score_percentage: Math.round(
-            (testAnswers.value.totalPoints /
-              (testAnswers.value.totalPoints +
-                testAnswers.value.totalErrors +
-                testAnswers.value.totalUncertainty)) *
-              100,
-          ),
-        },
-        best_subcategories: [],
-        worst_subcategories: [],
-        main_categories_summary: [],
-        recommendations: ['Analiza wyników zostanie dostarczona wkrótce.'],
-      }
-    }
-  } catch (error) {
-    console.error('Error submitting test:', error)
-    handleApiError(error, router)
-
-    // W przypadku błędu, nie blokuj przejścia do wyników
-    analysisResults.value = {
-      overall_stats: {
-        total_tasks: testAnswers.value.answers.length,
-        total_points: testAnswers.value.totalPoints,
-        total_errors: testAnswers.value.totalErrors,
-        total_uncertainty: testAnswers.value.totalUncertainty,
-        total_time: testAnswers.value.totalTime,
-        overall_score_percentage: Math.round(
-          (testAnswers.value.totalPoints /
-            (testAnswers.value.totalPoints +
-              testAnswers.value.totalErrors +
-              testAnswers.value.totalUncertainty)) *
-            100,
-        ),
-      },
-      best_subcategories: [],
-      worst_subcategories: [],
-      main_categories_summary: [],
-      recommendations: ['Wystąpił błąd podczas analizy wyników. Spróbuj ponownie później.'],
-    }
-  } finally {
-    loadingStore.stopLoading()
-  }
+  analysisResults.value = await useApi().post(
+    `${URL.PLACEMENT_TEST}/submit_test`,
+    {
+      answers: testAnswers.value,
+    },
+    router,
+  )
 
   testState.value = 'finished'
   clearInterval(timer)
@@ -397,7 +314,6 @@ function handleSubmitAnswers(answers) {
     completionDate: new Date().toISOString(),
   })
 
-  // 🔢 aktualizuj statystyki zbiorcze
   testAnswers.value.totalPoints += taskPoints
   testAnswers.value.totalErrors += taskError
   testAnswers.value.totalUncertainty += taskUncertainty
@@ -421,7 +337,7 @@ function finishTestManually() {
 
 function startTest() {
   testState.value = 'in_progress'
-  timeLeft.value = estimatedTime.value * 60 // konwersja minut na sekundy
+  timeLeft.value = estimatedTime.value * 60
 
   timer = setInterval(() => {
     seconds.value++
@@ -434,21 +350,7 @@ function startTest() {
 }
 
 onMounted(async () => {
-  try {
-    loadingStore.startLoading()
-
-    const response = await axios.get(`${URL.PLACEMENT_TEST}/get_test`, {
-      params: { id: props.level },
-    })
-
-    console.log('Tasks fetched successfully:', response.data)
-
-    tasks.value = response.data
-  } catch (error) {
-    handleApiError(error, router)
-  } finally {
-    loadingStore.stopLoading()
-  }
+  tasks.value = await useApi().get(`${URL.PLACEMENT_TEST}/get_test/${props.level}`, router)
 })
 
 onUnmounted(() => {

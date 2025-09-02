@@ -15,7 +15,6 @@
       </div>
     </div>
 
-    <!-- OVERLAY -->
     <div class="lesson-card__overlay">
       <div class="lesson-card__overlay-actions">
         <button v-if="previewButton" @click="previewLesson">

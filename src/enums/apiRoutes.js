@@ -9,4 +9,6 @@ export const URL = Object.freeze({
   SECTIONS: `${BASE_URL}/sections`,
   SETTINGS: `${BASE_URL}/settings`,
   TASKS: `${BASE_URL}/tasks`,
+  PROFILE: `${BASE_URL}/profile`,
+  THEMES: `${BASE_URL}/themes`,
 })

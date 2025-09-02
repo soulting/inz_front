@@ -2,7 +2,6 @@
   <div class="list">
     <h1 class="list_title">Moje zadania</h1>
 
-    <!-- FILTRY I SORTOWANIE -->
     <div class="list__controls">
       <input
         v-model="searchQuery"
@@ -18,7 +17,6 @@
       </select>
     </div>
 
-    <!-- GRID ZADAŃ -->
     <div class="list__grid">
       <slot></slot>
 
@@ -37,7 +35,6 @@
       </div>
     </div>
 
-    <!-- PRZYCISKI POKAŻ WIĘCEJ/MNIEJ -->
     <div class="list__show-more-wrapper">
       <button class="list__show-more-button" @click="showMoreButton ? showMore() : showLess()">
         {{ showMoreButton ? 'Pokaż więcej' : 'Pokaż mniej' }}
@@ -47,14 +44,12 @@
 </template>
 
 <script setup>
-// === IMPORTY ===
 import Swal from 'sweetalert2'
 
 import { computed, ref } from 'vue'
 
 import TaskCard from '@/components/TaskCard.vue'
 
-// === PROPS & EMITY ===
 const props = defineProps({
   tasks: { type: Array, required: true },
   editButton: { type: Boolean, default: false },
@@ -62,7 +57,6 @@ const props = defineProps({
 })
 const emit = defineEmits(['delete', 'join'])
 
-// === STANY LOKALNE ===
 const searchQuery = ref('')
 const sortBy = ref('date_desc')
 const sliceCount = ref(5)
@@ -70,7 +64,6 @@ const showMoreButton = ref(true)
 
 const levelOrder = ['A1', 'A2', 'B1']
 
-// === FUNKCJE ===
 function showMore() {
   sliceCount.value = props.tasks.length
   showMoreButton.value = false
@@ -98,18 +91,15 @@ function emitEdit(taskId) {
   emit('edit', taskId)
 }
 
-// === COMPUTED: FILTROWANIE + SORTOWANIE ===
 const filteredAndSortedTasks = computed(() => {
   let result = [...props.tasks]
 
-  // Filtrowanie
   if (searchQuery.value.trim()) {
     result = result.filter((task) =>
       task.question.toLowerCase().includes(searchQuery.value.toLowerCase()),
     )
   }
 
-  // Sortowanie
   switch (sortBy.value) {
     case 'date_desc':
       result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))

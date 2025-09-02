@@ -41,7 +41,6 @@
   margin-bottom: 2rem;
 }
 
-/* 🔹 Sekcje analityczne i statystyczne */
 .section-box {
   margin-top: 2rem;
   padding: 1.5rem;
@@ -63,7 +62,6 @@
   gap: 1rem;
 }
 
-/* 🔹 Tytuły sekcji */
 .section-title {
   font-size: 1.3rem;
   font-weight: 600;
@@ -78,7 +76,6 @@
   @extend .section-title;
 }
 
-/* 🔹 Empty states */
 .empty-state {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -98,7 +95,6 @@
   @extend .empty-state;
 }
 
-/* 🔹 Responsive */
 @media (max-width: 768px) {
   .lesson-stats {
     padding: 1rem;

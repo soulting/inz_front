@@ -74,11 +74,10 @@ const totalSubtasks = computed(() =>
   props.tasks.reduce((acc, task) => acc + (task.task_items?.length || 0), 0),
 )
 
-// Oszacowanie czasu: 1.5 minuty na pytanie + 5 minut buforu
 const estimatedTime = computed(() => {
   const baseTime = Math.ceil(totalSubtasks.value * 1.5)
   const bufferTime = 5
-  return Math.min(baseTime + bufferTime, 60) // maksymalnie 60 minut
+  return Math.min(baseTime + bufferTime, 60)
 })
 
 function startTest() {

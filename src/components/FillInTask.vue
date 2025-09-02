@@ -32,23 +32,54 @@
           </template>
         </div>
       </div>
+      <div v-if="answerFor(task_item.id)" class="task-content-result">
+        <div class="answer-box neutral">
+          <strong>Poprawna odpowiedź:</strong>
+          <p>{{ answerFor(task_item.id).correct_answer }}</p>
+        </div>
+
+        <div
+          class="answer-box"
+          :class="{
+            correct: answerFor(task_item.id).point === 1,
+            wrong: answerFor(task_item.id).point === 0,
+          }"
+        >
+          <strong>Twoja odpowiedź:</strong>
+          <p
+            v-html="
+              diffWords(answerFor(task_item.id).correct_answer, answerFor(task_item.id).my_answer)
+            "
+          ></p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import diffWords from '@/composables/diffChecker'
+
 import { ref, watch } from 'vue'
 
-// Props
-const props = defineProps(['currentTask'])
+const props = defineProps({
+  currentTask: {
+    type: Object,
+    required: true,
+  },
+  anwsers: {
+    type: Array,
+    default: () => [],
+  },
+})
 
-// Emit
 const emit = defineEmits(['submit', 'noAnswers'])
+function answerFor(id) {
+  return props.anwsers.find((el) => el.item_id === id)
+}
 
-// Reactive state for user inputs
 const userInputs = ref([])
 
-// Watch for changes in task_items and initialize input fields
 watch(
   () => props.currentTask.task_items,
   (newTaskItems) => {
@@ -62,7 +93,6 @@ watch(
   { immediate: true },
 )
 
-// Helper functions for hints
 function getInputCount(template, currentIndex) {
   const segments = template.replace(/^%%/, '').split('%%')
   let count = 0
@@ -71,7 +101,7 @@ function getInputCount(template, currentIndex) {
       count++
     }
   }
-  return count - 1 // Return 0-based index
+  return count - 1
 }
 
 function getHintForInput(bonusInfo, inputIndex) {
@@ -80,7 +110,6 @@ function getHintForInput(bonusInfo, inputIndex) {
   return hints[inputIndex] || ''
 }
 
-// Function exposed to parent – gathers answers and emits them
 function submitAnswers() {
   if (userInputs.value.some((row) => row.includes(''))) {
     emit('noAnswers')
@@ -94,3 +123,4 @@ defineExpose({
   submitAnswers,
 })
 </script>
+<style scoped></style>

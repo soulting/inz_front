@@ -89,27 +89,31 @@
 
   &__dropdown-item {
     width: 90%;
-    height: 28px;
-    padding: 5px 17px;
+    height: 40px;
+    padding: 8px 20px;
     @include mixins.flex-c-bl;
     text-decoration: none;
-    color: black;
-    border-radius: 13px;
+    color: #333;
+    border-radius: 8px;
     gap: 0.5rem;
+    transition:
+      background-color 0.3s ease,
+      transform 0.2s ease;
 
     &:hover {
-      background-color: #eeeeee;
+      background-color: #f0f0f0;
+      transform: translateY(-2px);
     }
 
     &--logout {
-      background-color: red;
+      background-color: #e63946;
       color: white;
 
       &:hover {
-        background-color: darkred;
+        background-color: #d62839;
       }
       &:visited {
-        color: inherit;
+        color: white;
       }
     }
   }

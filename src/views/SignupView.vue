@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="auth-container">
     <div class="signup-box">
       <div class="signup-header">
         <h2>Rejestracja</h2>
@@ -48,8 +48,6 @@ import { ref } from 'vue'
 
 import { URL } from '@/enums'
 
-// Dostosuj ścieżkę do lokalizacji twoich funkcji
-
 const router = useRouter()
 const name = ref('')
 const email = ref('')
@@ -59,13 +57,11 @@ const role = ref('')
 const isLoading = ref(false)
 
 const signup = async () => {
-  // Walidacja hasła
   if (password.value !== confirmPassword.value) {
     showErrorPopup('Hasła nie są zgodne.', 'Błąd walidacji')
     return
   }
 
-  // Walidacja roli
   if (!role.value) {
     showErrorPopup('Proszę wybrać rolę.', 'Brak roli')
     return
@@ -81,7 +77,6 @@ const signup = async () => {
       role: role.value,
     })
 
-    // Sukces - pokaz popup z przyciskiem
     await showSuccessPopup(
       'Rejestracja zakończona pomyślnie! Aktywój konto, aby się zalogować.',
       'Witaj w systemie!',
@@ -105,7 +100,6 @@ const signup = async () => {
         showErrorPopup('Użytkownik o podanych danych już istnieje.', 'Konflikt danych')
       }
     } else if (error.response?.status === 400) {
-      // Błędy walidacji po stronie serwera
       showErrorToast('Sprawdź poprawność wprowadzonych danych.', 'Błędne dane')
     } else if (error.code === 'NETWORK_ERROR' || !error.response) {
       showErrorPopup(
@@ -113,7 +107,6 @@ const signup = async () => {
         'Błąd połączenia',
       )
     } else {
-      // Ogólny błąd
       showErrorPopup(
         'Wystąpił nieoczekiwany błąd podczas rejestracji. Spróbuj ponownie za chwilę.',
         'Błąd serwera',

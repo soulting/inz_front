@@ -1,6 +1,5 @@
 <template>
   <div class="section-detail">
-    <!-- Nagłówek sekcji -->
     <div class="section-detail__header">
       <h1 class="section-detail__title">{{ title }}</h1>
       <button class="section-detail__toggle-button" @click="toggleContent">
@@ -14,13 +13,11 @@
       </button>
     </div>
 
-    <!-- Rozwijana treść sekcji -->
     <div
       class="section-detail__wrapper"
       :class="{ 'section-detail__wrapper--open': contentExpended }"
     >
       <div class="section-detail__expandable">
-        <!-- Zawartość sekcji -->
         <div
           class="section-detail__content tinymce-content tinymce-content--section"
           v-html="content"
@@ -28,7 +25,6 @@
 
         <hr class="section-detail__horizontal-line" />
 
-        <!-- Lekcje -->
         <div v-if="lessons.length" class="section-detail__lessons-container">
           <h2 class="section-detail__lessons-title">Lekcje</h2>
           <div
@@ -60,7 +56,6 @@
           </div>
         </div>
 
-        <!-- Zadania -->
         <div v-if="tasks.length" class="section-detail__tasks-container">
           <h2 class="section-detail__tasks-title">Zadania</h2>
           <div
@@ -82,10 +77,26 @@
                 <img src="@/assets/icons/delete.png" alt="usuń ikonka" />
               </button>
             </div>
+            <div
+              class="item-card__actions"
+              v-if="
+                authStore.user.role === 'student' &&
+                studentSectionResutls.find((item) => item.task_id === task.id)
+              "
+            >
+              <button
+                class="item-card__action-button"
+                title="Sprawdź wynik"
+                @click.stop="
+                  goToTaskResult(studentSectionResutls.find((item) => item.task_id === task.id))
+                "
+              >
+                <img src="@/assets/icons/grade.png" alt="sprawdz wyniki" />
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- Przyciski dodawania -->
         <div v-if="authStore.user.role === 'teacher'" class="section-detail__buttons">
           <div class="section-detail__add-card" @click="handleAddLesson">
             <div class="section-detail__add-text">Dodaj lekcję</div>
@@ -93,11 +104,6 @@
           <div class="section-detail__add-card" @click="handleAddTask">
             <div class="section-detail__add-text">Dodaj zadanie</div>
           </div>
-          <!--
-          <div class="section-detail__add-card" @click="handleAddFile">
-            <div class="section-detail__add-text">Dodaj plik</div>
-          </div>
-          -->
         </div>
       </div>
     </div>
@@ -111,7 +117,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useSectionStore } from '@/stores/classObject'
 import { useRouter } from 'vue-router'
 
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import { URL } from '@/enums'
 
@@ -138,6 +144,7 @@ const props = defineProps({
 const sectionType = ref(null)
 const contentExpended = ref(true)
 const router = useRouter()
+const studentSectionResutls = ref([])
 
 const classOverlayProps = computed(() => ({
   sectionItemType: sectionType.value,
@@ -213,7 +220,28 @@ function goToTask(id) {
   }
 }
 
+function goToTaskResult(task) {
+  console.log(task)
+
+  router.push({
+    name: 'single-task-result',
+    params: { resultId: task.id, taskId: task.task_id },
+  })
+}
+
 function handleAddFile() {
   console.log('Dodaj plik')
 }
+
+onMounted(async () => {
+  if (authStore.user.role === 'student') {
+    const response = await useApi().get(
+      `${URL.TASKS}/student_section_task_results/${props.sectionId}`,
+      router,
+    )
+    if (response?.task_items) {
+      studentSectionResutls.value = response.task_items
+    }
+  }
+})
 </script>

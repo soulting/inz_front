@@ -1,6 +1,5 @@
 import Swal from 'sweetalert2'
 
-// Toast bez przycisku - sukces
 export function showSuccessToast(text = 'Operacja zakończona pomyślnie', title = 'Sukces!') {
   return Swal.fire({
     icon: 'success',
@@ -13,7 +12,6 @@ export function showSuccessToast(text = 'Operacja zakończona pomyślnie', title
   })
 }
 
-// Toast bez przycisku - błąd
 export function showErrorToast(text = 'Wystąpił błąd', title = 'Błąd!') {
   return Swal.fire({
     icon: 'error',
@@ -26,7 +24,6 @@ export function showErrorToast(text = 'Wystąpił błąd', title = 'Błąd!') {
   })
 }
 
-// Popup z przyciskiem - sukces
 export function showSuccessPopup(text = 'Operacja zakończona pomyślnie', title = 'Sukces!') {
   return Swal.fire({
     icon: 'success',
@@ -37,7 +34,6 @@ export function showSuccessPopup(text = 'Operacja zakończona pomyślnie', title
   })
 }
 
-// Popup z przyciskiem - błąd
 export function showErrorPopup(text = 'Wystąpił błąd', title = 'Błąd!') {
   return Swal.fire({
     icon: 'error',
@@ -48,7 +44,6 @@ export function showErrorPopup(text = 'Wystąpił błąd', title = 'Błąd!') {
   })
 }
 
-// Uniwersalna funkcja (dla kompatybilności wstecznej)
 export function showSwal({ title, text, status = 'success', showButton = false, isToast = false }) {
   const config = {
     icon: status === 'success' ? 'success' : 'error',
